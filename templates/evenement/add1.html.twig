@@ -1,0 +1,40 @@
+
+{% extends 'baseback.html.twig' %}
+{% block title %}Evenement{% endblock %}
+
+{% block body %}
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic form elements</h4>
+                    <p class="card-description"> Basic form elements </p>
+                    {{ form_start(formEvenement , {'attr': {'novalidate':'novalidate'}} ) }}
+                    <form class="forms-sample">
+                      <div class="form-group">
+                        {{ form_row(formEvenement.nom, {'label':' nom' ,'attr':{'placeholder': 'nom...', 'class':'form-control'}}) }}</div>
+						<div class="form-group">
+                        <div class="form-group">
+                        {{ form_row(formEvenement.image, {'label':'image' ,'attr':{'placeholder': 'image...', 'class':'form-control'}}) }}</div>
+                        {{ form_row(formEvenement.date_debut, {'label':'Date' ,'attr':{'placeholder': 'Date...', 'class':'form-control'}}) }}</div>
+                        <div class="form-group">
+                        {{ form_row(formEvenement.date_fin, {'label':'Date' ,'attr':{'placeholder': 'Date...', 'class':'form-control'}}) }}</div>
+						<div class="form-group">
+                        {{ form_row(formEvenement.lieu, {'label':'lieu' ,'attr':{'placeholder': 'Lieu...', 'class':'form-control'}}) }}</div>
+						<div class="form-group">
+                        {{ form_row(formEvenement.description, {'label':'description' ,'attr':{'placeholder': 'Description...', 'class':'form-control'}}) }}</div>
+						<div class="form-group">
+                        {{ form_row(formEvenement.type, {'label':'Type' ,'attr':{'placeholder': 'Type...', 'class':'form-control'}}) }}
+						</div>
+						<div class="form-group">
+                        {{ form_row(formEvenement.Sponsors, {'label':'Sponsor' ,'attr':{'placeholder': 'Type...', 'class':'form-control'}}) }}
+						</div>
+                      
+					 
+                      <button type="submit" class="btn btn-primary mr-2" >Ajouter Evenement</button>
+                      
+                    </form>
+                     
+                    </div>
+                </div>
+            </div>
+			  {%endblock%}

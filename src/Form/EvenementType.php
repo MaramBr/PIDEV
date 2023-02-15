@@ -6,6 +6,7 @@ use App\Entity\Evenement;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class EvenementType extends AbstractType
 {
@@ -20,6 +21,7 @@ class EvenementType extends AbstractType
             ->add('date_fin')
             ->add('image')
             ->add('Sponsors')
+            ->add('Submit',SubmitType::class)
         ;
     }
 

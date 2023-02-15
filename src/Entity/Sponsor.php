@@ -105,4 +105,12 @@ class Sponsor
 
         return $this;
     }
+
+     public function __toString()
+    {
+        return (string) $this->getnomSponsor();
+        $this->getEmail();
+        $this->getInvest();
+        
+    }
 }

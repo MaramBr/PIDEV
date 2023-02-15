@@ -75,8 +75,8 @@ class SponsorController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('appback');
         }
-        return $this->renderForm("Sponsor/update.html.twig",
-            ["Sponsor"=>$form]) ;
+        return $this->renderForm("Sponsor/add.html.twig",
+            ["formSponsor"=>$form]) ;
 
 
     } 

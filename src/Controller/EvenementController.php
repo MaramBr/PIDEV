@@ -50,7 +50,7 @@ class EvenementController extends AbstractController
 
 
 
-    #[Route('/Evenement/add', name: 'add2')]
+    #[Route('/Evenement/add1', name: 'add_back')]
     public function add2(ManagerRegistry $doctrine,Request $request): Response
     {
         $Evenement=new Evenement() ;
@@ -64,12 +64,12 @@ class EvenementController extends AbstractController
         return $this->redirectToRoute('afficheback');
         
         }
-        return $this->render('Evenement/addnew.html.twig', array("formEvenement"=>$form->createView()));
+        return $this->render('Evenement/add1.html.twig', array("formEvenement"=>$form->createView()));
        // return $this->render('Evenement/add.html.twig', array("formEvenement"=>$form->createView));
 
     }
 
-     #[Route('/Evenement/add1', name: 'add1')]
+     #[Route('/Evenement/add', name: 'add_front')]
     public function add1(ManagerRegistry $doctrine,Request $request): Response
     {
         $Evenement=new Evenement() ;
@@ -83,7 +83,7 @@ class EvenementController extends AbstractController
         return $this->redirectToRoute('affichefront');
         
         }
-        return $this->render('Evenement/add1.html.twig', array("formEvenement"=>$form->createView()));
+        return $this->render('Evenement/add.html.twig', array("formEvenement"=>$form->createView()));
        // return $this->render('Evenement/add.html.twig', array("formEvenement"=>$form->createView));
 
     }
@@ -104,7 +104,7 @@ class EvenementController extends AbstractController
             return $this->redirectToRoute('afficheback');
         }
 
-        return $this->renderForm('Evenement/edit.html.twig', [
+        return $this->renderForm('Evenement/add.html.twig', [
             'formEvenement' => $form,
         ]);
     }

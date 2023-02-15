@@ -6,6 +6,7 @@ use App\Entity\Sponsor;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class SponsorType extends AbstractType
 {
@@ -15,6 +16,7 @@ class SponsorType extends AbstractType
             ->add('nomSponsor')
             ->add('email')
             ->add('invest')
+            ->add('Submit',SubmitType::class)
         ;
     }
 

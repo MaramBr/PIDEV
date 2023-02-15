@@ -6,6 +6,7 @@ use App\Repository\EvenementRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class Evenement
@@ -154,6 +155,8 @@ class Evenement
         $this->getType();
         $this->getDescription();
         $this->getLieu();
-        $this->getSponsor();
+        $this->getSponsors();
     }
+
+    
 }

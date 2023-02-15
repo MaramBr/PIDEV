@@ -12,7 +12,8 @@ use App\Form\EvenementType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Repository\EvenementRepository;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\String\Slugger\SluggerInterface;
+
  
 class EvenementController extends AbstractController
 {
@@ -70,13 +71,37 @@ class EvenementController extends AbstractController
     }
 
      #[Route('/Evenement/add', name: 'add_front')]
-    public function add1(ManagerRegistry $doctrine,Request $request): Response
+    public function add1(ManagerRegistry $doctrine,Request $request ,SluggerInterface $slugger): Response
     {
         $Evenement=new Evenement() ;
         $form=$this->createForm(EvenementType::class,$Evenement); //sna3na objet essmo form aamlena bih appel lel Evenementtype
         $form->handleRequest($request);
-        if( $form->isSubmitted() )  //amaalna verification esq taadet willa le aadna prob fi code ou nn
+        if ($form->isSubmitted()) //amaalna verification esq taadet willa le aadna prob fi code ou nn
        {
+        $brochureFile = $form->get('image')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('Evenement_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $Evenement->setImage($newFilename);
+            }
         $em=$doctrine->getManager(); //appel lel manager
         $em->persist($Evenement); //elli tzid
         $em->flush(); //besh ysob fi base de donnee

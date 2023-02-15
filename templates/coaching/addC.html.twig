@@ -1,0 +1,41 @@
+
+
+
+{% extends 'baseback.html.twig' %}
+
+
+{% block title %}Coaching{% endblock %}
+
+{% block body %}
+<h4 class="card-title">Basic form elements</h4>
+                    <p class="card-description"> Basic form elements </p>
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic form elements</h4>
+                    <p class="card-description"> Basic form elements </p>
+                    {{ form_start(formCoaching , {'attr': {'novalidate':'novalidate'}} ) }}
+                    <form class="forms-sample">
+                      <div class="form-group">
+                        {{ form_row(formCoaching.nomCoach, {'label':'Nom' ,'attr':{'placeholder': 'nom...', 'class':'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        {{ form_row(formCoaching.prenomCoach, {'label':'Prenom' ,'attr':{'placeholder': 'prenom...', 'class':'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        {{ form_row(formCoaching.emailCoach, {'label':'Email' ,'attr':{'placeholder': 'email...', 'class':'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        {{ form_row(formCoaching.dispoCoach, {'label':'Disponibilte' ,'attr':{'placeholder': 'Disponibilte...', 'class':'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        {{ form_row(formCoaching.imgCoach, {'label':'Image' ,'attr':{'placeholder': 'img...', 'class':'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        {{ form_row(formCoaching.cours, {'label':'Cours' ,'attr':{'placeholder': 'cours...', 'class':'form-control'}}) }}
+                      <button type="submit" class="btn btn-primary mr-2" >Ajouter</button>
+                    
+                      </div>
+	</div>
+
+                        {%endblock%}

@@ -1,0 +1,32 @@
+
+
+
+{% extends 'basefront.html.twig' %}
+
+
+{% block title %}RendezVous{% endblock %}
+
+{% block body %}
+<h4 class="card-title">Basic form elements</h4>
+                    <p class="card-description"> Basic form elements </p>
+<div class="col-8 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic form elements</h4>
+                    <p class="card-description"> Basic form elements </p>
+                    {{ form_start(formRendezVous , {'attr': {'novalidate':'novalidate'}} ) }}
+                    <form class="forms-sample">
+                      <div class="form-group">
+                        {{ form_row(formRendezVous.Coachings, {'label':'Cous' ,'attr':{'placeholder': 'cours...', 'class':'form-control'}}) }}
+                      </div>
+                    
+                      <div class="form-group">
+                        {{ form_row(formRendezVous.daterdv)}}
+                       </div>
+                      <button type="submit" class="btn btn-primary mr-2" >Ajouter</button>
+                      <a href="/afficherrdv" class="btn btn-dark">afficher</a>
+                    
+                      </div>
+	</div>
+
+                        {%endblock%}

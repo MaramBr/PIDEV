@@ -1,0 +1,52 @@
+{% extends 'baseback.html.twig' %}
+{% block body %}
+<div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic Table</h4>
+                    <p class="card-description"> table<code>des Coach</code>
+                    </p>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>id</th>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Email</th>
+                            <th>Cours</th>
+                             <th>Disponibilte</th>
+                             <th>img</th>
+                             <th>Modifier</th>
+                             <th>Supprimer/th>
+
+
+                            
+                          </tr>
+                        </thead>
+                        <tbody>
+                        
+                        {% for a in Coaching %}
+                          <tr>
+                            <td>{{a.id }}</td>
+                            <td> {{a.NomCoach}} </td>
+                            <td> {{a.PrenomCoach}} </td>
+                            <td> {{a.EmailCoach}} </td>
+                            <td> {{a.Cours  }} </td>
+                             <td> {{a.dispoCoach }} </td>
+                              <td> {{a.imgCoach }} </td>
+                              
+
+                            <td><a href="{{ path('updatecoach', {id:a.id}) }}" class="btn btn-dark" >mettre à jour</a></td>
+                            <td><a href="{{ path('deletecoach', {id:a.id}) }}" class="btn btn-dark" >supprimer</a></td>
+
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                
+              
+{% endblock %}

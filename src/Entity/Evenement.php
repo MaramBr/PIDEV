@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EvenementRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class Evenement
@@ -15,15 +16,19 @@ class Evenement
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"feraa8")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"feraa8")]
     private ?string $lieu = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"feraa8")]
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"feraa8")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -137,5 +142,18 @@ class Evenement
         $this->Sponsors = $Sponsors;
 
         return $this;
+    }
+
+     public function __toString()
+    {
+        return (string) $this->getNom();
+        
+        $this->getDateDebut();
+        $this->getDateFin();
+        $this->getImage();
+        $this->getType();
+        $this->getDescription();
+        $this->getLieu();
+        $this->getSponsor();
     }
 }

@@ -6,7 +6,7 @@ use App\Repository\SponsorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: SponsorRepository::class)]
 class Sponsor
 {
@@ -16,12 +16,15 @@ class Sponsor
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"feraa8")]
     private ?string $nomSponsor = null;
 
     #[ORM\Column(length: 255)]
+     #[Assert\Email(message:"the email is not valid ")]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"feraa8")]
     private ?string $invest = null;
 
     #[ORM\OneToMany(mappedBy: 'Sponsors', targetEntity: Evenement::class)]

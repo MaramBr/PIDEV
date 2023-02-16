@@ -76,7 +76,7 @@ class EvenementController extends AbstractController
         $Evenement=new Evenement() ;
         $form=$this->createForm(EvenementType::class,$Evenement); //sna3na objet essmo form aamlena bih appel lel Evenementtype
         $form->handleRequest($request);
-        if ($form->isSubmitted()) //amaalna verification esq taadet willa le aadna prob fi code ou nn
+        if ($form->isSubmitted() && $form->isValid()) //amaalna verification esq taadet willa le aadna prob fi code ou nn
        {
         $brochureFile = $form->get('image')->getData();
 

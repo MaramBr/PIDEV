@@ -6,7 +6,7 @@ use App\Entity\Sponsor;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class SponsorType extends AbstractType
@@ -24,7 +24,7 @@ class SponsorType extends AbstractType
                 'choices' => $options,
             ))
             
-            ->add('Submit',SubmitType::class)
+            
         ;
     }
 

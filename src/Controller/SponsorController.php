@@ -45,7 +45,7 @@ class SponsorController extends AbstractController
         $Sponsor=new Sponsor() ;
         $form=$this->createForm(SponsorType::class,$Sponsor); //sna3na objet essmo form aamlena bih appel lel Sponsortype
         $form->handleRequest($request);
-        if( $form->isSubmitted() )//&& $form->isValid() )  //amaalna verification esq taadet willa le aadna prob fi code ou nn
+        if( $form->isSubmitted() && $form->isValid() )  //amaalna verification esq taadet willa le aadna prob fi code ou nn
        {
         $em=$doctrine->getManager(); //appel lel manager
         $em->persist($Sponsor); //elli tzid

@@ -11,14 +11,16 @@
                       <table class="table">
                         <thead>
                           <tr>
-                            <th>identifiant</th>
-                            <th>Nom event</th>
-                            <th>date debut</th>
-                            <th>date fin</th>
-                            <th>lieu event</th>
-                            <th>Description</th>
-                            <th>Type</th>
-                            <th>Notre Sponsor</th>
+                          <th><button type="button" class="btn btn-outline-warning">  identifiant</button></th>
+                          
+                            <th><button type="button" class="btn btn-outline-danger">Nom Event</button></th>
+                            <th><button type="button" class="btn btn-outline-success">Date debut</button></th>
+                          <th><button type="button" class="btn btn-outline-warning"> Date fin</button></th>
+                          <th><button type="button" class="btn btn-outline-danger">lien image</button></th>
+                            <th><button type="button" class="btn btn-outline-success">Lieu</button></th>
+                            <th><button type="button" class="btn btn-outline-warning">  Description</button></th>
+                            <th><button type="button" class="btn btn-outline-danger">Type</button></th>
+                            <th><button type="button" class="btn btn-outline-success">Sponsor</button></th>
                             
                           </tr>
                         </thead>
@@ -39,6 +41,9 @@
                                                 </td>
                                                 <td>
                                                     {{ i.DateFin|date('Y-m-d H:i:s')  }}
+                                                </td>
+                                                <td>
+                                                    {{i.Image}}
                                                 </td>
                                               <td>
                                                     {{i.Lieu}}

@@ -6,6 +6,8 @@ use App\Repository\CoachingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
+
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CoachingRepository::class)]
@@ -23,6 +25,10 @@ class Coaching
     private ?string $prenomCoach = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Email(
+        message: 'The email {{ value }} is not a valid email.',
+    )]
+    protected $email;
     private ?string $emailCoach = null;
 
     
@@ -38,6 +44,9 @@ class Coaching
 
     #[ORM\OneToMany(mappedBy: 'Coachings', targetEntity: RendezVous::class)]
     private Collection $rendezVouses;
+
+    #[ORM\Column(length: 255)]
+    private ?string $autre = null;
 
     public function __construct()
     {
@@ -158,5 +167,17 @@ class Coaching
         return (string)  $this->getCours();
        
        
+    }
+
+    public function getAutre(): ?string
+    {
+        return $this->autre;
+    }
+
+    public function setAutre(string $autre): self
+    {
+        $this->autre = $autre;
+
+        return $this;
     }
 }

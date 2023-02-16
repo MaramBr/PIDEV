@@ -34,7 +34,7 @@
                             <td> {{a.EmailCoach}} </td>
                             <td> {{a.Cours  }} </td>
                              <td> {{a.dispoCoach }} </td>
-                              <td> {{a.imgCoach }} </td>
+                              <td><img src="{{ asset('/uploads/coach/' ~ a.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "10%"></td>
                               
 
                             <td><a href="{{ path('updatecoach', {id:a.id}) }}" class="btn btn-dark" >mettre à jour</a></td>

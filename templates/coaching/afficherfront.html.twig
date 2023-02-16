@@ -34,7 +34,8 @@
 							</div>
                              <div class="order-col">
 								<div> Image du Coach </div>
-                                <div>{{i.imgCoach}}</div>
+                                <div>    <td><img src="{{ asset('/uploads/coach/' ~ i.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%"></td>
+</div>
 							</div>
                             <div class="order-col">
 								<div> Cours </div>

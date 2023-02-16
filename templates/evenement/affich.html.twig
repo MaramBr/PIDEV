@@ -34,6 +34,7 @@
 								<div id="tab1" class="tab-pane active">
 									<div class="products-slick" data-nav="#slick-nav-1">
 										<!-- product -->
+                    
 										<div class="product">
 											<div class="product-img">
 												<img src="{{ asset('/uploads/brochures/'~i.Image) }}" alt="">
@@ -41,6 +42,7 @@
 													
 												</div>
 											</div>
+                     
 											<div class="product-body">
 												<h4 class="product-price">{{i.Nom}} </h4>
 												<h3 class="product-name">{{ i.Datedebut|date('Y-m-d') }}</h3>
@@ -63,9 +65,10 @@
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Participer maintenant</button>
+												<button class="add-to-cart-btn"></i> Participer maintenant</button>
 											</div>
 										</div>
+                  
 										<!-- /product -->
 									</div>
 									<div id="slick-nav-1" class="products-slick-nav"></div>
@@ -93,6 +96,7 @@
 
 
 {% endblock %}
+
 
 {% block footer %}
 

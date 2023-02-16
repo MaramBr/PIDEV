@@ -51,26 +51,7 @@ class EvenementController extends AbstractController
 
 
 
-    #[Route('/Evenement/add1', name: 'add_back')]
-    public function add2(ManagerRegistry $doctrine,Request $request): Response
-    {
-        $Evenement=new Evenement() ;
-        $form=$this->createForm(EvenementType::class,$Evenement); //sna3na objet essmo form aamlena bih appel lel Evenementtype
-        $form->handleRequest($request);
-       if( $form->isSubmitted())  //amaalna verification esq taadet willa le aadna prob fi code ou nn
-       {
-        $em=$doctrine->getManager(); //appel lel manager
-        $em->persist($Evenement); //elli tzid
-        $em->flush(); //besh ysob fi base de donnee
-        return $this->redirectToRoute('afficheback');
-        
-        }
-        return $this->render('Evenement/add1.html.twig', array("formEvenement"=>$form->createView()));
-       // return $this->render('Evenement/add.html.twig', array("formEvenement"=>$form->createView));
-
-    }
-
-     #[Route('/Evenement/add', name: 'add_front')]
+    #[Route('/Evenement/add', name: 'add_front')]
     public function add1(ManagerRegistry $doctrine,Request $request ,SluggerInterface $slugger): Response
     {
         $Evenement=new Evenement() ;
@@ -109,6 +90,49 @@ class EvenementController extends AbstractController
         
         }
         return $this->render('Evenement/add.html.twig', array("formEvenement"=>$form->createView()));
+       // return $this->render('Evenement/add.html.twig', array("formEvenement"=>$form->createView));
+
+    }
+
+    #[Route('/Evenement/add1', name: 'add_front')]
+    public function add2(ManagerRegistry $doctrine,Request $request ,SluggerInterface $slugger): Response
+    {
+        $Evenement=new Evenement() ;
+        $form=$this->createForm(EvenementType::class,$Evenement); //sna3na objet essmo form aamlena bih appel lel Evenementtype
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) //amaalna verification esq taadet willa le aadna prob fi code ou nn
+       {
+        $brochureFile = $form->get('image')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('Evenement_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $Evenement->setImage($newFilename);
+            }
+        $em=$doctrine->getManager(); //appel lel manager
+        $em->persist($Evenement); //elli tzid
+        $em->flush(); //besh ysob fi base de donnee
+        return $this->redirectToRoute('afficheback');
+        
+        }
+        return $this->render('Evenement/add1.html.twig', array("formEvenement"=>$form->createView()));
        // return $this->render('Evenement/add.html.twig', array("formEvenement"=>$form->createView));
 
     }

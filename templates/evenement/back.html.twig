@@ -53,10 +53,11 @@
                                                     {{i.Sponsors}}
                                                 </td>
                                                  <td>
-                                                    <a href="{{ path('deleteEvenement', {id:i.ID}) }}">Delete </a>
+                                                  
+                                                  <button type="button" class="btn btn-danger"><a href="{{ path('deleteEvenement', {id:i.ID}) }}">Delete </a></button>
                                                 </td>
                                                  <td>
-                                                    <a href="{{ path('updateEvenement', {id:i.ID}) }}">Update </a>
+                                                   <button type="button" class="btn btn-success"><a href="{{ path('updateEvenement', {id:i.ID}) }}">Update </a></button> 
                                                 </td>
                           </tr>
                           {% endfor %}

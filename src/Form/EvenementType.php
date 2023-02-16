@@ -36,11 +36,12 @@ class EvenementType extends AbstractType
                 // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
                     new File([
-                        'maxSize' => '1024k',
+                        
                         'mimeTypes' => [
                             'image/gif',
                             'image/jpeg',
                             'image/jpg',
+                            'image/png',
                         ],
                         'mimeTypesMessage' => 'Please upload a valid image',
                     ])

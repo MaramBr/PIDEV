@@ -33,6 +33,16 @@ class CoachingController extends AbstractController
             'Coaching' => $resultat,
         ]);
     }
+     
+    #[Route('/afficherdetaille', name: 'afficherdetaille')]
+    public function afficherdetaille(ManagerRegistry $mg): Response
+    {
+        $repo=$mg->getRepository(Coaching::class);
+        $resultat = $repo ->FindAll();
+        return $this->render('coaching/index.html.twig', [
+            'Coaching' => $resultat,
+        ]);
+    }
 
     
     #[Route('/afficherback', name: 'afficherback')]

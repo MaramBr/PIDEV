@@ -3,59 +3,43 @@
 {% block title %}Coaching{% endblock %}
 
 {% block body %}
-{%for i in Coaching%}
-					<div class="col-md-5 order-details">
-						<div class="section-title text-center">
-							<h3 class="title">Coaching</h3>
-						</div>
-						<div class="order-summary">
-							<div class="order-col">
-								<div><strong>Coach</strong></div>
+
+
+<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+							{%for i in Coaching%}
+
+			<div class="container">
+				<!-- row -->
+
+				<div class="row">
+					<!-- shop -->
+					<div class="col-md-3 col-xs-4">
+						<div class="shop">
+							<div class="shop-img">
+								<img src="{{ asset('/uploads/coach/' ~ i.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "5%">
 							</div>
-							<div class="order-products">
-								<div class="order-col">
-									<div> Nom du Coach </div>
-                                    <div>{{i.NomCoach}}</div>
-								</div>
-								
-							</div>
-							<div class="order-col">
-								<div>Prenom de Coach</div>
-                                    <div>{{i.PrenomCoach}}</div>
-							</div>
-							<div class="order-col">
-								<div>Email du Coach </div>
-                                <div>{{i.EmailCoach}}</div>
-							</div>
-                         
-                             <div class="order-col">
-								<div> Disponibilte du Coach </div>
-                                <div>{{i.dispoCoach}}</div>
-							</div>
-                             <div class="order-col">
-								<div> Image du Coach </div>
-                                <div>    <td><img src="{{ asset('/uploads/coach/' ~ i.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%"></td>
-</div>
-							</div>
-                            <div class="order-col">
-								<div> Cours </div>
-                                <div>{{i.Cours}}</div>
-								<div><strong class="order-total">Coach Yoga</strong></div>
+							<div class="shop-body">
+								<h3>{{i.Cours}}</h3>
+								<a href="{{ path('afficherdetaille') }}" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
-                        
-						
-							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-2">
-								
-								
-							</div>
-						
-						<a href="#" class="primary-btn order-submit">Réserver votre Coach</a>
 					</div>
-                    <div>
-     
+					
+
+					<!-- /shop -->
+
 {%endfor%}
+			</div>
+				</div>
+				<!-- /row --> 
+			<!-- /container -->
+				
+		</div>
+		<!-- /SECTION -->
+	
+
 {% endblock %}
 
 {% block footer %}

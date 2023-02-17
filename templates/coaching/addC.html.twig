@@ -8,12 +8,12 @@
 
 {% block body %}
 <h4 class="card-title">Basic form elements</h4>
-                    <p class="card-description"> Basic form elements </p>
+                    
 <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Basic form elements</h4>
-                    <p class="card-description"> Basic form elements </p>
+                    <p class="card-description"> Coaching : </p>
                     {{ form_start(formCoaching , {'attr': {'novalidate':'novalidate'}} ) }}
                     <form class="forms-sample">
                       <div class="form-group">
@@ -34,8 +34,8 @@
                       <div class="form-group">
                         {{ form_row(formCoaching.cours, {'label':'Cours' ,'attr':{'placeholder': 'cours...', 'class':'form-control'}}) }}
                       <button type="submit" class="btn btn-primary mr-2" >Ajouter</button>
-                    
+                    {{ form_end(formCoaching)}}
+
                       </div>
 	</div>
-{{ form_end(formCoaching)}}
                         {%endblock%}

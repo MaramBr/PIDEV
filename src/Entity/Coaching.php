@@ -28,7 +28,6 @@ class Coaching
     private ?string $prenomCoach = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")]
     #[Assert\Email(
         message: 'Email {{ value }} n est pas valider.',
     )]
@@ -171,7 +170,7 @@ class Coaching
     {
         return (string)  $this->getCours();
        
-       
+        $this->getDispoCoach();
     }
 
    

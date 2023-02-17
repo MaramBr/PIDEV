@@ -4,7 +4,9 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Basic Table</h4>
-                    <p class="card-description"> table<code>des Coach</code>
+                    
+                    <p class="card-description"> Ajouter Coach <code> <a href="{{ path('addcoach') }}" class="btn btn-dark" >Ajouter</a>
+</code>
                     </p>
                     <div class="table-responsive">
                       <table class="table">
@@ -18,7 +20,7 @@
                              <th>Disponibilte</th>
                              <th>img</th>
                              <th>Modifier</th>
-                             <th>Supprimer/th>
+                             <th>Supprimer </th>
 
 
                             
@@ -37,8 +39,8 @@
                               <td><img src="{{ asset('/uploads/coach/' ~ a.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "10%"></td>
                               
 
-                            <td><a href="{{ path('updatecoach', {id:a.id}) }}" class="btn btn-dark" >mettre à jour</a></td>
-                            <td><a href="{{ path('deletecoach', {id:a.id}) }}" class="btn btn-dark" >supprimer</a></td>
+                            <td><a href="{{ path('updatecoach', {id:a.id}) }}" class="btn btn-dark" >Modifier</a></td>
+                            <td><a href="{{ path('deletecoach', {id:a.id}) }}" class="btn btn-dark" >Supprimer</a></td>
 
                           </tr>
                           {% endfor %}

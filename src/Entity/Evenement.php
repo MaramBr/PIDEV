@@ -17,25 +17,27 @@ class Evenement
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"feraa8")]
+   #[Assert\NotBlank(message:"emptyyy")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"feraa8")]
+    #[Assert\NotBlank(message:"emptyyy")]
     private ?string $lieu = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"feraa8")]
+    #[Assert\NotBlank(message:"emptyyy")]
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"feraa8")]
+    #[Assert\NotBlank(message:"empty")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+     
     private ?\DateTimeInterface $date_debut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    
     private ?\DateTimeInterface $date_fin = null;
 
     #[ORM\Column(length: 255)]

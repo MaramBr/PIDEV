@@ -25,25 +25,15 @@
                                     <table class="table">
 
                                         <thead class=" text-primary">
-                                            <th>
-                                                ID
-                                            </th>
-                                            <th>
-                                                Nom sponsor
-                                            </th>
-                                            <th>
-                                                Email sponsor
-                                            </th>
-                                            <th class="text-right">
-                                                Investissement
-                                            </th>
+
+                                        <th><button type="button" class="btn btn-outline-warning">  identifiant</button></th>
+                          
+                            <th><button type="button" class="btn btn-outline-danger">Nom Sponsor</button></th>
+                            <th><button type="button" class="btn btn-outline-success">Email Sponor</button></th>
+                            <th><button type="button" class="btn btn-outline-warning">  Investissement</button></th>
                                             
-                                             <th class="text-right">
-                                              Delete
-                                            </th>
-                                             <th class="text-right">
-                                                Update
-                                            </th>
+                                            
+                                             
                                         </thead>
 
                                         <tbody>
@@ -64,10 +54,11 @@
                                                 </td>
                                                  
                                                  <td>
-                                                    <a href="{{ path('delete', {id:i.ID}) }}">Delete </a>
+                                                 <button type="button" class="btn btn-danger"><a href="{{ path('delete', {id:i.ID}) }}">Delete </a></button>
+                                                    
                                                 </td>
                                                  <td>
-                                                    <a href="{{ path('update', {id:i.ID}) }}">Update </a>
+                                                     <button type="button" class="btn btn-success"><a href="{{ path('update', {id:i.ID}) }}">Update </a></button>
                                                 </td>
                                             </tr>
                                            {% endfor%}

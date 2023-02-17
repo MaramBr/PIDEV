@@ -6,7 +6,7 @@
 <!-- section title -->
 	<div class="col-md-12">
 						<div class="section-title">
-							<h3 class="title"> Event</h3>
+							<h3 class="title"> Evenement De cette Saison :</h3>
 							<div class="section-nav">
 								<ul class="section-tab-nav tab-nav">
 									
@@ -16,9 +16,8 @@
 					</div>
  <!-- section title -->
 
-{% for i in Evenement %}
-<table>
-            <td>
+
+
             
 <div class="section">
 			<!-- container -->
@@ -29,12 +28,12 @@
 					<!-- Products tab & slick -->
 					<div class="col-md-12">
 						<div class="row">
-							<div class="products-tabs">
+							<div class="section-nav">
 								<!-- tab -->
 								<div id="tab1" class="tab-pane active">
 									<div class="products-slick" data-nav="#slick-nav-1">
 										<!-- product -->
-                    
+                    {% for i in Evenement %}
 										<div class="product">
 											<div class="product-img">
 												<img src="{{ asset('/uploads/brochures/'~i.Image) }}" alt="">
@@ -68,7 +67,7 @@
 												<button class="add-to-cart-btn"></i> Participer maintenant</button>
 											</div>
 										</div>
-                  
+                  {%endfor%}
 										<!-- /product -->
 									</div>
 									<div id="slick-nav-1" class="products-slick-nav"></div>
@@ -84,15 +83,12 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
-    
- </td> 
- 
-    </table>
+  
        
                           
                    
      
-{%endfor%}
+
 
 
 {% endblock %}

@@ -94,7 +94,7 @@ class EvenementController extends AbstractController
 
     }
 
-    #[Route('/Evenement/add1', name: 'add_front')]
+    #[Route('/Evenement/add1', name: 'add_back')]
     public function add2(ManagerRegistry $doctrine,Request $request ,SluggerInterface $slugger): Response
     {
         $Evenement=new Evenement() ;

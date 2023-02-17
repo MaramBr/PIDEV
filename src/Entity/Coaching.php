@@ -19,31 +19,33 @@ class Coaching
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    private ?string $nomCoach = null;
+    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")] 
+       private ?string $nomCoach = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")] 
+
     private ?string $prenomCoach = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")]
     #[Assert\Email(
-        message: 'Email {{ value }} is not a valid email.',
+        message: 'Email {{ value }} n est pas valider.',
     )]
     private ?string $emailCoach = null;
 
     
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")] 
     private ?string $cours = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")]
     private ?string $dispoCoach = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")]
     private ?string $imgCoach = null;
 
     #[ORM\OneToMany(mappedBy: 'Coachings', targetEntity: RendezVous::class)]

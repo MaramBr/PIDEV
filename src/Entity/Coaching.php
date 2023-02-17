@@ -19,26 +19,31 @@ class Coaching
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $nomCoach = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $prenomCoach = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\Email(
-        message: 'The email {{ value }} is not a valid email.',
+        message: 'Email {{ value }} is not a valid email.',
     )]
     private ?string $emailCoach = null;
 
     
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $cours = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $dispoCoach = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $imgCoach = null;
 
     #[ORM\OneToMany(mappedBy: 'Coachings', targetEntity: RendezVous::class)]

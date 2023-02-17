@@ -11,7 +11,6 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 
@@ -49,16 +48,9 @@ class CoachingType extends AbstractType
                 'attr' => ['class' => 'form-control'],
                 'placeholder' => 'Choisissez une option',
             ])
-            ->add('autre', TextType::class, [
-                'label' => 'Autre',
-                'required' => false,
-                'attr' => ['class' => 'form-control'],
-            ])
+         
           
-            ->add('submit', SubmitType::class, [
-                'label' => 'Envoyer',
-                'attr' => ['class' => 'btn btn-primary'],
-            ])
+          
            
             
 

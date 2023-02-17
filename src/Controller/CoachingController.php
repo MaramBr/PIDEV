@@ -52,7 +52,7 @@ class CoachingController extends AbstractController
         $Form=$this->createForm(CoachingType::class,$Coaching);
         $Form->handleRequest($request);
         if($Form->isSubmitted() && $Form->isValid()
-        )
+)
         {
             /** @var UploadedFile $brochureFile */
             $brochureFile = $Form->get('imgCoach')->getData();

@@ -28,7 +28,6 @@ class Coaching
     #[Assert\Email(
         message: 'The email {{ value }} is not a valid email.',
     )]
-    protected $email;
     private ?string $emailCoach = null;
 
     
@@ -45,8 +44,7 @@ class Coaching
     #[ORM\OneToMany(mappedBy: 'Coachings', targetEntity: RendezVous::class)]
     private Collection $rendezVouses;
 
-    #[ORM\Column(length: 255)]
-    private ?string $autre = null;
+   
 
     public function __construct()
     {
@@ -169,15 +167,5 @@ class Coaching
        
     }
 
-    public function getAutre(): ?string
-    {
-        return $this->autre;
-    }
-
-    public function setAutre(string $autre): self
-    {
-        $this->autre = $autre;
-
-        return $this;
-    }
+   
 }

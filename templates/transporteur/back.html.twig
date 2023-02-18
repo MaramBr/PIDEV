@@ -1,0 +1,109 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}E-FIT!{% endblock %}
+
+{% block body %}
+
+<div class="panel-header panel-header-sm">
+            </div>
+            <div class="content">
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                                                                                            
+
+                        <div class="card">
+                            <div class="card-header">
+
+                                <h4 class="card-title"> Simple Table</h4>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+
+                                    <table class="table">
+
+                                        <thead class=" text-primary">
+                                            <th>
+                                                ID
+                                            </th>
+                                            <th>
+                                                Full Name
+                                            </th>
+                                            <th>
+                                                Vehucile Description
+                                            </th>
+                                             <th>
+                                                Numero telephone
+                                            </th>
+                                            <th class="text-right">
+                                                Prix Standard
+                                            </th>
+                                            <th class="text-right">
+                                                Company
+                                            </th>
+                                             <th class="text-right">
+                                                Image
+                                            </th>
+                                        
+                                             <th class="text-right">
+                                              Delete
+                                            </th>
+                                             <th class="text-right">
+                                                Update
+                                            </th>
+                                        </thead>
+
+                                        <tbody>
+                                                      {% for i in Transporteur %}
+
+                                            <tr>
+                                                <td>
+                                                    {{i.ID}}
+                                                </td>
+                                                <td>
+                                                   {{i.Nom}}
+                                                </td>
+                                                <td>
+                                                    {{i.VehiculeDescription}}
+                                                </td>
+
+                                                 <td>
+                                                    {{i.Numero}}
+                                                </td>
+                                              <td>
+                                                    {{i.PrixStandard}}
+                                                </td>
+                                                <td>
+                                                    {{i.Company}}
+                                                </td>
+                                                
+                                                <td><img src="{{ asset('/uploads/Produits/' ~ i.Image) }}?t={{ date().getTimestamp() }}" alt="image"  width = "10%"></td>
+                                                 <td>
+                                                    <a class="btn btn-danger" href="{{ path('delete', {id:i.ID}) }}">Delete </a>
+                                                </td>
+                                                 <td>
+                                                    <a class="btn btn-warning" href="{{ path('update', {id:i.ID}) }}">Update </a>
+                                                </td>
+                                            </tr>
+                                           {% endfor%}
+                                        </tbody>
+                                    </table>
+                                       <th>
+                                    <a class="btn btn-light " href="/Transporteur/add"> Ajouter des transporteurs </a>
+                                      </th>
+                                      <th>
+                                       <a class="btn btn-info " href="/Company/add2"> Ajouter des Companies </a>
+                                       </th>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                           
+                            
+                </div>
+            </div>
+
+{% endblock %}

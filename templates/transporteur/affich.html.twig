@@ -1,0 +1,47 @@
+{% extends 'basefront.html.twig' %}
+{% block title %}Transporteurs{% endblock %}
+
+{% block body %}
+
+	<!-- section title -->
+					<div class="col-md-10">
+						<div class="section-title">
+							<h3 class="title">Vos transporteurs :</h3>
+							</div>
+					</div>
+					<!-- /section title -->
+	<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- shop --> {% for a in Transporteur %}
+					<div class="col-md-4 col-xs-6">
+						<div class="shop">
+							<div class="shop-img">
+								<img src="{{asset('/uploads/Produits/'~a.Image)}}" alt="" >
+							</div>
+							<div class="shop-body">
+								<h3>-{{a.Nom }}<br>-Cordonnées : </h3>
+								<div>
+								<a href="#" class="cta-btn">*vehicule : {{a.vehiculeDescription}}</a>
+								</div>
+								<div>
+								<a href="#" class="cta-btn">*Numero de telephone : {{a.numero}}</a></div>
+								<div><a href="#" class="cta-btn">*Prix Standard du livraison : {{a.prixStandard}}DT</a></div>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+					</div>
+					</div>
+					</div>
+					<!-- /shop -->
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
+

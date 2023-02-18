@@ -1,0 +1,63 @@
+
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Company{% endblock %}
+
+{% block body %}
+{%for i in Company%}
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">Company</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div><strong>Company</strong></div>
+							</div>
+							
+							<div class="order-col">
+								<div>Nom de Company</div>
+                                    <div>{{i.companyName}}</div>
+							</div>
+							
+                            <div class="order-col">
+								<div>1x Description du Vehicule  </div>
+                                <div>{{i.VehiculeDescription}}</div>
+							</div>
+
+							<div class="order-col">
+								<div>1x Prix Standard </div>
+                                <div>{{i.PrixStandard}}</div>
+							</div>
+
+							 <div class="order-col">
+								<div>1x image </div>
+                                <div>{{i.Image}}</div>
+								
+							</div>
+
+							<div class="order-col">
+								<div>1x Company</div>
+                               
+								<div><strong class="order-total"> <div>{{i.Company}}</div></strong></div>
+							</div>
+                           
+						</div>
+                        
+						
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-2">
+								
+								
+							</div>
+						
+						<a href="#" class="primary-btn order-submit">Acheter votre Company</a>
+					</div>
+                    <div>
+     
+{%endfor%}
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
+

@@ -170,7 +170,7 @@ class Coaching
     {
         return (string)  $this->getCours();
        
-        $this->getDispoCoach();
+        return(string)  $this->getDispoCoach();
     }
 
    

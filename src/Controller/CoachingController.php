@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Psr\Log\LoggerInterface;
+
 
 class CoachingController extends AbstractController
 {
@@ -34,15 +36,7 @@ class CoachingController extends AbstractController
         ]);
     }
      
-    #[Route('/afficherdetaille', name: 'afficherdetaille')]
-    public function afficherdetaille(ManagerRegistry $mg): Response
-    {
-        $repo=$mg->getRepository(Coaching::class);
-        $resultat = $repo ->FindAll();
-        return $this->render('coaching/index.html.twig', [
-            'Coaching' => $resultat,
-        ]);
-    }
+  
 
     
     #[Route('/afficherback', name: 'afficherback')]
@@ -107,7 +101,7 @@ class CoachingController extends AbstractController
         $form = $this->createForm(CoachingType::class, $Coaching);
         $form->add('update', SubmitType::class) ;
         $form->handleRequest($request);
-        if ($form->isSubmitted())
+        if ($form->isSubmitted() && $Form->isValid())
         { $em = $doctrine->getManager();
             $em->flush();
             return $this->redirectToRoute('afficherback');
@@ -125,4 +119,19 @@ class CoachingController extends AbstractController
         $em->flush();
         return $this->redirectToRoute('afficherback');
     }
+
+    #[Route('/detaille/{id}', name: 'detaille')]
+    public function detaille($id,ManagerRegistry $mg, LoggerInterface $logger): Response
+    {
+        $repo=$mg->getRepository(Coaching::class);
+        $resultat = $repo ->find(6);
+        $logger->info("The array is: " . json_encode($resultat));
+        return $this->render('coaching/index.html.twig', [
+            'Coaching' => $resultat,
+        ]);
+    }
+
+
+   
+    
 }

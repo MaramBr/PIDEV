@@ -73,12 +73,13 @@ class CoachingType extends AbstractType
                             'image/jpg',
                             'image/png',
                         ],
-                        'mimeTypesMessage' => 'Please upload a valid PDF document',
+                        'mimeTypesMessage' => 'Please upload a valid image',
                     ])
                 ],
             ])
             ->getForm()
         ;
+        
         
     }
 
@@ -88,4 +89,7 @@ class CoachingType extends AbstractType
             'data_class' => Coaching::class,
         ]);
     }
+
+  
 }
+

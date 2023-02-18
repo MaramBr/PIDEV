@@ -1,12 +1,12 @@
 {% extends 'basefront.html.twig' %}
 
-{% block title %}Coaching{% endblock %}
+{% block title %}coaching{% endblock %}
 
 {% block body %}
 
 					<div class="col-md-5 order-details">
 						<div class="section-title text-center">
-							<h3 class="title">Coaching</h3>
+							<h3 class="title">coaching</h3>
 						</div>
 						<div class="order-summary">
 							<div class="order-col">
@@ -15,31 +15,31 @@
 							<div class="order-products">
 								<div class="order-col">
 									<div> Nom du Coach </div>
-                                    <div>{{Coaching.NomCoach}}</div>
+                                    <div>{{coaching.NomCoach}}</div>
 								</div>
 								
 							</div>
 							<div class="order-col">
 								<div>Prenom de Coach</div>
-                                    <div>{{Coaching.PrenomCoach}}</div>
+                                    <div>{{coaching.PrenomCoach}}</div>
 							</div>
 							<div class="order-col">
 								<div>Email du Coach </div>
-                                <div>{{Coaching.EmailCoach}}</div>
+                                <div>{{coaching.EmailCoach}}</div>
 							</div>
                          
                              <div class="order-col">
 								<div> Disponibilte du Coach </div>
-                                <div>{{Coaching.dispoCoach}}</div>
+                                <div>{{coaching.dispoCoach}}</div>
 							</div>
                              <div class="order-col">
 								<div> Image du Coach </div>
-                                <div>    <td><img src="{{ asset('/uploads/coach/' ~ Coaching.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%"></td>
+                                <div>    <td><img src="{{ asset('/uploads/coach/' ~ coaching.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%"></td>
 </div>
 							</div>
                             <div class="order-col">
 								<div> Cours </div>
-                                <div>{{Coaching.Cours}}</div>
+                                <div>{{coaching.Cours}}</div>
 								<div><strong class="order-total">Coach Yoga</strong></div>
 							</div>
 						</div>
@@ -51,7 +51,7 @@
 								
 							</div>
 						
-						<a href="#" class="primary-btn order-submit">Réserver votre Coach</a>
+						<a href="{{ path('addrdv') }}" class="primary-btn order-submit">Réserver votre Coach</a>
 					</div>
                     <div>
      

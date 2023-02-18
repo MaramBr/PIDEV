@@ -11,6 +11,10 @@ use App\Repository\RendezVousRepository;//controller
 use App\Form\RendezVousType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Repository\CoachingRepository;//controller
+use App\Entity\Coaching;//controller
+use App\Form\CoachingType;
+
 
 class RendezVousController extends AbstractController
 {
@@ -53,11 +57,26 @@ class RendezVousController extends AbstractController
             $em=$doctrine->getManager();
             $em->persist($RendezVous);
             $em->flush();
-         return $this->redirectToRoute('afficherrdv');
+         return $this->redirectToRoute('/getByCours/Fitness');
         }
       //  return $this->render('productcontroller2/add.html.twig',array("form_student"=>$Form->createView()));
         return $this->renderForm('rendez_vous/addR.html.twig',array("formRendezVous"=>$Form));
     }
+
+    
+    #[Route('/getByCours/{cours}', name: 'appgetByCours')]
+    public function getByCours(ManagerRegistry $doctrine,Request $request, $cours, CoachingRepository $coachingRepository): Response
+    {        $coaching = $coachingRepository->findByCours($cours);
+        if (!$coaching) {
+            throw $this->createNotFoundException('Coaching not found for cours: '.$cours);
+        }
+
+        return $this->render('rendez_vous/liste.html.twig', [
+            'coaching' => $coaching,
+        ]);
+    }
+
+    
 
     #[Route('/updaterdv/{id}', name: 'updaterdv')]
     public function updaterdv(ManagerRegistry $doctrine,RendezVousRepository $RendezVousRepository,$id,Request $request): Response
@@ -86,4 +105,31 @@ class RendezVousController extends AbstractController
         $em->flush();
         return $this->redirectToRoute('afficherrdv');
     }
+
+
+    #[Route('/comparer', name: 'comparer')]
+    public function comparer(Request $request, CoachingRepository $coachingRepository): Response
+    {
+        $rendezVous = new RendezVous();
+        $form = $this->createForm(RendezVousType::class, $rendezVous);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $cours = $rendezVous->getCours();
+            $dispo = $rendezVous->getDate();
+
+            $coaches = $coachingRepository->findAvailableCoachesForCourseAndDate($cours, $dispo);
+
+            return $this->render('rendez_vous/result.html.twig', [
+                'coaches' => $coaches,
+            ]);
+        }
+
+        return $this->render('rendez_vous/index.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+   
 }
+

@@ -1,20 +1,63 @@
-<!DOCTYPE html>
+{% extends 'basefront.html.twig' %}
 
-<title>Hello RendezVousController!</title>
+{% block title %}Coaching{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/Maram/Desktop/Pidev_Symfony/src/Controller/RendezVousController.php'|file_link(0) }}">src/Controller/RendezVousController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/Maram/Desktop/Pidev_Symfony/templates/rendez_vous/index.html.twig'|file_link(0) }}">templates/rendez_vous/index.html.twig</a></code></li>
-    </ul>
+{%for i in form%}
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">Coaching</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div><strong>Coach</strong></div>
+							</div>
+							<div class="order-products">
+								<div class="order-col">
+									<div> Nom du Coach </div>
+                                    <div>{{i.getNomCoach()}}</div>
+								</div>
+								
+							</div>
+							<div class="order-col">
+								<div>Prenom de Coach</div>
+                                    <div>{{i.PrenomCoach}}</div>
+							</div>
+							<div class="order-col">
+								<div>Email du Coach </div>
+                                <div>{{i.EmailCoach}}</div>
+							</div>
+                         
+                             <div class="order-col">
+								<div> Disponibilte du Coach </div>
+                                <div>{{i.dispoCoach}}</div>
+							</div>
+                             <div class="order-col">
+								<div> Image du Coach </div>
+                                <div>    <td><img src="{{ asset('/uploads/coach/' ~ i.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%"></td>
 </div>
+							</div>
+                            <div class="order-col">
+								<div> Cours </div>
+                                <div>{{i.Cours}}</div>
+								<div><strong class="order-total">Coach Yoga</strong></div>
+							</div>
+						</div>
+                        
+						
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-2">
+								
+								
+							</div>
+						
+						<a href="" class="primary-btn order-submit">Réserver votre Coach</a>
+					</div>
+                    <div>
+     
+{%endfor%}
+{% endblock %}
+
+{% block footer %}
+
 {% endblock %}

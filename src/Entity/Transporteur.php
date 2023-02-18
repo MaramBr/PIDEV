@@ -20,15 +20,19 @@ class Transporteur
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"is empty")]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message:"is empty")]
     private ?string $vehiculeDescription = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"is empty")]
     private ?int $numero = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"is empty")]
     private ?float $prixStandard = null;
 
     #[ORM\Column(length: 255)]

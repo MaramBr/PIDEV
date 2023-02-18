@@ -17,6 +17,7 @@ class Company
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"fera8")]
     private ?string $companyName = null;
 
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Transporteur::class)]

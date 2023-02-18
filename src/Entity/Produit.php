@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 class Produit
@@ -17,15 +18,19 @@ class Produit
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"is empty")]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message:"is empty")]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"is empty")]
     private ?int $quantite = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"is empty")]
     private ?float $prix = null;
 
     #[ORM\Column(length: 255)]
@@ -37,9 +42,13 @@ class Produit
     #[ORM\OneToMany(mappedBy: 'Produit', targetEntity: CommandeProduit::class)]
     private Collection $Commande;
 
+    #[ORM\ManyToMany(targetEntity: Panier::class, mappedBy: 'produits')]
+    private Collection $panier;
+
     public function __construct()
     {
         $this->Commande = new ArrayCollection();
+        $this->panier = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,6 +128,16 @@ class Produit
         return $this;
     }
 
+    public function __toString()
+    {
+        return (string) $this->getNom();
+        $this->getDescription();
+        $this->getQuantite();
+        $this->getPrix();
+        $this->getImage();
+        $this->getCategorys();
+    }
+
     /**
      * @return Collection<int, CommandeProduit>
      */
@@ -126,7 +145,6 @@ class Produit
     {
         return $this->Commande;
     }
-
     public function addCommande(CommandeProduit $commande): self
     {
         if (!$this->Commande->contains($commande)) {
@@ -148,4 +166,32 @@ class Produit
 
         return $this;
     }
+
+    /**
+     * @return Collection|Panier[]
+     */
+    public function getPanier(): Collection
+    {
+        return $this->panier;
+    }
+
+    public function addPanier(Panier $panier): self
+    {
+        if (!$this->panier->contains($panier)) {
+            $this->panier->add($panier);
+            $panier->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): self
+    {
+        if ($this->panier->removeElement($panier)) {
+            $panier->removeProduit($this);
+        }
+
+        return $this;
+    }
+
 }

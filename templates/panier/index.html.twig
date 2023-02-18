@@ -1,0 +1,132 @@
+{% extends 'basefront.html.twig' %}
+{% block title %} Votre panier{% endblock %}
+
+{% block cart %}
+
+
+
+
+								<div class="dropdown">
+									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-shopping-cart"></i>
+										<span>Mon panier</span>	
+                                        <div class="qty">{{ sum}}</div>
+									</a>
+
+                                    <div class="cart-dropdown">
+
+                                    {% for item in items %}
+										<div class="cart-list">
+											<div class="product-widget">
+												<div class="product-img">
+													<img src="{{ item.produit.image}}" alt="">
+												</div>
+												<div class="product-body">
+													<h3 class="product-name"><a href="#">{{ item.produit.Nom }}</a></h3>
+													<h4 class="product-price"><span class="qty">{{ item.quantite }}x</span>{{ item.produit.prix~"DT" }}</h4>
+												</div>
+												<button class="delete"><a href="{{ path('cart_remove', {'id': item.produit.id}) }}"><i class="fa fa-close"></i></a></button>
+											</div>
+                                        </div>
+                                        
+									{% endfor %}
+
+                                    <div class="cart-summary">
+											<small>  {{ sum}} Item(s) selected </small>
+											<h5>TOTAL: {{ total~"DT"}}</h5>
+										</div>
+
+										<div class="cart-btns">
+											<a href="{{ path('cart_index',) }}" >Voir Panier</a>
+                                            <a href="#">Confirmer <i class="fa fa-arrow-circle-right"></i></a>
+										</div>
+									
+								</div>
+                             
+  
+{% endblock %}
+{% block body %}
+    <div class="bg-light p-3">
+        <h1>Votre panier</h1>
+    </div>
+
+    {% if items | length > 0 %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom Produit</th>
+                    <th>Prix</th>
+                    <th>Quantite</th>
+                    <th>Total</th>
+                    <th>Ajouter</th>
+                    <th>Retirer</th>
+                    <th>Annulation</th>
+                    
+                     
+                     
+                        
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>{{ item.produit.id}}</td>
+                        <td>{{ item.produit.Nom }}</td>
+                        <td>{{ item.produit.prix~"DT" }}</td>
+                        <td>{{ item.quantite }}</td>
+                        <td>{{ item.produit.prix * item.quantite }}DT</td>
+                        <td>   <a href="{{ path('cart_addq', {'id': item.produit.id}) }}" class="btn btn-sm btn-success">  
+                            +</a>
+                            <td> <a href="{{ path('cart_removeq', {'id': item.produit.id}) }}" class="btn btn-sm btn-warning">  
+                            -</a></td>
+                            
+                            </td>
+                        <td> 
+                            <a href="{{ path('cart_remove', {'id': item.produit.id}) }}" class="btn btn-sm btn-danger">
+                           Annuler </a>
+                        </td>
+                   
+                    </tr>
+                {% endfor %}
+            </tbody>
+        
+                <tr>
+                    <th colspan="7" class="text-right">
+                        Total Panier:
+                    </th>
+                    <th>{{ total~"DT"}}</th>
+                    
+                </tr>
+                <tr>   
+                <th colspan="8" class="text-right"> 
+                <button type="submit" class="primary-btn btn-success" ><a href="{{ path('panierToCommande',{ idUtlisateur:0  }) }}">Commander </a></button>
+                </th>
+                </tr>
+
+              
+                         
+                    
+            
+             <tr>   
+                <th colspan="8" class="text-right"> 
+                <button type="submit" class="btn btn-primary" ><a href="{{ path('app')}}">Continuer Votre Shopping </a></button>
+                </th>
+                
+                </tr>
+        </table>
+      
+       
+      
+    {% else %}
+  
+        <h2>Surprise ! C'est vide !</h2>
+         <tr>   
+                <th colspan="8" class="text-right"> 
+                <button type="submit" class="btn btn-primary" ><a href="{{ path('app')}}">Continuer Votre Shopping </a></button>
+                </th>
+                
+                </tr>
+    {% endif %}
+
+{% endblock %}

@@ -21,6 +21,8 @@ class CommandeProduitRepository extends ServiceEntityRepository
         parent::__construct($registry, CommandeProduit::class);
     }
 
+
+    
     public function save(CommandeProduit $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -37,7 +39,7 @@ class CommandeProduitRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
-    }
+    } 
 
 //    /**
 //     * @return CommandeProduit[] Returns an array of CommandeProduit objects

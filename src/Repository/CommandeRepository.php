@@ -21,6 +21,8 @@ class CommandeRepository extends ServiceEntityRepository
         parent::__construct($registry, Commande::class);
     }
 
+
+    
     public function save(Commande $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
@@ -37,7 +39,7 @@ class CommandeRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
-    }
+    } 
 
 //    /**
 //     * @return Commande[] Returns an array of Commande objects

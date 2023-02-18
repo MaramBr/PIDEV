@@ -17,9 +17,11 @@ class CommandeProduit
     private ?int $quantiteProduit = null;
 
     #[ORM\ManyToOne(inversedBy: 'Commande')]
+    #[ORM\JoinColumn(onDelete:'CASCADE')]
     private ?Produit $Produit = null;
 
     #[ORM\ManyToOne(inversedBy: 'commandeProduits')]
+    #[ORM\JoinColumn(onDelete:'CASCADE')]
     private ?Commande $Commande = null;
 
     public function getId(): ?int

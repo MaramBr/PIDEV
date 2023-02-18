@@ -1,0 +1,58 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}E-FIT!{% endblock %}
+
+ {% block body %}
+
+
+ <div class="bg-light p-3">
+        <h1>Votre Commande</h1>
+    </div>
+
+    
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>REFERENCE</th>
+                    <th>LISTE PRODUIT</th>
+                    <th>MONTANT</th>
+                    <th>DATE</th>
+                    <th>STATUS</th>
+                    <th>SUPPRIMER</th>
+                    
+                     
+                     
+                        
+                </tr>
+            </thead>
+            <tbody>
+                {%for c in Commande%}
+                    <tr>
+                        <td>{{c.Reference}}</td>
+                        {% for a in  i.getCommandeProduits().toArray() %}
+                           <b>Nom</b> : {{ a.getProduit().nom}} , <b>Quantite </b> : {{ a.quantiteProduit }} <br>
+                        {% endfor %}
+                        <td> {{ i.montant }}DT</td>
+                         <td class="invert"> {{ i.getDateCreation().format('j-m-y') }}</td>
+                        <td>{{ i.status }}</td> 
+                        <td> 
+                         <a href="{{ path('commandeDelete',{'id':i.id}) }}">
+                                       <div class="btn btn-sm btn-danger"> </div>
+                        Supprimer</a>
+                        </td>
+                   
+                    </tr>
+                {% endfor %}
+            </tbody>
+        
+             
+        </table>
+      
+       
+      
+   
+
+{% endblock %}
+
+
+        

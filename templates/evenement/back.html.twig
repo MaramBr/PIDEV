@@ -16,7 +16,7 @@
                             <th><button type="button" class="btn btn-outline-danger">Nom Event</button></th>
                             <th><button type="button" class="btn btn-outline-success">Date debut</button></th>
                           <th><button type="button" class="btn btn-outline-warning"> Date fin</button></th>
-                          <th><button type="button" class="btn btn-outline-danger">lien image</button></th>
+                          <th><button type="button" class="btn btn-outline-danger"> image</button></th>
                             <th><button type="button" class="btn btn-outline-success">Lieu</button></th>
                             <th><button type="button" class="btn btn-outline-warning">  Description</button></th>
                             <th><button type="button" class="btn btn-outline-danger">Type</button></th>
@@ -62,12 +62,19 @@
                                                  <td>
                                                    <button type="button" class="btn btn-success"><a href="{{ path('updateEvenement', {id:i.ID}) }}">Update </a></button> 
                                                 </td>
+                                               
                           </tr>
                           {% endfor %}
+                          
+                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/add1">Ajouter evenement </a></td>
+                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Sponsor/add"> ajouter Sponsor </a> </td>
+                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/afficher"> front</a> </td>
                         </tbody>
                       </table>
+                      
                     </div>
                   </div>
+                     
                 </div>
                 
               

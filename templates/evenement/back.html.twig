@@ -42,9 +42,7 @@
                                                 <td>
                                                     {{ i.DateFin|date('Y-m-d H:i:s')  }}
                                                 </td>
-                                                <td>
-                                                    {{i.Image}}
-                                                </td>
+                                                <td><img src="{{ asset('/uploads/brochures/' ~ i.Image) }}?t={{ date().getTimestamp() }}" alt="image"  width = "10%"></td>
                                               <td>
                                                     {{i.Lieu}}
                                                 </td>

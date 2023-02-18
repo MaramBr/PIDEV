@@ -23,7 +23,7 @@ class EvenementType extends AbstractType
             ->add('date_debut')
             ->add('date_fin')
             ->add('image', FileType::class, [
-                'label' => 'image (image pdf)',
+                'label' => 'image (image)',
 
                 // unmapped means that this field is not associated to any entity property
                 'mapped' => false,

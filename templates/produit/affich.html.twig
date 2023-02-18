@@ -10,7 +10,7 @@
 									</a>
 									<div class="cart-dropdown">
 										<div class="cart-btns">
-											<a href="{{ path('cart_index',) }}" >Voir Panier</a>
+											<a href="{{ path('panier') }}" >Voir Panier</a>
 											<a href="#">Confirmer <i class="fa fa-arrow-circle-right"></i></a>
 											
 										</div>
@@ -68,7 +68,7 @@
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn" ><a href="{{ path('cart_add', { 'id' : a.id }) }}"><i class="fa fa-shopping-cart"></i> add to cart</a></button>
+												<button class="add-to-cart-btn" ><a href="{{ path('cartAdd', {'id':a.id})}}"><i class="fa fa-shopping-cart"></i> add to cart</a></button>
 											</div>
 										</div>
 									{% endfor %}

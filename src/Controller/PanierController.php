@@ -27,98 +27,91 @@ use Symfony\Component\Validator\Constraints\Date;
 use function Sodium\randombytes_random16;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+use App\Services\CartServices;
+
 
 
 
 
 class PanierController extends AbstractController
 {
-/**
-     * @Route("/panier", name="cart_index")
-     */
-    public function index(SessionInterface $session, ProduitRepository $ProduitRepository , PanierRepository $PanierRepository )
+    private $cartServices;
+    public function __construct(CartServices $cartServices)
     {
-
-        $panier = $session->get('panier', []);
-        $panierWithData = [];
-        foreach ($panier as $id => $quantite  ) {
-            $panierWithData[] = [
-                'produit' => $ProduitRepository->find($id),
-                'quantite' => $quantite,];}
-        $total = 0;
-        $sum=0;
-        foreach ($panierWithData as $couple) {
-            $total += $couple['produit']->getPrix() * $couple['quantite'];
-            $sum+=$couple['quantite'];
+        $this->cartServices = $cartServices;
+    }
+    /**
+     * @Route("/cart", name="panier")
+     */
+    public function index(): Response
+    {
+        $cart = $this->cartServices->getFullCart();
+        if (!isset($cart['products'])){
+            return $this->redirectToRoute("app");
         }
+        //$cartServices->addToCart(4);
+        //dd($cartServices->getCart());//test ok pour affichage
         return $this->render('panier/index.html.twig', [
-            "items" => $panierWithData,
-            "total" => $total,
-            "sum"=>$sum,
-        ]);}
+            'cart' => $cart
+        ]);
+    }
+    /**
+     * @Route("/cart/add/{id}", name = "cartAdd")
+     */
+    public function addToCart($id): Response{
+        //$cartServices->deleteCart();
+        $this->cartServices->addToCart($id);
+        //dd($cartServices->getFullCart());//test ok pour l'ajout
+        return $this->redirectToRoute("app");
+        //return $this->render('cart/index.html.twig', [
+           // 'controller_name' => 'CartController',]);
+    }
+       /**
+     * @Route("/cart/add2/{id}", name = "cartAdd2")
+     */
+    public function addToCart2($id): Response{
+        //$cartServices->deleteCart();
+        $this->cartServices->addToCart($id);
+        //dd($cartServices->getFullCart());//test ok pour l'ajout
+        return $this->redirectToRoute("panier");
+        //return $this->render('cart/index.html.twig', [
+           // 'controller_name' => 'CartController',]);
+    }
 
     /**
-     * @Route("/ajouter/{id}", name="cart_add")
+     * @Route("/cart/delete/{id}", name = "cartDelete")
      */
-    public function add($id, SessionInterface $session)
-    {
-        $panier = $session->get('panier', []);
-        if (empty($panier[$id])) {
-            $panier[$id] = 0;
-        }
-        $panier[$id]++;
-        $session->set('panier', $panier);
-        return $this->redirectToRoute("app");
-    }
-      /**
-     * @Route("/supprimer/{id}", name="cart_remove")
-     */
-    public function remove($id, SessionInterface $session)
-    {
-        $panier = $session->get('panier', []);
-        if (!empty($panier[$id])) {
-            unset($panier[$id]);
-        }
-        $session->set('panier', $panier);
-        return $this->redirectToRoute('cart_index');
-    }
-           /**
-     * @Route("/addquantite/{id}/{$quantite}", name="cart_addq")
-     */
-    public function addq($id, SessionInterface $session)
-    {
-        $panier = $session->get('panier', []);
-        if (empty($panier[$id])) {
-            $panier[$id] = $panier[$id];
-        }
-        $panier[$id]++;
-        $session->set('panier', $panier);
-        return $this->redirectToRoute("cart_index");
+    public function deleteFromCart($id): Response{
+       
+        $this->cartServices->deleteFromCart($id);
+        //dd($cartServices->getFullCart());//test ok pour le delete
+        return $this->redirectToRoute("panier");
+        //return $this->render('cart/index.html.twig', [
+        //    'controller_name' => 'CartController',]);
     }
      /**
-     * @Route("/removequantite/{id}", name="cart_removeq")
+     * @Route("/cart/deleteAll/{id}", name = "cartDeleteAll")
      */
-    public function removeq($id, SessionInterface $session)
-    {
-        $panier = $session->get('panier', []);
-        if (!empty($panier[$id])) {
-            $panier[$id] = $panier[$id];
-        $panier[$id]--;}
-        else  if (empty($panier[$id])) {
-            unset($panier[$id]);
-        }
-        $session->set('panier', $panier);
-        return $this->redirectToRoute("cart_index");
+    public function deleteAllToCart($id): Response{
+       
+        $this->cartServices->deleteAllToCart($id);
+        //dd($cartServices->getFullCart());//test ok pour le delete
+        return $this->redirectToRoute("panier");
+        //return $this->render('cart/index.html.twig', [
+        //    'controller_name' => 'CartController',]);
     }
+
    /**
      * @Route("/panierToCommande{idUtlisateur}", name="panierToCommande")
      */
 
-     public function panierToCommande(CommandeProduitRepository $commandeProduitRepository,ProduitRepository $produitRepository,UserRepository $utilisateurRepository,$idUtlisateur ,PanierRepository $panierrepository, Request $request): Response
+     public function panierToCommande(CartServices $cartServices,CommandeProduitRepository $commandeProduitRepository,ProduitRepository $produitRepository,UserRepository $utilisateurRepository,$idUtlisateur ,PanierRepository $panierrepository, Request $request): Response
      {
- 
+        $cart = $this->cartServices->getFullCart();
+        
+
+
          $newCommande = new Commande();
-         $prixTot=0;
          $panier = $panierrepository->findBy(['utilisateur' => $idUtlisateur][0]);
          foreach($panier->getProduits()->toArray() as $p){
              $pr = $produitRepository->find($p->getId());

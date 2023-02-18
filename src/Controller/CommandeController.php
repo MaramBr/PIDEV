@@ -36,7 +36,7 @@ class CommandeController extends AbstractController
         $d = $panierRepository->findBy(['utilisateur'=>1])[0];
         $sum = $d->getProduits()->count();
         $dataTarray = $d->getProduits()->toArray();
-        $total=0.0;
+        $total=0;
         foreach ($dataTarray as $p){
             $total += ($p->getPrix() * $p->getQuantite());
         }

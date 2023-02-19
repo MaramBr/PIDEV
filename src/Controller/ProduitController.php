@@ -31,6 +31,7 @@ class ProduitController extends AbstractController
         $repo=$em->getRepository(Produit::class);
         $result=$repo->findAll();
         return $this->render ('Produit/affich.html.twig',['Produit'=>$result]);
+        
    
        
     }

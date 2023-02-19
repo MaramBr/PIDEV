@@ -17,7 +17,7 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"is empty")]
+    #[Assert\NotBlank(message:"veuillez remplir le champs")]
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'Categorys', targetEntity: Produit::class)]

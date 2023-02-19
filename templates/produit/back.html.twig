@@ -78,14 +78,12 @@
                                                 <td>
                                                     {{i.Categorys}}
                                                 </td>
-                                                 <td>
-                                                    {{i.Image}}
+                                               <td><img src="{{ asset('/uploads/produits/' ~ i.Image) }}?t={{ date().getTimestamp() }}" alt="image"  width = "10%"></td>
+                                               <td>
+                                                    <a href="{{ path('delete', {id:i.ID}) }}">supprimer </a>
                                                 </td>
                                                  <td>
-                                                    <a href="{{ path('delete', {id:i.ID}) }}">Delete </a>
-                                                </td>
-                                                 <td>
-                                                    <a href="{{ path('update', {id:i.ID}) }}">Update </a>
+                                                    <a href="{{ path('update', {id:i.ID}) }}">mise à jour </a>
                                                 </td>
                                             </tr>
                                            {% endfor%}

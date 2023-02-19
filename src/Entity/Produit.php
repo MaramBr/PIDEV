@@ -18,19 +18,19 @@ class Produit
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"is empty")]
+    #[Assert\NotBlank(message:"veuillez remplir le champs")]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\NotBlank(message:"is empty")]
+    #[Assert\NotBlank(message:"veuillez remplir le champs")]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message:"is empty")]
+    #[Assert\NotBlank(message:"veuillez remplir le champs")]
     private ?int $quantite = null;
 
     #[ORM\Column]
-    #[Assert\NotBlank(message:"is empty")]
+    #[Assert\NotBlank(message:"veuillez remplir le champs")]
     private ?float $prix = null;
 
     #[ORM\Column(length: 255)]

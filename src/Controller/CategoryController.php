@@ -23,6 +23,15 @@ class CategoryController extends AbstractController
             'controller_name' => 'CategoryController',
         ]);
     }
+    #[Route('/Category/afficher2', name: 'appfront2')]
+    public function affichefront2(ManagerRegistry $em): Response
+    {
+        $repo=$em->getRepository(Category::class);
+        $result=$repo->findAll();
+        return $this->render ('Category/affich.html.twig',['Category'=>$result]);
+   
+       
+    }
 
    
     #[Route('/Category/afficherback2', name: 'appback2')]

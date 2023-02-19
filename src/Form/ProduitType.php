@@ -36,8 +36,8 @@ class ProduitType extends AbstractType
                     new File([
                         
                       'mimeTypes' => [
-                           'image/jpg',
-                           //'image/png',
+                           //'image/jpg',
+                           'image/png',
                            'image/gif',
                         ],
                         'mimeTypesMessage' => 'Veuillez télécharger une image valide',

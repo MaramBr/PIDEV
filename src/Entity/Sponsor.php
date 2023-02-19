@@ -16,15 +16,17 @@ class Sponsor
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"feraa8")]
+    #[Assert\NotBlank(message:"nom Sponsor doit etre non vide")]
+    #[Assert\Length(min:3, minMessage:"Votre nom inferieure a 3 caractères.")]
     private ?string $nomSponsor = null;
 
     #[ORM\Column(length: 255)]
-     #[Assert\Email(message:"the email is not valid ")]
+    #[Assert\NotBlank(message:"l'email doit etre non vide")]
+     #[Assert\Email(message:"L'email n'est pas valide ")]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"feraa8")]
+    #[Assert\NotBlank(message:"Investissement doit etre non vide")]
     private ?string $invest = null;
 
     #[ORM\OneToMany(mappedBy: 'Sponsors', targetEntity: Evenement::class)]

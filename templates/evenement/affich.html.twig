@@ -46,23 +46,21 @@
                      
 											<div class="product-body">
 												<h4 class="product-price"> {{i.Nom}} </h4>
-												<h2 class="product-name">DATE DEBUT : {{ i.Datedebut|date('Y-m-d') }}</h2>
-                        <h2 class="product-name">DATE FIN :{{ i.Datefin|date('Y-m-d') }}</h2>
-                        <h3 class="product-name">{{i.lieu}}</h3>
-                        <h3 class="product-name">{{i.Description}}</h3>
+												<h2 class="product-name"><p class="product-category">Date Debut :</p> {{ i.Datedebut|date('Y-m-d') }}</h2>
+                        <h2 class="product-name"><p class="product-category">Date fin:</p>{{ i.Datefin|date('Y-m-d') }}</h2>
+                        <h3  class="fa fa-exchange" class="product-name">{{i.lieu}}</h3> 
+						
+						<p class="product-category">{{i.Description}}</p>
+                       
 												<h4 class="product-price">{{i.Type}} </h4>
                         <h3 class="product-name"><p class="product-category">Notre Sponsor :</p>{{i.Sponsors}}</h3>
 												<div class="product-rating">
-													<i class="fa fa-star"></i>
-													<i class="fa fa-star"></i>
-													<i class="fa fa-star"></i>
-													<i class="fa fa-star"></i>
-													<i class="fa fa-star"></i>
+													
 												</div>
 												<div class="product-btns">
 													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+													
+							                        <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
 												</div>
 											</div>
 											<div class="add-to-cart">

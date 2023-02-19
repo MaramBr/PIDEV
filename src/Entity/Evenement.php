@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints\Date;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class Evenement
@@ -17,27 +18,29 @@ class Evenement
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-   #[Assert\NotBlank(message:"emptyyy")]
+   #[Assert\NotBlank(message:"nom evenement doit etre non vide")]
+   #[Assert\Length(min:5, minMessage:"Votre nom inferieure a 5 caractères.")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"emptyyy")]
+    #[Assert\NotBlank(message:"lieu evenement doit etre non vide")]
     private ?string $lieu = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"emptyyy")]
+    #[Assert\NotBlank(message:"type evenement doit etre non vide")]
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"empty")]
+    #[Assert\NotBlank(message:"Description evenement doit etre non vide")]
+     #[Assert\Length(min:7,max:100, minMessage:"Doit etre > 7.", maxMessage:"Doit etre <=100")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-     
+ 
     private ?\DateTimeInterface $date_debut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    
+   
     private ?\DateTimeInterface $date_fin = null;
 
     #[ORM\Column(length: 255)]

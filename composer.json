@@ -43,6 +43,7 @@
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
         "vich/uploader-bundle": "^2.0"
+        
     },
     "config": {
         "allow-plugins": {
@@ -103,4 +104,5 @@
         "symfony/stopwatch": "5.4.*",
         "symfony/web-profiler-bundle": "5.4.*"
     }
+    
 }

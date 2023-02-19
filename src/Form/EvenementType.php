@@ -38,10 +38,11 @@ class EvenementType extends AbstractType
                     new File([
                         
                         'mimeTypes' => [
-                            'image/gif',
+                    
                             'image/jpeg',
                             'image/jpg',
                             'image/png',
+                            'image/webp'
                         ],
                         'mimeTypesMessage' => 'Please upload a valid image',
                     ])

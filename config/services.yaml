@@ -6,6 +6,7 @@
 parameters:
      Evenement_directory : '%kernel.project_dir%/public/uploads/brochures'
 
+
 services:
     # default configuration for services in *this* file
     _defaults:

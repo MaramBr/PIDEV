@@ -8,17 +8,29 @@
         <div class="card-body">
             {{ form_start(formRendezVous, {'attr': {'novalidate': 'novalidate'}}) }}
             <form class="forms-sample">
-                <div class="form-group">
-                    {{ form_row(formRendezVous.Coachings, {'label': 'Cours', 'attr': {'placeholder': 'cours...', 'class': 'form-control', 'id': 'select-coachings'}}) }}
-                </div>
+             
                 
-              
+                <div class="form-group">
+                    {{ form_row(formRendezVous.daterdv) }}
+                    
+                </div>
 
-                <a href="{{ path('appgetByCours', {'cours': ' '}) }}" class="primary-btn" id="afficher-btn">afficher</a>
+                
+                {{ form_end(formRendezVous)}}
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+               
             </form>
         </div>
     </div>
 </div>
+ 
+
 <script>
     // Get the select element
     const select = document.getElementById('rendez_vous_Coachings');
@@ -37,9 +49,10 @@
       console.log(afficherBtn.href)
     });
 </script>
+
+                  
+
+
 {% endblock %}
 
 
-
-{% block footer %}
-{% endblock %}

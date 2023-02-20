@@ -18,20 +18,9 @@ class Coaching
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")] 
-       private ?string $nomCoach = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")] 
+   
 
-    private ?string $prenomCoach = null;
-
-    #[ORM\Column(length: 255)]
-    #[Assert\Email(
-        message: 'Email {{ value }} n est pas valider.',
-    )]
-    private ?string $emailCoach = null;
 
     
 
@@ -44,7 +33,6 @@ class Coaching
     private ?string $dispoCoach = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")]
     private ?string $imgCoach = null;
 
     #[ORM\OneToMany(mappedBy: 'Coachings', targetEntity: RendezVous::class)]
@@ -61,42 +49,16 @@ class Coaching
     {
         return $this->id;
     }
-
-    public function getNomCoach(): ?string
+    public function setId(int $id): self
     {
-        return $this->nomCoach;
-    }
-
-    public function setNomCoach(string $nomCoach): self
-    {
-        $this->nomCoach = $nomCoach;
+        $this->id = $id;
 
         return $this;
     }
+   
 
-    public function getPrenomCoach(): ?string
-    {
-        return $this->prenomCoach;
-    }
+  
 
-    public function setPrenomCoach(string $prenomCoach): self
-    {
-        $this->prenomCoach = $prenomCoach;
-
-        return $this;
-    }
-
-    public function getEmailCoach(): ?string
-    {
-        return $this->emailCoach;
-    }
-
-    public function setEmailCoach(string $emailCoach): self
-    {
-        $this->emailCoach = $emailCoach;
-
-        return $this;
-    }
 
    
 

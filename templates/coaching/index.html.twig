@@ -10,37 +10,27 @@
 						</div>
 						<div class="order-summary">
 							<div class="order-col">
-								<div><strong>Coach</strong></div>
-							</div>
-							<div class="order-products">
-								<div class="order-col">
-									<div> Nom du Coach </div>
-                                    <div>{{Coaching.NomCoach}}</div>
-								</div>
 								
 							</div>
-							<div class="order-col">
-								<div>Prenom de Coach</div>
-                                    <div>{{Coaching.PrenomCoach}}</div>
+							
+								
 							</div>
-							<div class="order-col">
-								<div>Email du Coach </div>
-                                <div>{{Coaching.EmailCoach}}</div>
-							</div>
+						
+							
                          
                              <div class="order-col">
 								<div> Disponibilte du Coach </div>
                                 <div>{{Coaching.dispoCoach}}</div>
 							</div>
                              <div class="order-col">
-								<div> Image du Coach </div>
+								<div> Image  </div>
                                 <div>    <td><img src="{{ asset('/uploads/coach/' ~ Coaching.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%"></td>
 </div>
 							</div>
                             <div class="order-col">
 								<div> Cours </div>
-                                <div>{{Coaching.Cours}}</div>
-								<div><strong class="order-total">Coach Yoga</strong></div>
+                                
+								<div><strong class="order-total"><div>{{Coaching.Cours}}</div></strong></div>
 							</div>
 						</div>
                         
@@ -50,8 +40,8 @@
 								
 								
 							</div>
-						
-						<a href="#" class="primary-btn order-submit">Réserver votre Coach</a>
+
+						<a href="{{ path('addrdv2', {id:Coaching.id}) }}" class="primary-btn order-submit">Réserver votre Coach</a>
 					</div>
                     <div>
      

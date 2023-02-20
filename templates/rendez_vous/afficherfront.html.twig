@@ -12,15 +12,20 @@
 					<div class="col-md-17">
                 <div class="card">
                   <div class="card-body">
+                 <p class="card-description" > Ajouter Rendez_vous <code> <a href="{{ path('addrdv') }}" class="primary-btn" >Ajouter</a> </code>
+
                     <h4 class="card-title">Table des Rendez_Vous</h4>
+
                     
                     </p>
                     <div class="table-responsive">
                       <table class="table">
                         <thead>
                           <tr>
+                            <th>Cours</th>
                             <th>Date</th>
-                            <th>Nom du cours</th>
+                             <th>Modifier-rendez-vous</th>
+                              <th>Annuler rendez-vous</th>
                            
                             
                           </tr>
@@ -33,8 +38,8 @@
                           
                             <td> {{a.Coachings  }} </td>
                             <td> {{a.daterdv.format('j-m-y') }} </td>
-                            <td><a href="{{ path('updaterdv', {id:a.id}) }}" class="btn btn-dark" >Modifier</a></td>
-                            <td><a href="{{ path('deleterdv', {id:a.id}) }}" class="btn btn-dark" >supprimer</a></td>
+                            <td><a href="{{ path('updaterdv', {id:a.id}) }}" class="primary-btn" >Modifier</a></td>
+                            <td><a href="{{ path('deleterdv', {id:a.id}) }}" class="primary-btn" >Annuler</a></td>
  </tr>
                           {% endfor %}
                         </tbody>

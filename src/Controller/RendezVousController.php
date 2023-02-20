@@ -9,11 +9,13 @@ use App\Entity\RendezVous;//controller
 use Doctrine\Persistence\ManagerRegistry;//controller
 use App\Repository\RendezVousRepository;//controller
 use App\Form\RendezVousType;
+use App\Form\RendezVousType2;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Repository\CoachingRepository;//controller
 use App\Entity\Coaching;//controller
 use App\Form\CoachingType;
+use Psr\Log\LoggerInterface;
 
 
 class RendezVousController extends AbstractController
@@ -48,19 +50,44 @@ class RendezVousController extends AbstractController
 
     #[Route('/addrdv', name: 'addrdv')]
     public function addrdv(ManagerRegistry $doctrine,Request $request): Response
-    {
+    {   
         $RendezVous =new RendezVous();
         $Form=$this->createForm(RendezVousType::class,$RendezVous);
         $Form->handleRequest($request);
-        if($Form->isSubmitted())
+       /* $RendezVous->setCoachings($em->getRepository(Coaching::class)->find($request->get('Coachings')));        
+       */ if($Form->isSubmitted() && $Form->isValid )
         {
             $em=$doctrine->getManager();
             $em->persist($RendezVous);
             $em->flush();
-         return $this->redirectToRoute('/getByCours/Fitness');
+         return $this->redirectToRoute('afficherrdv');
         }
       //  return $this->render('productcontroller2/add.html.twig',array("form_student"=>$Form->createView()));
         return $this->renderForm('rendez_vous/addR.html.twig',array("formRendezVous"=>$Form));
+    }
+    #[Route('/addrdv2/{id}', name: 'addrdv2')]
+    public function addrdv2(ManagerRegistry $doctrine,Request $request,  LoggerInterface $logger, $id): Response
+    {   
+        // $coaching = new Coaching();
+        $repo=$doctrine->getRepository(Coaching::class);
+        $coaching = $repo ->find($id);
+        // $coaching->find($id);
+        $RendezVous = new RendezVous();
+        $Form=$this->createForm(RendezVousType2::class,$RendezVous);
+        $Form->handleRequest($request);
+        $RendezVous->setCoachings($coaching);
+
+       /* $RendezVous->setCoachings($em->getRepository(Coaching::class)->find($request->get('Coachings')));        
+       */ if($Form->isSubmitted() && $Form->isValid())
+        {
+            $em=$doctrine->getManager();
+            $em->persist($coaching);
+            $em->persist($RendezVous);
+            $em->flush();
+         return $this->redirectToRoute('afficherrdv');
+        }
+      //  return $this->render('productcontroller2/add.html.twig',array("form_student"=>$Form->createView()));
+        return $this->renderForm('rendez_vous/addR2.html.twig',array("formRendezVous"=>$Form));
     }
 
     
@@ -79,20 +106,20 @@ class RendezVousController extends AbstractController
     
 
     #[Route('/updaterdv/{id}', name: 'updaterdv')]
-    public function updaterdv(ManagerRegistry $doctrine,RendezVousRepository $RendezVousRepository,$id,Request $request): Response
+    public function updaterdv(ManagerRegistry $doctrine,RendezVousRepository $RendezVousRepository ,$id,Request $request): Response
     {
         $RendezVous= $doctrine
         ->getRepository(RendezVous::class)
         ->find($id);
         $form = $this->createForm(RendezVousType::class, $RendezVous);
-        $form->add('update', SubmitType::class) ;
+        $form->add('Modifier', SubmitType::class) ;
         $form->handleRequest($request);
         if ($form->isSubmitted())
         { $em = $doctrine->getManager();
             $em->flush();
             return $this->redirectToRoute('afficherrdv');
         }
-        return $this->renderForm("rendez_vous/addR.html.twig",
+        return $this->renderForm("rendez_vous/addR2.html.twig",
             ["formRendezVous"=>$form]) ;
     }
 

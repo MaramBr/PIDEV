@@ -12,6 +12,8 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 
 class CoachingType extends AbstractType
@@ -19,19 +21,26 @@ class CoachingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nomCoach')
-            ->add('prenomCoach')
-            ->add('emailCoach')
+          
             ->add('cours', ChoiceType::class, [
                 'choices' => [
                     'Yoga' => 'Yoga',
                     'Fitness' => 'Fitness',
                     'Gymnas' => 'Gymnas',
-                  
+                    'Boxing' => 'Boxing',
+
+                                     
                 ],
                 'attr' => ['class' => 'form-control'],
                 'placeholder' => 'Choisissez une option',
+                'required' => true,
+                'mapped' => true,
+                
             ])
+            
+          
+         
+        
             ->add('dispoCoach', ChoiceType::class, [
                 'choices' => [
                     'En weekend' => 'weekend',
@@ -72,8 +81,9 @@ class CoachingType extends AbstractType
                         'mimeTypes' => [
                             'image/jpg',
                             'image/png',
+                          
                         ],
-                        'mimeTypesMessage' => 'Please upload a valid image',
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide',
                     ])
                 ],
             ])

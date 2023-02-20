@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Coaching;//controller
 use Doctrine\Persistence\ManagerRegistry;//controller
 use App\Repository\CoachingRepository;//controller
-use App\Form\CoachingType;
+use App\Form\CoachingType; 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -99,9 +99,8 @@ class CoachingController extends AbstractController
         ->getRepository(Coaching::class)
         ->find($id);
         $form = $this->createForm(CoachingType::class, $Coaching);
-        $form->add('update', SubmitType::class) ;
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $Form->isValid())
+        if ($form->isSubmitted() && $form->isValid())
         { $em = $doctrine->getManager();
             $em->flush();
             return $this->redirectToRoute('afficherback');
@@ -124,7 +123,7 @@ class CoachingController extends AbstractController
     public function detaille($id,ManagerRegistry $mg, LoggerInterface $logger): Response
     {
         $repo=$mg->getRepository(Coaching::class);
-        $resultat = $repo ->find(6);
+        $resultat = $repo ->find($id);
         $logger->info("The array is: " . json_encode($resultat));
         return $this->render('coaching/index.html.twig', [
             'Coaching' => $resultat,

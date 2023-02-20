@@ -22,8 +22,7 @@
                             <td>{{a.id }}</td>
                             <td> {{a.coachings}} </td>
                             <td> {{a.DateRdv.format('j-m-y') }} </td>
-                            <td><a href="{{ path('updaterdv', {id:a.id}) }}" class="btn btn-dark" >Modifier</a></td>
-                            <td><a href="{{ path('deleterdv', {id:a.id}) }}" class="btn btn-dark" >supprimer</a></td>
+                            <td><a href="{{ path('updaterdv', {id:a.id}) }}" class="btn btn-primary" >Traiter</a></td>
 
                           </tr>
                           {% endfor %}

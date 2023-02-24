@@ -1,0 +1,20 @@
+{% if evenements is not empty %}
+    <h2>Résultats pour "{{ term }}"</h2>
+
+    <ul>
+        {% for evenement in evenements %}
+            <li>{{ evenement.nom }} - {{ evenement.date|date('d/m/Y') }}</li>
+            <ul>
+                <li>Lieu : {{ evenement.lieu }}</li>
+                <li>Description : {{ evenement.description }}</li>
+            </ul>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun résultat pour "{{ term }}"</p>
+{% endif %}
+Cette vue affiche une liste de noms d'événements correspondant au terme de recherche fourni. Chaque événement est affiché avec des détails tels que la date
+
+
+
+

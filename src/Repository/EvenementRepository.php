@@ -63,4 +63,16 @@ class EvenementRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+ public function searchEvenements(string $term)
+    {
+        $qb = $this->createQueryBuilder('e');
+        
+        $qb->where($qb->expr()->like('e.nom', ':term'))
+           ->setParameter('term', '%'.$term.'%');
+           
+        $qb->orderBy('e.nom', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
 }

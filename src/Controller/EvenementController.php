@@ -42,6 +42,7 @@ class EvenementController extends AbstractController
     {
         $repo=$em->getRepository(Evenement::class);
         $result=$repo->findAll();
+        $result = $evenementRepository->searchEvenement($x);
         return $this->render ('Evenement/back.html.twig',['Evenement'=>$result]);
    
        
@@ -172,5 +173,16 @@ class EvenementController extends AbstractController
         return $this->redirectToRoute('afficheback');
     }
  
-    
+     #[Route('/Evenement/search', name: 'add_search')]
+  public function search(Request $request ,EvenementRepository $EvenementRepository)
+{
+    $term = $request->query->get('q');
+    $evenement = $this->EvenementRepository->searchEvenements($term);
+
+    return $this->render('evenement/search.html.twig', [
+        'evenements' => $evenement,
+        'term' => $term,
+    ]);
+
+}
 }

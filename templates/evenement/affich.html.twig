@@ -38,7 +38,7 @@
                     {% for i in Evenement %}
 										<div class="product">
 											<div class="product-img">
-												<img src="{{ asset('/uploads/brochures/'~i.Image) }}" alt="">
+												<img  src="{{ asset('/uploads/brochures/'~i.Image) }}" alt="">
 												<div class="product-label">
 													
 												</div>
@@ -46,13 +46,46 @@
                      
 											<div class="product-body">
 												<h4 class="product-price"> {{i.Nom}} </h4>
-												<h2 class="product-name"><p class="product-category">Date Debut :</p> {{ i.Datedebut|date('Y-m-d') }}</h2>
-                        <h2 class="product-name"><p class="product-category">Date fin:</p>{{ i.Datefin|date('Y-m-d') }}</h2>
-                        <h3  class="fa fa-exchange" class="product-name">{{i.lieu}}</h3> 
-						
-						<p class="product-category">{{i.Description}}</p>
-                       
-												<h4 class="product-price">{{i.Type}} </h4>
+												<!-- Cart -->
+								<div class="dropdown">
+									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										 <i class="fa-sharp fa-regular fa-arrow-down"></i>
+										<span>Details</span>
+										
+									</a>
+									<div class="cart-dropdown">
+										<div class="cart-list">
+											<div class="product-widget">
+												<div class="product-img">
+													<img src="{{asset('./img/product01.png')}}" alt="">
+												</div>
+												<div class="product-body">
+													<h3 class="fa fa-map-marker"  class="product-name" > {{i.lieu}} </h3>
+													<p class="product-price">{{i.Description}}</p>
+												</div>
+												<button class="delete"><i class="fa fa-close"></i></button>
+											</div>
+
+											<div class="product-widget">
+												<div class="product-img">
+													<img src="{{asset('./img/product02.png')}}" alt="">
+												</div>
+												<div class="product-body">
+												<small>Date debut :</small>
+													<h3 class="product-name">{{ i.Datedebut|date('Y-m-d') }}</h3>
+												<small>Date Fin:</small>	
+													<h2 class="product-name">{{ i.Datefin|date('Y-m-d') }}</h2>
+													<h4 class="product-price">{{i.Type}}</h4>
+												</div>
+												<button class="delete"><i class="fa fa-close"></i></button>
+											</div>
+										</div>
+										
+										
+									</div>
+								</div>
+								<!-- /Cart -->
+
                         <h3 class="product-name"><p class="product-category">Notre Sponsor :</p>{{i.Sponsors}}</h3>
 												<div class="product-rating">
 													
@@ -64,7 +97,7 @@
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn"></i> Participer maintenant</button>
+												<button class="add-to-cart-btn" > <a href="/Participant/add"  > Participer maintenant </a></button>
 											</div>
 										</div>
                   {% endfor %}
@@ -99,4 +132,6 @@
 {% block footer %}
 
 {% endblock %}
+
+
 

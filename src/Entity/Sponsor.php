@@ -18,6 +18,10 @@ class Sponsor
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"nom Sponsor doit etre non vide")]
     #[Assert\Length(min:3, minMessage:"Votre nom inferieure a 3 caractères.")]
+    #[Assert\Regex(
+         pattern:"/^[^0-9]+$/",
+         message:"Le nom ne doit pas contenir de chiffres"
+     )]
     private ?string $nomSponsor = null;
 
     #[ORM\Column(length: 255)]

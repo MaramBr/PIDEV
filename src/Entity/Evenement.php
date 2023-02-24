@@ -3,11 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\EvenementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\LessThan;
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class Evenement
@@ -17,9 +21,13 @@ class Evenement
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+   #[ORM\Column(length: 255)]
    #[Assert\NotBlank(message:"nom evenement doit etre non vide")]
    #[Assert\Length(min:5, minMessage:"Votre nom inferieure a 5 caractères.")]
+   #[Assert\Regex(
+         pattern:"/^[^0-9]+$/",
+         message:"Le nom ne doit pas contenir de chiffres"
+     )]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
@@ -36,6 +44,9 @@ class Evenement
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+
+   #[Assert\GreaterThan('today')]
+   #[Assert\LessThan('+2 year')]
  
     private ?\DateTimeInterface $date_debut = null;
 
@@ -48,6 +59,14 @@ class Evenement
 
     #[ORM\ManyToOne(inversedBy: 'evenements')]
     private ?Sponsor $Sponsors = null;
+
+    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'evenements')]
+    private Collection $Participants;
+
+    public function __construct()
+    {
+        $this->Participants = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -162,6 +181,30 @@ class Evenement
         $this->getLieu();
         $this->getSponsors();
     }
+
+     /**
+      * @return Collection<int, Participant>
+      */
+     public function getParticipants(): Collection
+     {
+         return $this->Participants;
+     }
+
+     public function addParticipant(Participant $participant): self
+     {
+         if (!$this->Participants->contains($participant)) {
+             $this->Participants->add($participant);
+         }
+
+         return $this;
+     }
+
+     public function removeParticipant(Participant $participant): self
+     {
+         $this->Participants->removeElement($participant);
+
+         return $this;
+     }
 
     
 }

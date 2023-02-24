@@ -28,43 +28,50 @@
 
                                         <th><button type="button" class="btn btn-outline-warning">  identifiant</button></th>
                           
-                            <th><button type="button" class="btn btn-outline-danger">Nom Sponsor</button></th>
-                            <th><button type="button" class="btn btn-outline-success">Email Sponor</button></th>
-                            <th><button type="button" class="btn btn-outline-warning">  Investissement</button></th>
+                            <th><button type="button" class="btn btn-outline-danger">Nom Participant</button></th>
+                            <th><button type="button" class="btn btn-outline-danger">prenom Participant</button></th>
+                            <th><button type="button" class="btn btn-outline-success">Email Participant</button></th>
+                            <th><button type="button" class="btn btn-outline-warning">  age</button></th>
+                             <th><button type="button" class="btn btn-outline-warning">  tel</button></th>
                                             
                                             
                                              
                                         </thead>
 
                                         <tbody>
-                                                      {% for i in Sponsor %}
+                                                      {% for i in Participant %}
 
                                             <tr>
                                                 <td>
                                                     {{i.ID}}
                                                 </td>
                                                 <td>
-                                                   {{i.nomSponsor}}
+                                                   {{i.nom}}
+                                                </td>
+                                                <td>
+                                                   {{i.prenom}}
                                                 </td>
                                                 <td>
                                                     {{ i.email }}
                                                 </td>
                                               <td>
-                                                    {{i.Invest}}
+                                                    {{i.age}}
+                                                </td>
+                                                <td>
+                                                   {{i.tel}}
                                                 </td>
                                                  
                                                  <td>
-                                                <a class="btn btn-danger" href="{{ path('delete', {id:i.ID}) }}">supprimer </a>
+                                                <a class="btn btn-danger" href="{{ path('delete3', {id:i.ID}) }}">supprimer </a>
                                                     
                                                 </td>
-                                                 <td>
-                                                  <a class="btn btn-success" href="{{ path('update', {id:i.ID}) }}">mettre a jour </a>
+                                                 
                                             </tr>
                                            {% endfor%}
                                            
                                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/add1">Ajouter evenement </a></td>
-                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Sponsor/add"> ajouter Sponsor </a> </td>
-                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/afficher"> front</a> </td>
+                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Participant/add"> ajouter Participant </a> </td>
+                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/afficher"> Routour</a> </td>
                         </tbody>
                                     </table>
                                 </div>

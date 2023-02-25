@@ -15,11 +15,10 @@ class Panier
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-        /**
-     * @ORM\ManyToMany(targetEntity=Produit::class, mappedBy="panier")
-     * @ORM\JoinTable(name="panierproduit")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     */
+  
+    #[ORM\ManyToMany(mappedBy: 'panier', targetEntity: Produit::class)]
+    #[ORM\JoinTable(name:'panierproduit')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private $produits;
 
     #[ORM\OneToOne(inversedBy: 'panier',cascade:['persist','remove'], targetEntity: User::class)]

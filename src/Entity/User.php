@@ -44,10 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Commande::class)]
     private Collection $commandes;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Panier::class, mappedBy="client", cascade={"persist", "remove"})
-     *
-     */
+
+    #[ORM\OneToOne(mappedBy: 'utilisateur',cascade:['persist','remove'], targetEntity: Panier::class)]
+
     private $panier;
 
     public function __construct()
@@ -267,5 +266,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->panier = $panier;
 
         return $this;
+    }
+    public function __toString()
+    {
+        return sprintf('%s: %s ', $this->nom, $this->prenom);
     }
 }

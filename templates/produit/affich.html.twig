@@ -2,20 +2,7 @@
 
 {% block title %}Produit{% endblock %}
 
- {% block cart %}
-								<div class="dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-										<i class="fa fa-shopping-cart"></i>
-										<span>Mon panier</span>	
-									</a>
-									<div class="cart-dropdown">
-										<div class="cart-btns">
-											<a href="{{ path('panier') }}" >Voir Panier</a>
-											<a href="#">Confirmer <i class="fa fa-arrow-circle-right"></i></a>
-											
-										</div>
-									</div>
-								</div> {% endblock %}
+
 {% block body %}
 <!-- SECTION -->
 		<div class="section">
@@ -68,7 +55,7 @@
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn" ><a href="{{ path('cartAdd', {'id':a.id})}}"><i class="fa fa-shopping-cart"></i> add to cart</a></button>
+												<button class="add-to-cart-btn" ><a href="{{ path('panier') }}"><i class="fa fa-shopping-cart"></i> add to cart</a></button>
 											</div>
 										</div>
 									{% endfor %}

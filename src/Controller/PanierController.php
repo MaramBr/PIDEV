@@ -27,97 +27,70 @@ use Symfony\Component\Validator\Constraints\Date;
 use function Sodium\randombytes_random16;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-use App\Services\CartServices;
-
 
 
 
 
 class PanierController extends AbstractController
 {
-    private $cartServices;
-    public function __construct(CartServices $cartServices)
-    {
-        $this->cartServices = $cartServices;
-    }
-    /**
-     * @Route("/cart", name="panier")
+/**
+     * @Route("/panier", name="panier")
      */
-    public function index(): Response
+    public function index(PanierRepository $repository , Request $request): Response
     {
-        $cart = $this->cartServices->getFullCart();
-        if (!isset($cart['products'])){
-            return $this->redirectToRoute("app");
+        $d = $repository->findBy(['utilisateur'=>1])[0];
+        $sum = $d->getProduits()->count();
+        $data = $d->getProduits()->toArray();
+        $total=0.0;
+        foreach ($data as $p){
+            $total += ($p->getPrix() * $p->getQuantite());
         }
-        //$cartServices->addToCart(4);
-        //dd($cartServices->getCart());//test ok pour affichage
-        return $this->render('panier/index.html.twig', [
-            'cart' => $cart
-        ]);
-    }
-    /**
-     * @Route("/cart/add/{id}", name = "cartAdd")
-     */
-    public function addToCart($id): Response{
-        //$cartServices->deleteCart();
-        $this->cartServices->addToCart($id);
-        //dd($cartServices->getFullCart());//test ok pour l'ajout
-        return $this->redirectToRoute("app");
-        //return $this->render('cart/index.html.twig', [
-           // 'controller_name' => 'CartController',]);
-    }
-       /**
-     * @Route("/cart/add2/{id}", name = "cartAdd2")
-     */
-    public function addToCart2($id): Response{
-        //$cartServices->deleteCart();
-        $this->cartServices->addToCart($id);
-        //dd($cartServices->getFullCart());//test ok pour l'ajout
-        return $this->redirectToRoute("panier");
-        //return $this->render('cart/index.html.twig', [
-           // 'controller_name' => 'CartController',]);
-    }
+        //$newPanier = new Panier();
+        $form = $this->createFormBuilder($d)
+           // ->add("utilisateur",EntityType::class, ['class'=> User::class, 'choice_label' => 'nom'])
+            ->add('produits',EntityType::class,[
+                'class'=>Produit::class,
+                'choice_label'=>'nom',
+                'multiple'=>true,
+                'mapped'=>false,
+])
+            ->add("Ajouter_produit",SubmitType::class)
+            ->getForm();
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid() ) {
+            $em = $this->getDoctrine()->getManager();
+            foreach ($request->request->get('form')['produits'] as $PID){
+                $produit = $this->getDoctrine()->getRepository(Produit::class)->find($PID);
+                $d->addProduit($produit);
+                $em->flush();
+            }
+           // dd($newPanier->getProduits());
 
-    /**
-     * @Route("/cart/delete/{id}", name = "cartDelete")
-     */
-    public function deleteFromCart($id): Response{
-       
-        $this->cartServices->deleteFromCart($id);
-        //dd($cartServices->getFullCart());//test ok pour le delete
-        return $this->redirectToRoute("panier");
-        //return $this->render('cart/index.html.twig', [
-        //    'controller_name' => 'CartController',]);
-    }
-     /**
-     * @Route("/cart/deleteAll/{id}", name = "cartDeleteAll")
-     */
-    public function deleteAllToCart($id): Response{
-       
-        $this->cartServices->deleteAllToCart($id);
-        //dd($cartServices->getFullCart());//test ok pour le delete
-        return $this->redirectToRoute("panier");
-        //return $this->render('cart/index.html.twig', [
-        //    'controller_name' => 'CartController',]);
+             //$em->persist($newPanier);
+            $em->flush();
+            return $this->redirectToRoute('panier');
+        }
+
+        return $this->render('panier/index.html.twig', [
+            'formP' => $form->createView(),'data' => $data , 'sumP'=>$sum , 'total'=>$total
+        ]);
     }
 
    /**
-     * @Route("/panierToCommande{idUtlisateur}", name="panierToCommande")
+     * @Route("/panierToCommande{idUtilisateur}", name="panierToCommande")
      */
 
-     public function panierToCommande(CartServices $cartServices,CommandeProduitRepository $commandeProduitRepository,ProduitRepository $produitRepository,UserRepository $utilisateurRepository,$idUtlisateur ,PanierRepository $panierrepository, Request $request): Response
+     public function panierToCommande(CommandeProduitRepository $commandeProduitRepository,ProduitRepository $produitRepository,UserRepository $utilisateurRepository,$idUtilisateur ,PanierRepository $repository, Request $request): Response
      {
-        $cart = $this->cartServices->getFullCart();
-        
-
-
+ 
          $newCommande = new Commande();
-         $panier = $panierrepository->findBy(['utilisateur' => $idUtlisateur][0]);
+         $prixTot=0;
+         $panier = $repository->findBy(['utilisateur' => $idUtilisateur])[0];
          foreach($panier->getProduits()->toArray() as $p){
              $pr = $produitRepository->find($p->getId());
              $prixTot =$prixTot+ $pr->getPrix();
          }
-         $newCommande->setUtilisateur($utilisateurRepository->find($idUtlisateur));
+         $newCommande->setUtilisateur($utilisateurRepository->find($idUtilisateur));
          $newCommande->setStatus("En Attente");
          $newCommande->setReference(random_bytes(10));
          $newCommande->setMontant($prixTot);
@@ -134,9 +107,31 @@ class PanierController extends AbstractController
              $newCommande->addCommandeProduit($commandeProduit);
              $pr->setQuantite(1);
              $panier->removeProduit($p);
+             
          }
          $em->flush();
          return $this->redirectToRoute('commande');
+     }
+     /**
+      * @Route("/removeP{id}", name="removeP")
+      */
+     public function removeP( $id,PanierRepository $repository , Request $request): Response
+     {
+         $d = $repository->findBy(['utilisateur'=>1])[0];
+             $em = $this->getDoctrine()->getManager();
+                 $produit = $this->getDoctrine()->getRepository(Produit::class)->find($id);
+                 $d->removeProduit($produit);
+                 $produit->setQuantite(1);
+                 $em->flush();
+ 
+             // dd($newPanier->getProduits());
+ 
+             //$em->persist($newPanier);
+ 
+             return $this->redirectToRoute('panier');
+ 
+ 
+ 
      }
    
 }

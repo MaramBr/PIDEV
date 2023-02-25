@@ -1,101 +1,181 @@
 {% extends 'basefront.html.twig' %}
 {% block title %} Votre panier{% endblock %}
+{% set prod = {} %}
+{% for i in data %}
+
+        {%  set prod = prod|merge([i.id]) %}
+    {% endfor %}
+{% set count=0 %}
+
+{% block cart %}
 
 
+
+
+								<div class="dropdown">
+									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-shopping-cart"></i>
+										<span>Mon panier</span>	
+                                        <div class="qty">{{ data|length}}</div>
+									</a>
+
+                                    <div class="cart-dropdown">
+
+                                    {% for i in data %}
+										<div class="cart-list">
+											<div class="product-widget">
+												<div class="product-img">
+													<img src={{asset('/uploads/produits/'~i.image)}} alt="" width="5%">
+												</div>
+												<div class="product-body">
+													<h3 class="product-name"><a href="#"> {{ i.nom}}</a></h3>
+													<h4 class="product-price"><span class="qty">{{ i.quantite }}x</span>{{ i.prix }}.00DT</h4>
+												</div>
+												<button class="delete"><a href="{{ path('removeP',{id : i.id}) }}"><i class="fa fa-close"></i></a></button>
+											</div>
+                                        </div>
+                                        
+									{% endfor %}
+
+                                    <div class="cart-summary">
+											<small>  {{ data|length}} Item(s) selected </small>
+                                           <div> <small>  + 7.00 Frais de livraison</small> 	</div>
+											<h5>TOTAL: {{ total + 7.00 }}.00 DT</h5>
+										</div>
+
+										<div class="cart-btns">
+											<a href="{{ path('panier',) }}" >Voir Panier</a>
+                                            <a href="{{ path('panierToCommande',{ idUtilisateur:1  }) }}">Commander <i class="fa fa-arrow-circle-right"></i></a>
+										</div>
+									
+								</div>
+                             
+  
+{% endblock %}
 {% block body %}
     <div class="bg-light p-3">
-        <h1>Votre panier</h1>
+        <h3>Votre panier dispose de : <span>{{ data|length}} Produits</span></h3>
     </div>
 
-         <table class="table">
-            <thead>
-                <tr>
-                    <th >&nbsp;</th>
-                    <th>Produit</th>
-                    <th>Prix</th>
-                    <th>Quantite</th>
-                    <th>Total</th>
-                    <th>Annuler</th>
-                      
-                </tr>
-            </thead>
+        <table class="table">
+           
+                   <thead>
+                           <tr>
+                               <th>SL No.</th>
+                               <th>Produit</th>
+                               <th>Quantite</th>
+                               <th>Nom Produit</th>
+                               <th>prix</th>
+                               <th>Action</th>
+                           </tr>
+                           </thead>
+
             <tbody>
-                {% if app.session.get('cart') %}
-                {% for element in cart.products %}
-                    <tr>
-                        <td><a href="#"><img src="/assets/uploads/products/{{element.product.image}}"></a></td>
-                        <td>{{element.product.Nom}}</td>
-                        <td>{{element.product.prix}}DT</td>
-                        <td class="product-quantity" data-title="Quantity"><div class="quantity">
-                                        <a href="{{ path('cartDelete', {'id':element.product.id})}}" type="button" class="btn btn-warning"  value="-" class="minus"> - </a>
-                                        <input type="text" name="quantity" value="{{element.quantity}}" title="Qty"  size="5">
-                                        <a href="{{ path('cartAdd2', {'id':element.product.id})}}" type="button" class="btn btn-success" value="+" class="plus"> + </a>
+            {% for i in data %}
+                               {% set count=count+1 %}
+                            <tr >
+                            
+                               <td >{{ count }}</td>
+                               <td ><a href="#"><img src={{asset('/uploads/produits/'~i.image)}} alt="" width="5%" /></a></td>
+
+                       
+                                  <td class="product-quantity" data-title="Quantity"><div class="quantity">
+                                        <a href="#" type="button"   value="-" class="minus"> - </a>
+                                        <input type="text" name="quantity" value="{{ i.quantite }}" title="Qty"  size="5">
+                                        <a href="#" type="button"  value="+" class="plus"> + </a>
                                         </div></td>
+                               <td >
+                                       {{ i.nom}}
+                               <td >
+                                       {{ i.prix }}DT
+                               </td>
+                               <td >
+                                  <a href="{{ path('removeP',{id : i.id}) }}">
+                                  <div class="btn btn-sm btn-danger"> Supprimer </div>
+                                  </a>
+                               </td>
+                           </tr>
+                           {% endfor %}
+                       </table>
+           <!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+<!-- Order Details -->
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">continuer au panier</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div><strong>PRODUCT</strong></div>
+								<div><strong>TOTAL</strong></div>
+							</div>
+							<div class="order-products">
+                            {% for i in data %}
+								<div class="order-col">
+                                
+									<div>{{ i.quantite }}x {{ i.nom }}</div>
+									<div>{{i.prix * i.quantite}}.00 DT</div>
+								</div>
+                                {% endfor %}
+							</div>
+                              
+                              
+							<div class="order-col">
+								<div>Frait de livraison:</div>
+								<div><strong>7.00 DT</strong></div>
+							</div>
+                            
+                            
+							<div class="order-col">
+								<div><strong>TOTAL</strong></div>
+								<div><strong class="order-total">{{ total + 7.00 }}.00 DT</strong></div>
+							</div>
+                            
+						</div>
+                        <h4>Mode de payement</h4>
+						<div class="payment-method">
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-1">
+								<label for="payment-1">
+									<span></span>
+									Carte bancaire
+								</label>
+							</div>
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-2">
+								<label for="payment-2">
+									<span></span>
+									Espece
+								</label>
+							</div>
+							
+						</div>
+						
+						<a href="{{ path('panierToCommande',{ idUtilisateur:1  }) }}" class="primary-btn order-submit">Commander</a>
+					</div>
+					<!-- /Order Details -->
+                    	</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+                       <div >
+                          <a href="{{ path('app') }}" class="primary-btn order-submit">Continuer votre shopping</a>
+                            <br><br>
+                           {{ form(formP) }}
+                       </div>
 
-                        <td>{{ element.quantity * element.product.prix }}DT </td>
+                       <div class="clearfix"> </div>
+                   </div>
 
-                        <td class="btn btn-danger"> 
-                            <a href="{{ path('cartDeleteAll', {'id':element.product.id})}}"> Annuler
-                        </td>
-                    </tr>
-                {% endfor %}
+               </div>
+           </div>
 
-                {% else %}
-        <h2>Surprise ! C'est vide !</h2>
-         <tr>   
-                <th colspan="5" class="text-right"> 
-                <button  class="btn btn-primary" ><a href="{{ path('app')}}">Continuer Votre Shopping </a></button>
-                </th>
-                </tr>
-                {% endif %}
-                </tbody>
-                  <tfoot>
-                                <tr>
-                                    <th >&nbsp;</th>
-                                    <th >Produit</th>
-                                    <th >Prix</th>
-                                    <th >Quantite</th>
-                                    <th >Total</th>
-                                    <th >Annuler</th>
-                                </tr>
-                            </tfoot>
-                             </table>
-                            <p><a class="btn btn-fill-out" href="{{ path('app')}}">Continuer Votre Shopping</a></p>
-      
-       <div class="row">
-                  <div class="col-md-6">
-                  </div>
-                  <div class="col-md-6">
-                    <div class="border p-3 p-md-4">
-                        <div class="heading_s1 mb-3">
-                            <h6>Panier Totaux</h6>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td class="cart_total_label">Panier Sous total HT</td>
-                                        <td class="cart_total_amount">{{ cart.data.subTotalHT}}DT</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_total_label">Taxe (20%) </td>
-                                        <td class="cart_total_amount">{{ cart.data.Taxe }}DT</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_total_label">Total TTC</td>
-                                        <td class="cart_total_amount"><strong>{{ cart.data.subTotalTTC  }}DT</strong></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <a href="#" class="btn btn-fill-out">Valider votre commande</a>
-                    </div>
-                  </div>
-              </div>
-         </div>
-      </div>
        
-      
-   
 
 {% endblock %}

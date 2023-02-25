@@ -1,12 +1,37 @@
 {% extends 'basefront.html.twig' %}
 
 {% block title %}E-FIT!{% endblock %}
+{% block cart %}
+
+
+
+
+								<div class="dropdown">
+									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-shopping-cart"></i>
+										<span>Mon panier</span>	
+                                        <div class="qty">0</div>
+									</a>
+
+                                    <div class="cart-dropdown">
+
+                                  
+
+										<div class="cart-btns">
+											<a href="{{ path('panier',) }}" >Voir Panier</a>
+                                            <a href="#">Commander <i class="fa fa-arrow-circle-right"></i></a>
+										</div>
+									
+								</div>
+                             
+  
+{% endblock %}
 
  {% block body %}
 
 
  <div class="bg-light p-3">
-        <h1>Votre Commande</h1>
+       <h3>Vos commandes : <span> {{ data|length}} Commande(s)</span></h3>
     </div>
 
     
@@ -26,19 +51,33 @@
                 </tr>
             </thead>
             <tbody>
-                {%for c in Commande%}
+                {% for i in data %}
                     <tr>
-                        <td>{{c.Reference}}</td>
+                        <td>{{i.Reference}}</td>
+                        <td>
                         {% for a in  i.getCommandeProduits().toArray() %}
-                           <b>Nom</b> : {{ a.getProduit().nom}} , <b>Quantite </b> : {{ a.quantiteProduit }} <br>
+                           <b>Nom</b> : {{ a.getProduit().nom}} | <b>Quantite </b> : {{ a.quantiteProduit }} | <b>Prix</b> : {{ a.getProduit().prix}} <br> 
                         {% endfor %}
+                        </td>
                         <td> {{ i.montant }}DT</td>
                          <td class="invert"> {{ i.getDateCreation().format('j-m-y') }}</td>
-                        <td>{{ i.status }}</td> 
+                        <td> {% if i.status == "En attente" %}
+  <span class="badge badge-warning">{{ i.status }}</span>
+ {% elseif i.status == "Confirmée" %}
+    <span class="badge badge-success">{{ i.status }}</span>
+ {% elseif i.status == "Annulée" %}
+    <span class="badge badge-danger">{{ i.status }}</span>
+ {% elseif i.status == "En cours de preparation" %}
+    <span class="badge badge-info">{{ i.status }}</span>
+ {% elseif i.status == "Livraison en cours" %}
+    <span class="badge  badge-info">{{ i.status }}</span>
+ {% elseif i.status == "livrée" %}
+    <span class="badge badge-success">{{ i.status }}</span>
+ {% endif %}</td>
                         <td> 
                          <a href="{{ path('commandeDelete',{'id':i.id}) }}">
-                                       <div class="btn btn-sm btn-danger"> </div>
-                        Supprimer</a>
+                                       <div class="btn btn-sm btn-danger"> Supprimer </div>
+                       </a>
                         </td>
                    
                     </tr>

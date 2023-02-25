@@ -39,10 +39,15 @@ class Produit
     #[ORM\ManyToOne(inversedBy: 'produits')]
     private ?Category $Categorys = null;
 
-    #[ORM\OneToMany(mappedBy: 'Produit', targetEntity: CommandeProduit::class)]
+  
+    #[ORM\OneToMany(mappedBy: 'Produit', cascade: ['persist', 'remove'], targetEntity: CommandeProduit::class)]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private Collection $Commande;
 
-    #[ORM\ManyToMany(targetEntity: Panier::class, mappedBy: 'produits')]
+   
+    #[ORM\ManyToMany(inversedBy: 'produits',targetEntity: Panier::class)]
+    #[ORM\JoinTable(name:'panierproduit')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private Collection $panier;
 
     public function __construct()

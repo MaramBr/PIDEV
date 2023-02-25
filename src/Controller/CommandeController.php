@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-use App\Entity\Utilisateur;
+use App\Entity\user;
 use App\Entity\Commande;
 use App\Entity\Produit;
 use App\Repository\CommandeRepository;
@@ -19,13 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CommandeController extends AbstractController
 {
-   /* #[Route('/commande', name: 'commande')]
-    public function index(): Response
-    {
-        return $this->render('commande/index.html.twig', [
-            'controller_name' => 'CommandeController',
-        ]);
-    }*/
+   
 
     /**
      * @Route ("/commande", name="commande")
@@ -36,7 +30,7 @@ class CommandeController extends AbstractController
         $d = $panierRepository->findBy(['utilisateur'=>1])[0];
         $sum = $d->getProduits()->count();
         $dataTarray = $d->getProduits()->toArray();
-        $total=0;
+        $total=0.0;
         foreach ($dataTarray as $p){
             $total += ($p->getPrix() * $p->getQuantite());
         }
@@ -45,8 +39,7 @@ class CommandeController extends AbstractController
         ]);
     }
 
-
-     /**
+    /**
      * @Route ("/commandeDelete/{id}", name="commandeDelete")
      */
     public function delete(CommandeRepository $repository , $id): Response
@@ -58,6 +51,7 @@ class CommandeController extends AbstractController
         //return new Response('suppression avec succes');
         return $this->redirectToRoute('commande');
     }
+
 
 
       

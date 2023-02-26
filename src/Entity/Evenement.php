@@ -12,6 +12,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\LessThan;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\SerilizerInterface;
+
 
 #[ORM\Entity(repositoryClass: EvenementRepository::class)]
 class Evenement
@@ -22,6 +26,7 @@ class Evenement
     private ?int $id = null;
 
    #[ORM\Column(length: 255)]
+   #[Groups("Evenement")]
    #[Assert\NotBlank(message:"nom evenement doit etre non vide")]
    #[Assert\Length(min:5, minMessage:"Votre nom inferieure a 5 caractères.")]
    #[Assert\Regex(
@@ -31,19 +36,23 @@ class Evenement
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("Evenement")]
     #[Assert\NotBlank(message:"lieu evenement doit etre non vide")]
     private ?string $lieu = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("Evenement")]
     #[Assert\NotBlank(message:"type evenement doit etre non vide")]
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("Evenement")]
     #[Assert\NotBlank(message:"Description evenement doit etre non vide")]
      #[Assert\Length(min:7,max:100, minMessage:"Doit etre > 7.", maxMessage:"Doit etre <=100")]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups("Evenement")]
 
    #[Assert\GreaterThan('today')]
    #[Assert\LessThan('+2 year')]
@@ -51,10 +60,12 @@ class Evenement
     private ?\DateTimeInterface $date_debut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups("Evenement")]
    
     private ?\DateTimeInterface $date_fin = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("Evenement")]
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'evenements')]

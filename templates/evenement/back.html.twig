@@ -9,6 +9,7 @@
                     </p>
                     <div class="table-responsive">
                       <table class="table">
+                      
                         <thead>
                           <tr>
                           <th><button type="button" class="btn btn-outline-warning">  identifiant</button></th>
@@ -64,18 +65,71 @@
                                                 </td>
                                                
                           </tr>
+                          
                           {% endfor %}
                           
                           <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/add1">Ajouter evenement </a></td>
                           <td> <a class="nav-link btn btn-success create-new-button"  href="/Sponsor/add"> ajouter Sponsor </a> </td>
                           <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/afficher"> front</a> </td>
-                        </tbody>
+                          <tbody id="searchtab">
+                          </tbody>
+
+                  
+                  
                       </table>
-                      
+                      <input type="text" id="search" class="form-control" placeholder="Search">
                     </div>
                   </div>
                      
                 </div>
                 
-              
+ 
+
+<script src="https//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+<script
+$( document ).ready(function() {
+  $("#search").keyup(function(e){
+    var value = $(this).val();
+    $.ajax({
+      url : "{{path ('afficheback')}}",
+      type : 'GET',
+      data: {
+        'searchValue' :value
+      },
+
+      success :function(retour){
+        if(retour){
+          $('#t tbody#searchtab').empty();
+          $.each(JSON.parse(retour),function(i,obj)){
+            $('#t tbody#searchtab').empty();
+            $.each(JSON.parse(retour),function(i,obj){
+              $('#t tbody#all').hide();
+              $('#t tbody#searchtab').append(<tr> <td> '+obj.ID+'</td>
+              <td> '+obj.Nom+' </td>
+              <td>'+obj.Description+' </td>
+              <td> '+obj.DateDebut+'</td> 
+              <td> '+obj.DateFin+'</td> 
+              <td> '+obj.Type+'</td> 
+              <td>'+obj.lieu+' </td><td>
+              <a
+               href="updateStudent/'+obj.id'">modifier</a></br>
+             <a href="deleteStudent/'obj.id+'">supprimer</a></td> </tr>);
+            });
+          }
+          else
+          {
+            $('#t tbody#all').show();
+            $('#t tbody#searchtab').empty();
+            $('#t tbody#searchtab').fadeIn('fast');
+            }
+  }},
+  });
+  return false;
+          });
+        });
+</script>
+
+ 
+
 {% endblock %}
+ 

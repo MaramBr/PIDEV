@@ -13,10 +13,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Repository\EvenementRepository;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Evenement\CancellationEvenement;
+use Symfony\Component\EvenementDispatcher\EvenementDispatcherInterface;
+use Symfony\App\Controller\EventNotificationService;
+
 
  
 class EvenementController extends AbstractController
-{
+{     
+    
+    
     #[Route('/Evenement', name: 'app_Evenement')]
     public function index(): Response
     {
@@ -42,7 +49,7 @@ class EvenementController extends AbstractController
     {
         $repo=$em->getRepository(Evenement::class);
         $result=$repo->findAll();
-        $result = $evenementRepository->searchEvenement($x);
+      
         return $this->render ('Evenement/back.html.twig',['Evenement'=>$result]);
    
        
@@ -173,16 +180,21 @@ class EvenementController extends AbstractController
         return $this->redirectToRoute('afficheback');
     }
  
-     #[Route('/Evenement/search', name: 'add_search')]
-  public function search(Request $request ,EvenementRepository $EvenementRepository)
-{
-    $term = $request->query->get('q');
-    $evenement = $this->EvenementRepository->searchEvenements($term);
-
-    return $this->render('evenement/search.html.twig', [
-        'evenements' => $evenement,
-        'term' => $term,
-    ]);
+    
+    
+ #[Route('/searchEvenement', name: 'searchEvenement')]
+  
+ public function searchEvenementx(Request $request,NormalizerInterface $Normalizer,EvenementRepository $sr)
+ {
+$repository = $this->getDoctrine()->getRepository(Evenement::class);
+$requestString=$request->get('searchValue');
+$Evenements = $sr->findEvenementByNom($requestString);
+$jsonContent = $Normalizer
+->normalize($Evenements,'json',['groups'=>'Evenements']);
+$retour=json_encode($jsonContent);
+return new Response($retour);
 
 }
+    
 }
+

@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CoachingRepository::class)]
@@ -16,6 +16,7 @@ class Coaching
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("Coaching")]
     private ?int $id = null;
 
 
@@ -25,14 +26,17 @@ class Coaching
     
 
     #[ORM\Column(length: 255)]
+    #[Groups("Coaching")]
     #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")] 
     private ?string $cours = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("Coaching")]
     #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")]
     private ?string $dispoCoach = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("Coaching")]
     private ?string $imgCoach = null;
 
     #[ORM\OneToMany(mappedBy: 'Coachings', targetEntity: RendezVous::class)]

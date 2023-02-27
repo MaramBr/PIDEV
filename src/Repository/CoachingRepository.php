@@ -79,4 +79,17 @@ public function findAvailableCoachesForCourseAndDate($cours, $dispo)
 {
     return $this->findOneBy(['cours' => $cours]);
 }
+
+
+
+public function findCoachingByCours($cours): ?Coaching
+   {
+       return $this->createQueryBuilder('Coaching')
+           ->andWhere('Coaching.cours LIKE :cours')
+           ->setParameter('cours','%'.$cours.'%')
+          ->getQuery()
+           ->getResult()
+        ;
+   }
+
 }

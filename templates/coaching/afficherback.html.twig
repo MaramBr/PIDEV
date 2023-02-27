@@ -1,10 +1,15 @@
 {% extends 'baseback.html.twig' %}
 {% block body %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Basic Table</h4>
-                    
+
+                    <input type="text" id="search_term" class="form_control" placeholder="Search">
+              
+
                     <p class="card-description"> Ajouter Coach <code> <a href="{{ path('addcoach') }}" class="btn btn-primary" >Ajouter</a>
 </code>
                     </p>
@@ -49,5 +54,32 @@
                   </div>
                 </div>
 
-              
+ <script>
+        // Fonction de recherche Ajax
+        function search() {
+            // Récupérer le terme de recherche à partir du champ de recherche
+            var term = $('#search_term').val();
+
+            // Envoyer une requête Ajax à la route de recherche
+            $.ajax({
+                url: "/ajax",
+                method: "GET",
+                data: { term: term },
+                success: function(results) {
+                    // Effacer les résultats précédents
+                    $('#search-results').empty();
+
+                    // Ajouter les résultats à la liste de résultats
+                    for (var i = 0; i < results.length; i++) {
+                        $('#search-results').append('<li>' + results[i].title + '</li>');
+                    }
+                }
+            });
+        }
+
+        // Lancer la recherche lorsqu'une touche est tapée dans le champ de recherche
+        $('#search_term').on('keyup', function() {
+            search();
+        });
+    </script>
 {% endblock %}

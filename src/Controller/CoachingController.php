@@ -14,6 +14,13 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 
 class CoachingController extends AbstractController
@@ -27,10 +34,12 @@ class CoachingController extends AbstractController
     }
     
     #[Route('/affichercoach', name: 'affichercoach')]
-    public function affichercoach(ManagerRegistry $mg): Response
+    public function affichercoach(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
     {
         $repo=$mg->getRepository(Coaching::class);
         $resultat = $repo ->FindAll();
+        $coachingNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Coaching"]);
+        $json=json_encode($coachingNormalises);
         return $this->render('coaching/afficherfront.html.twig', [
             'Coaching' => $resultat,
         ]);
@@ -40,17 +49,20 @@ class CoachingController extends AbstractController
 
     
     #[Route('/afficherback', name: 'afficherback')]
-    public function afficherback(ManagerRegistry $mg): Response
+    public function afficherback(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
     {
         $repo=$mg->getRepository(Coaching::class);
         $resultat = $repo ->FindAll();
+        $coachingNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Coaching"]);
+        $json=json_encode($coachingNormalises);
+
         return $this->render('coaching/afficherback.html.twig', [
             'Coaching' => $resultat,
         ]);
     }
 
     #[Route('/addcoach', name: 'addcoach')]
-    public function addcoach(ManagerRegistry $doctrine,Request $request,SluggerInterface $slugger): Response
+    public function addcoach(ManagerRegistry $doctrine,Request $request,SluggerInterface $slugger,NormalizerInterface $normalizer): Response
     {
         $Coaching =new Coaching();
         $Form=$this->createForm(CoachingType::class,$Coaching);
@@ -86,6 +98,8 @@ class CoachingController extends AbstractController
             $em=$doctrine->getManager();
             $em->persist($Coaching);
             $em->flush();
+            $coachingNormalises=$normalizer->normalize($Coaching,'json',['groups'=>"Coaching"]);
+
          return $this->redirectToRoute('afficherback');
         }
       //  return $this->render('productcontroller2/add.html.twig',array("form_student"=>$Form->createView()));
@@ -93,7 +107,7 @@ class CoachingController extends AbstractController
     }
 
     #[Route('/updatecoach/{id}', name: 'updatecoach')]
-    public function updatecoach(ManagerRegistry $doctrine,CoachingRepository $CoachingRepository,$id,Request $request): Response
+    public function updatecoach(ManagerRegistry $doctrine,NormalizerInterface $normalizer,CoachingRepository $CoachingRepository,$id,Request $request): Response
     {
         $Coaching = $doctrine
         ->getRepository(Coaching::class)
@@ -103,6 +117,8 @@ class CoachingController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         { $em = $doctrine->getManager();
             $em->flush();
+            $coachingNormalises=$normalizer->normalize($Coaching,'json',['groups'=>"Coaching"]);
+
             return $this->redirectToRoute('afficherback');
         }
         return $this->renderForm("coaching/addC.html.twig",
@@ -110,17 +126,19 @@ class CoachingController extends AbstractController
     }
 
     #[Route('/deletecoach/{id}', name: 'deletecoach')]
-    public function deletecoach(ManagerRegistry $mg ,CoachingRepository $X , $id): Response
+    public function deletecoach(ManagerRegistry $mg ,NormalizerInterface $normalizer,CoachingRepository $X , $id): Response
     {
         $Coaching= $X->find($id);
         $em=$mg->getManager();
         $em->remove($Coaching);
         $em->flush();
+        $coachingNormalises=$normalizer->normalize($Coaching,'json',['groups'=>"Coaching"]);
+
         return $this->redirectToRoute('afficherback');
     }
 
     #[Route('/detaille/{id}', name: 'detaille')]
-    public function detaille($id,ManagerRegistry $mg, LoggerInterface $logger): Response
+    public function detaille($id,ManagerRegistry $mg,NormalizerInterface $normalizer, LoggerInterface $logger): Response
     {
         $repo=$mg->getRepository(Coaching::class);
         $resultat = $repo ->find($id);
@@ -130,6 +148,27 @@ class CoachingController extends AbstractController
         ]);
     }
 
+
+    #[Route('/ajax', name: 'ajax')]
+    public function ajax(Request $request,NormalizerInterface $Normalizer,CoachingRepository $sr,LoggerInterface $logger): Response
+    {
+        $logger->info("Bonjour");
+
+        $repository=$this->getDoctrine()->getRepository(Coaching::class);
+        $requestString=$request->get('term');
+        $logger->info("The ajax is: " .$requestString);
+
+        $Coaching=$sr->findCoachingByCours($requestString);
+
+        $logger->info("maram: " .json_encode($Coaching));
+        $jsonContent=$Normalizer->normalize($Coaching, 'json' ,['groups'=>'Coaching']);
+        $retour=json_encode($jsonContent);
+        return new Response($retour);
+        
+    }
+
+   
+   
 
    
     

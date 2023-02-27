@@ -16,6 +16,11 @@ use App\Repository\CoachingRepository;//controller
 use App\Entity\Coaching;//controller
 use App\Form\CoachingType;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+
+
 
 
 class RendezVousController extends AbstractController
@@ -66,7 +71,7 @@ class RendezVousController extends AbstractController
         return $this->renderForm('rendez_vous/addR.html.twig',array("formRendezVous"=>$Form));
     }
     #[Route('/addrdv2/{id}', name: 'addrdv2')]
-    public function addrdv2(ManagerRegistry $doctrine,Request $request,  LoggerInterface $logger, $id): Response
+    public function addrdv2(ManagerRegistry $doctrine,Request $request,  LoggerInterface $logger, $id,MailerInterface $mailer): Response
     {   
         // $coaching = new Coaching();
         $repo=$doctrine->getRepository(Coaching::class);
@@ -84,6 +89,8 @@ class RendezVousController extends AbstractController
             $em->persist($coaching);
             $em->persist($RendezVous);
             $em->flush();
+           
+            
          return $this->redirectToRoute('afficherrdv');
         }
       //  return $this->render('productcontroller2/add.html.twig',array("form_student"=>$Form->createView()));
@@ -157,6 +164,63 @@ class RendezVousController extends AbstractController
         ]);
     }
 
+    #[Route('/email', name: 'email')]
+    public function email(MailerInterface $mailer): Response
+    {
+        $content='<p>HTML body</p>';
+        $email = (new Email())
+            ->from('maram.brinsi@esprit.tn')
+            ->to('maram.brinsi@esprit.tn')
+            ->text('Body')
+            ->subject('Test email')
+            ->html('<p>Hello !</p>');
+
+    
+        $mailer->send($email);
+
+        return $this->render('basefront.html.twig');
+    }
+
+
+/*
+
+    #[Route('/notif', name: 'notif')]
+      public function reserverSeanceCoaching(Request $request, NotificationService $notificationService)
+    {
+        // Créer un formulaire pour la réservation d'une séance de coaching
+        $form = $this->createForm(ReservationType::class);
+        
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérer les données du formulaire
+            $reservation = $form->getData();
+            
+            // Enregistrer la réservation dans la base de données
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($reservation);
+            $entityManager->flush();
+            
+            // Envoyer une notification au coach
+            $this->sendNotificationToCoach($reservation, $notificationService);
+            
+            // Rediriger l'utilisateur vers la page de confirmation
+            return $this->redirectToRoute('confirmation_reservation');
+        }
+        
+        return $this->render('reservation/reserver.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    
+    private function sendNotificationToCoach(RendezVous $reservation, NotificationService $notificationService)
+    {
+        $message = 'Nouvelle réservation effectuée par ' . $reservation->getCoaching()->getcours() . ' ' . $reservation->getClient()->getPrenom() . ' pour une séance de coaching avec vous.';
+    
+        // Envoyer la notification au coach
+        $notificationService->sendNotification($reservation->getCoaching(), $message);
+    }
+*/
    
 }
 

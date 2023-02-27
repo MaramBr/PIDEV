@@ -42,7 +42,8 @@
                     <th>LISTE PRODUIT</th>
                     <th>MONTANT</th>
                     <th>DATE</th>
-                    <th>STATUS</th>
+                    <th></th>
+                    <th>Status</th>
                     <th>SUPPRIMER</th>
                     
                      
@@ -62,17 +63,18 @@
                         <td> {{ i.montant }}DT</td>
                          <td class="invert"> {{ i.getDateCreation().format('j-m-y') }}</td>
                         <td> {% if i.status == "En attente" %}
-  <span class="badge badge-warning">{{ i.status }}</span>
+  <td class="warning">{{ i.status }}</td>
  {% elseif i.status == "Confirmée" %}
-    <span class="badge badge-success">{{ i.status }}</span>
+    <td class="success">{{ i.status }}</td>
  {% elseif i.status == "Annulée" %}
-    <span class="badge badge-danger">{{ i.status }}</span>
+    <td class="danger">{{ i.status }}</td>
  {% elseif i.status == "En cours de preparation" %}
-    <span class="badge badge-info">{{ i.status }}</span>
+    <td class="info">{{ i.status }}</td>
  {% elseif i.status == "Livraison en cours" %}
-    <span class="badge  badge-info">{{ i.status }}</span>
- {% elseif i.status == "livrée" %}
-    <span class="badge badge-success">{{ i.status }}</span>
+    <td class="info">{{ i.status }}</td>
+ {% elseif i.status == "Livrée" %}
+    <td class="success">{{ i.status }}</td>
+
  {% endif %}</td>
                         <td> 
                          <a href="{{ path('commandeDelete',{'id':i.id}) }}">

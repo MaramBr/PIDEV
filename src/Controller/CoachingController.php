@@ -18,9 +18,9 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
+use mercuryseries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+use Symfony\Component\Filesystem\Filesystem;
 
 
 class CoachingController extends AbstractController
@@ -43,6 +43,17 @@ class CoachingController extends AbstractController
         return $this->render('coaching/afficherfront.html.twig', [
             'Coaching' => $resultat,
         ]);
+    }
+
+
+    #[Route('/afficherjson', name: 'affichercoachjson')]
+    public function affichercoachjson(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
+    {
+        $repo=$mg->getRepository(Coaching::class);
+        $resultat = $repo ->FindAll();
+        $coachingNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Coaching"]);
+        $json=json_encode($coachingNormalises);
+        return new Response ($json);
     }
      
   
@@ -98,7 +109,6 @@ class CoachingController extends AbstractController
             $em=$doctrine->getManager();
             $em->persist($Coaching);
             $em->flush();
-            $coachingNormalises=$normalizer->normalize($Coaching,'json',['groups'=>"Coaching"]);
 
          return $this->redirectToRoute('afficherback');
         }
@@ -170,6 +180,68 @@ class CoachingController extends AbstractController
    
    
 
-   
+
+    #[Route('/ajoutjson', name: 'ajoutjson')]
+    public function ajoutjson(ManagerRegistry $doctrine,Request $request,NormalizerInterface $normalizer): Response
+    {
+        $Coaching =new Coaching();
+        $Coaching->SetCours($request->get('cours'));
+        $Coaching->SetDispoCoach($request->get('dispoCoach'));
+        $Coaching->SetImgCoach($request->get('imgCoach'));
+        $em=$doctrine->getManager();
+        $em->persist($Coaching);
+        $em->flush();
+        $coachingNormalises=$normalizer->normalize($Coaching,'json',['groups'=>"Coaching"]);
+
+        return new Response (json_encode($coachingNormalises));
+    }
+
+    #[Route('/stat', name: 'stat', methods: ['GET'])]
+    public function Coachingstats(): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $entityManager->getRepository(Coaching::class);
+    
+        // Count total number of Coachings
+        $totalCoachings = $repository->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    
+        // Query for all products and group them by category
+        $query = $repository->createQueryBuilder('c')
+            ->select('c.cours as cours, COUNT(c.id) as count, COUNT(c.id) / :total * 100 as percentage')
+            ->setParameter('total', $totalCoachings)
+            ->groupBy('c.cours')
+            ->getQuery();
+    
+        $Coachings = $query->getResult();
+    
+        
+    
+        // Calculate the counts array
+        $counts = [];
+        foreach ($Coachings as $Coaching) {
+            $counts[$Coaching['cours']] = $Coaching['count'];
+        }
+    
+        return $this->render('coaching/stats.html.twig', [
+            'Coachings' => $Coachings,
+            'counts' => $counts,
+        ]);
+    }
+
+
+
+/*
+    #[Route('/notify', name: 'notify')]
+    public function notify(FlashyNotifier $flashy): Response
+    {
+        $flashy->success('Event created!', 'http://your-awesome-link.com');
+
+        return $this->redirectToRoute('afficherback');
+
+        
+    }*/
     
 }

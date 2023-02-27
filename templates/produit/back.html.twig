@@ -89,6 +89,7 @@
                                            {% endfor%}
                                         </tbody>
                                     </table>
+                                    <input type="text" id="search" class="form_control" placeholder="Search">
                                 </div>
                             </div>
                         </div>
@@ -98,5 +99,54 @@
                             
                 </div>
             </div>
+<script
+src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script>
+$( document ).ready(function(){
+    $("#search").keyup(function(e){
+        var value = $(this).val();
+        $.ajax({
+            url : "{{ path('appback') }}",
+            type : 'GET',
+            data: {
+                'searchValue' : value
+            },
+            success : function(retour){
+                if(retour){
+                    $('#t tbody#searchtab').empty();
+                    $.each(JSON.parse(retour), function(i, obj) {
+                        $('#t tbody#all').hide();
+                        $('#t tbody#searchtab').append(
+                          
+                        <td> '+obj.id+'</td>
+                        <td> '+obj.Nom+' </td>
+    
+                        <td> 
+                        <a href="Produit/update/'+obj.id+'">modifier </a>
+                         </br>
+                        <a href="Produit/delete/'+obj.id+'">supprimer</a>
+                        </td>
+                     
+                        ); 
+                        });
+
+                        }
+                        else
+                        {
+                            $('#t tbody#all').show();
+                            $('#t tbody#searchtab').empty();
+                            $('#t tbody#searchtab').fadeIn('fast');
+                            }
+                            },
+                            });
+                            return false;
+                            });
+                            });
+                            </script> 
+
+
+
+
 
 {% endblock %}

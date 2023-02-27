@@ -38,6 +38,47 @@ class ProduitRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    public function findProduitByNom($Nom)
+    {
+         return $this->createQueryBuilder('Produit')
+         ->where('Produit.nom LIKE : nom')
+         ->setParameter('nom' , '%'.$Nom.'%')
+         ->getQuery()
+         ->getResult();
+    }
+
+    public function findAllWithRating()
+    {
+        $qb = $this->createQueryBuilder('p')
+                  ->leftJoin('p.ratings', 'r')
+                  ->addSelect('AVG(r.rating) as ratingAverage')
+                  ->groupBy('p.id');
+
+        return $qb->getQuery()->getResult();
+    }
+    /**
+     * Returns all Annonces per page
+     * @return void 
+     */
+    public function getPaginatedAnnonces($page, $limit){
+        $query = $this->createQueryBuilder('a')
+        
+        ->setFirstResult(($page * $limit) - $limit)
+        ->setMaxResults($limit)
+    ;
+    return $query->getQuery()->getResult();
+}
+
+
+public function getTotalProduits($filters = null){
+    $query = $this->createQueryBuilder('a')
+        ->select('COUNT(a)')
+       
+    
+   ;
+
+    return $query->getQuery()->getSingleScalarResult();
+}
 
 //    /**
 //     * @return Produit[] Returns an array of Produit objects

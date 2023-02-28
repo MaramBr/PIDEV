@@ -19,6 +19,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 
 
 
@@ -71,7 +72,7 @@ class RendezVousController extends AbstractController
         return $this->renderForm('rendez_vous/addR.html.twig',array("formRendezVous"=>$Form));
     }
     #[Route('/addrdv2/{id}', name: 'addrdv2')]
-    public function addrdv2(ManagerRegistry $doctrine,Request $request,  LoggerInterface $logger, $id,MailerInterface $mailer): Response
+    public function addrdv2(ManagerRegistry $doctrine,Request $request,  FlashyNotifier $flashy,LoggerInterface $logger, $id,MailerInterface $mailer): Response
     {   
         // $coaching = new Coaching();
         $repo=$doctrine->getRepository(Coaching::class);
@@ -90,7 +91,9 @@ class RendezVousController extends AbstractController
             $em->persist($RendezVous);
             $em->flush();
            
-            
+           $flashy->success('Réservation effectue!', 'http://your-awesome-link.com');
+        //   $this->addFlash('message','Profil mis a jour');
+
          return $this->redirectToRoute('afficherrdv');
         }
       //  return $this->render('productcontroller2/add.html.twig',array("form_student"=>$Form->createView()));
@@ -226,5 +229,62 @@ class RendezVousController extends AbstractController
 
 
 
+
+
+#[Route('/statrdv', name: 'statrdv', methods: ['GET'])]
+public function statsrdv(CoachingRepository $coachingRepository): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+    $repository = $entityManager->getRepository(RendezVous::class);
+
+    // Count total number of Coachings
+    $totalRendezVous = $repository->createQueryBuilder('c')
+        ->select('COUNT(c.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+
+    // Query for all products and group them by category
+    $query = $repository->createQueryBuilder('c')
+        ->select('c.Coachings as Coaching, COUNT(c.id) as count, COUNT(c.id) / :total * 100 as percentage')
+        ->setParameter('total', $totalRendezVous)
+        ->groupBy('c.Coachings')
+        ->getQuery();
+
+    $Coachings = $query->getResult();
+
+    // Calculate the counts array
+    $counts = [];
+    foreach ($Coachings as $RendezVous) {
+        $counts[$RendezVous['Coaching']] = $RendezVous['count'];
+    }
+
+    return $this->render('rendez_vous/stats.html.twig', [
+        'RendezVouss' => $Coachings,
+        'counts' => $counts,
+    ]);
+}
+
+
+#[Route('/notify', name: 'notify')]
+public function notify(FlashyNotifier $flashy): Response
+{
+    $flashy->success('Réservation effectue!', 'http://your-awesome-link.com');
+
+    return $this->render('rendez_vous/afficherrdv.html.twig');
+
+    
+}
+
+
+#[Route('/listerdv/{id}', name: 'listerdv')]
+
+    public function listerdv(Coaching $coaching): Response
+    {
+        $rdv = $coaching->getRendezVouses();
+        return $this->render('coaching/listerdv.html.twig', [
+            'coaching' => $coaching,
+            'rdv' => $rdv,
+        ]);
+    }
 }
 

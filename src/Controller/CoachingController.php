@@ -18,10 +18,11 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use mercuryseries\FlashyBundle\FlashyNotifier;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Filesystem\Filesystem;
-
+use App\Repository\RendezVousRepository;//controller
+use App\Entity\RendezVous;//controller
 
 class CoachingController extends AbstractController
 {
@@ -112,7 +113,7 @@ class CoachingController extends AbstractController
 
          return $this->redirectToRoute('afficherback');
         }
-      //  return $this->render('productcontroller2/add.html.twig',array("form_student"=>$Form->createView()));
+      //  return $this->render('RendezVouscontroller2/add.html.twig',array("form_student"=>$Form->createView()));
         return $this->renderForm('coaching/addC.html.twig',array("formCoaching"=>$Form));
     }
 
@@ -208,7 +209,7 @@ class CoachingController extends AbstractController
             ->getQuery()
             ->getSingleScalarResult();
     
-        // Query for all products and group them by category
+        // Query for all RendezVouss and group them by Coaching
         $query = $repository->createQueryBuilder('c')
             ->select('c.cours as cours, COUNT(c.id) as count, COUNT(c.id) / :total * 100 as percentage')
             ->setParameter('total', $totalCoachings)
@@ -232,16 +233,63 @@ class CoachingController extends AbstractController
     }
 
 
+    #[Route('/stat2', name: 'stat2', methods: ['GET'])]
 
-/*
-    #[Route('/notify', name: 'notify')]
-    public function notify(FlashyNotifier $flashy): Response
+    public function stat2(): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+    $repository = $entityManager->getRepository(Coaching::class);
+
+    // Count total number of Coachings
+    $totalCoachings = $repository->createQueryBuilder('a')
+        ->select('COUNT(a.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+
+    // Query for all RendezVouss and group them by Coaching
+    $query = $repository->createQueryBuilder('a')
+        ->select('a.cours as cours, COUNT(a.id) as count, COUNT(a.id) / :total * 100 as percentage')
+        ->setParameter('total', $totalCoachings)
+        ->groupBy('a.cours')
+        ->getQuery();
+
+    $Coachings = $query->getResult();
+
+    return $this->render('coaching/stats.html.twig', [
+        'Coachings' => $Coachings,
+    ]);
+}
+
+
+
+    #[Route('/notifyy', name: 'notifyy')]
+    public function notifyy(FlashyNotifier $flashy): Response
     {
-        $flashy->success('Event created!', 'http://your-awesome-link.com');
+        $flashy->success('Réservation effectue!', 'http://your-awesome-link.com');
 
-        return $this->redirectToRoute('afficherback');
+        return $this->render('coaching/home.html.twig');
 
         
-    }*/
+    }
+
+
+    #[Route('/listecoach', name: 'listecoach')]
+    public function listecoachy($id, CoachingRepository $CoachingRepository, RendezVousRepository $RendezVousRepository): Response
+    {
+        $Coaching = $CoachingRepository->find($id);
+
+        if (!$Coaching) {
+            throw $this->createNotFoundException('La seance de coaching demandée n\'existe pas.');
+        }
+
+        $RendezVous = $RendezVousRepository->findByCoaching($Coaching);
+
+        return $this->render('coaching/listerdv.html.twig', [
+            'Coaching' => $Coaching,
+            'RendezVous' => $RendezVous,
+        ]);
+    }
+
+
     
 }

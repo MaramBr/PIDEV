@@ -7,12 +7,8 @@
                   <div class="card-body">
                     <h4 class="card-title">Basic Table</h4>
 
-                    <input type="text" id="search_term" class="form_control" placeholder="Search">
-              
-
-                    <p class="card-description"> Ajouter Coach <code> <a href="{{ path('addcoach') }}" class="btn btn-primary" >Ajouter</a>
-</code>
-                    </p>
+                </br>
+                   
                     <div class="table-responsive">
                       <table class="table">
                         <thead>
@@ -24,6 +20,7 @@
                              <th>img</th>
                              <th>Modifier</th>
                              <th>Supprimer </th>
+                              <th>Liste des rendez_vous pour chaque cours </th>
 
 
                             
@@ -44,15 +41,25 @@
                               
 
                             <td><a href="{{ path('updatecoach', {id:a.id}) }}" class="btn btn-primary" >Modifier</a></td>
-                            <td><a href="{{ path('deletecoach', {id:a.id}) }}" class="btn btn-dark" >Supprimer</a></td>
+                            <td><a href="{{ path('deletecoach', {id:a.id}) }}" class="btn btn-danger" >Supprimer</a></td>
+						   	        <td> <a href="{{ path('listerdv', {id:a.id}) }}" class="btn btn-success"> liste des Rendez_Vous pour {{a.Cours}} <i class="fa fa-arrow-circle-right"></i></a></td>
 
                           </tr>
                           {% endfor %}
+
                         </tbody>
                       </table>
+                      </br>
+                       <p class="card-description">  <code> <a href="{{ path('addcoach') }}" class="btn btn-warning" >Ajouter une séance</a></code>
+                    </p>
+                    
+              <p class="card-description">  <code> <a href="{{ path('stat') }}" class="btn btn-warning" >Statistique</a></code>
+                 <input type="text" id="search_term" class="form_control" placeholder="Search">
+
                     </div>
                   </div>
                 </div>
+
 
  <script>
         // Fonction de recherche Ajax

@@ -23,6 +23,7 @@
 
 		<!-- Font Awesome Icon -->
 		<link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
 
 		<!-- Custom stlylesheet -->
 		<link type="text/css" rel="stylesheet" href="{{asset('css/style.css')}}"/>
@@ -1081,6 +1082,10 @@ version d'eux-mêmes.</p>
 {% endblock %}
 {% block js%}
 		<!-- jQuery Plugins -->
+		 <script src="//code.jquery.com/jquery.js"></script>
+    <!-- Load Flashy default JavaScript -->
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+    <!-- Include Flashy default partial -->
 		<script src="{{asset('js/jquery.min.js')}}"></script>
 		<script src="{{asset('js/bootstrap.min.js')}}"></script>
 		<script src="{{asset('js/slick.min.js')}}"></script>

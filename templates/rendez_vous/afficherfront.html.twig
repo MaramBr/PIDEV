@@ -3,6 +3,15 @@
 {% block title %}Rendez_Vous{% endblock %}
 
 {% block body %}
+
+
+
+ {% for message in app.flashes('message') %}
+<div class="col-xs4">
+<div class="p-3 my-2 rounded-2 success"> {{message}}</div>
+</div>
+</div>
+{% endfor %}
 <div class="section">
 			<!-- container -->
 			<div class="container">
@@ -15,7 +24,24 @@
                  <p class="card-description" > Ajouter Rendez_vous <code> <a href="{{ path('addrdv') }}" class="primary-btn" >Ajouter</a> </code>
 
                     <h4 class="card-title">Table des Rendez_Vous</h4>
+   
+    
+    
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- Load Flashy default JavaScript -->
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+    <!-- Include Flashy default partial -->
+   {% for message in app.flashes('mercuryseries_flashy_notification') %}
+    <script id="flashy-template" type="text/template">
+        <div class="flashy flashy--{{ message.type }}">
+            <a class="flashy__body" href="#" target="_blank"></a>
+        </div>
+    </script>
 
+    <script>
+        flashy("{{ message.message }}", "{{ message.link }}");
+    </script>
+    {% endfor %} 
                     
                     </p>
                     <div class="table-responsive">
@@ -50,22 +76,14 @@
                  </div>
                   </div>
                 </div>
-     <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
 
-           
-<script src="//code.jquery.com/jquery.js"></script>
-    <!-- Load Flashy default JavaScript -->
-    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
-    <!-- Include Flashy default partial -->
-{% for message in app.flashes('mercuryseries_flashy_notification') %}
-    <script id="flashy-template" type="text/template">
-        <div class="flashy flashy--{{ message.type }}">
-            <a class="flashy__body" href="#" target="_blank"></a>
-        </div>
-    </script>
 
-    <script>
-        flashy("{{ message.message }}", "{{ message.link }}");
-    </script>
-{% endfor %}
+
 {% endblock %}
+
+
+
+
+
+
+    

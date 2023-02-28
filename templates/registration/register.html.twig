@@ -1,0 +1,83 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+ <div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+					<div class="col-md-7">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">S'inscrire</h3>
+							</div>
+                                               {{ form_start(registrationForm, {'attr': {'novalidate':'novalidate'}} ) }}
+
+
+							 {# {{ form_start(registrationForm}} #}
+                             	<div class="form-group">
+                    {{ form_row(registrationForm.nom , {'label':'nom','attr':{'placeholder':'nom' , 'class':'input'}})}}
+							</div>
+							<div class="form-group">
+                    {{ form_row(registrationForm.prenom , {'label':'prenom','attr':{'placeholder':'prenom' , 'class':'input'}})}}
+							</div>
+                         
+						<div class="form-group">	
+                        {{ form_row(registrationForm.email , {'label':'email','attr':{'placeholder':'user@gmail.com' , 'class':'input'}})}}
+
+							</div>
+
+						 <div class="form-group">
+                             {{ form_row(registrationForm.password, { 'label': 'Password','attr':{'placeholder':'**********' , 'class':'input'} }) }} 
+							    
+							</div> 
+{# 							
+						 <div class="form-group">
+						 <label >Saisir une seconde fois le mot de passe</label>
+								<input for="verifpass2" class="input" placeholder="***********" type="password" id="verifpass2" required>
+							</div>  #}
+							        {# <div class="col-12">
+                                <label for="confirm_mdp">Saisir une seconde fois le mot de passe</label>
+                                <input type="password" id="confirm_mdp" required>
+                        </div> #}
+                     
+						{# <div class="form-group">
+						 <label >Saisir une seconde fois le mot de passe</label>
+								<input for="verifpass" class="input" placeholder="***********" type="password" id="verifpass" required>
+							</div> #}
+               
+						
+
+
+							<div class="form-group">
+						
+									
+                             {{ form_row(registrationForm.agreeTerms, { 'attr': {'class': 'input-checkbox'} }) }}
+										
+							</div>
+							
+								<div class="form-group">
+						
+									
+                             {{ form_row(registrationForm.Image, { 'label':'image','attr':{  'class':'file'} }) }}
+										
+							</div>
+							   <button type="submit" class="btn btn-primary" >Register</button>
+							
+									
+								</div>
+							</div>
+						</div>
+
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                            {{ form_end(registrationForm) }}
+
+					
+{% endblock %}

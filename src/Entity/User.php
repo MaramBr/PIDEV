@@ -6,10 +6,12 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -17,7 +19,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+
+    
+
     #[ORM\Column(length: 180, unique: true)]
+// #[Assert\Type(type: ['alnum'], message: "The adresse '{{ value }}' is not valid")]
+#[Assert\Email(
+    message: 'The email {{ value }} is not a valid email.',
+)]
+#[Assert\NotBlank(message:"veuillez remplir le champs")]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -29,10 +39,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"veuillez remplir le champs")]
+    #[Assert\Type(type: ['alpha'], message: "The name '{{ value }}' is not valid")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type(type: ['alpha'], message: "The name '{{ value }}' is not valid")]
+    #[Assert\NotBlank(message:"veuillez remplir le champs")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
@@ -43,6 +58,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Commande::class)]
     private Collection $commandes;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reset_token = null;
+
 
     public function __construct()
     {
@@ -119,6 +138,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+   
     /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
@@ -234,4 +254,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getResetToken(): ?string
+    {
+        return $this->reset_token;
+    }
+
+    public function setResetToken(?string $reset_token): self
+    {
+        $this->reset_token = $reset_token;
+
+        return $this;
+    }
+
+
 }

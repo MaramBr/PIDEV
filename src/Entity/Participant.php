@@ -28,15 +28,20 @@ class Participant
     #[ORM\Column]
     private ?int $age = null;
 
-    #[ORM\ManyToMany(targetEntity: Evenement::class, mappedBy: 'Participants')]
-    private Collection $evenements;
+ 
 
     #[ORM\Column]
     private ?int $tel = null;
 
+    #[ORM\ManyToMany(targetEntity: Evenement::class, inversedBy: 'participants')]
+    private Collection $evenement;
+
+    
     public function __construct()
     {
         $this->evenements = new ArrayCollection();
+        $this->evenementParticipants = new ArrayCollection();
+        $this->evenement = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,35 +106,10 @@ class Participant
         $this->getEmail();
         $this->getAge();
         $this->getTel();
+        $this->getEvenement();
         
     }
-    /**
-     * @return Collection<int, Evenement>
-     */
-    public function getEvenements(): Collection
-    {
-        return $this->evenements;
-    }
-
-    public function addEvenement(Evenement $evenement): self
-    {
-        if (!$this->evenements->contains($evenement)) {
-            $this->evenements->add($evenement);
-            $evenement->addParticipant($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvenement(Evenement $evenement): self
-    {
-        if ($this->evenements->removeElement($evenement)) {
-            $evenement->removeParticipant($this);
-        }
-
-        return $this;
-    }
-
+  
     public function getTel(): ?int
     {
         return $this->tel;
@@ -141,4 +121,30 @@ class Participant
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Evenement>
+     */
+    public function getEvenement(): Collection
+    {
+        return $this->evenement;
+    }
+
+    public function addEvenement(Evenement $evenement): self
+    {
+        if (!$this->evenement->contains($evenement)) {
+            $this->evenement->add($evenement);
+        }
+
+        return $this;
+    }
+
+    public function removeEvenement(Evenement $evenement): self
+    {
+        $this->evenement->removeElement($evenement);
+
+        return $this;
+    }
+
+    
 }

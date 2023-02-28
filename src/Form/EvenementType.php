@@ -48,6 +48,7 @@ class EvenementType extends AbstractType
                     ])
                 ],
             ])
+            ->add('nbParticipant')
             ->add('Sponsors')
            
         ;

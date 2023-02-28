@@ -46,6 +46,7 @@
         "twig/twig": "^2.12|^3.0",
         "twilio/sdk": "^6.44",
         "vich/uploader-bundle": "^2.0"
+       
     },
     "config": {
         "allow-plugins": {

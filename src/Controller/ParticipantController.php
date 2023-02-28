@@ -48,8 +48,18 @@ class ParticipantController extends AbstractController
 
    
     
-    #[Route('/Participant/afficherback', name: 'appback3')]
+    #[Route('/Participant/afficher', name: 'appback3')]
     public function afficheback(ManagerRegistry $em): Response
+    {
+        $repo=$em->getRepository(Participant::class);
+        $result=$repo->findAll();
+        return $this->render ('Participant/annuler.html.twig',['Participant'=>$result]);
+   
+       
+    }
+ 
+    #[Route('/Participant/afficherback', name: 'affichefront1')]
+    public function affiche6(ManagerRegistry $em): Response
     {
         $repo=$em->getRepository(Participant::class);
         $result=$repo->findAll();
@@ -60,11 +70,11 @@ class ParticipantController extends AbstractController
 
 
 
-
     #[Route('/Participant/add', name: 'add3')]
     public function add(MailerInterface $mailer,ManagerRegistry $doctrine,Request $request): Response
     {
         $Participant=new Participant() ;
+        //$participant = $this->getDoctrine()->getRepository(Participant::class)->find($id);
         $form=$this->createForm(ParticipantType::class,$Participant); //sna3na objet essmo form aamlena bih appel lel Participanttype
         $form->handleRequest($request);
         if( $form->isSubmitted() && $form->isValid() )  //amaalna verification esq taadet willa le aadna prob fi code ou nn
@@ -72,28 +82,19 @@ class ParticipantController extends AbstractController
         $em=$doctrine->getManager(); //appel lel manager
         $em->persist($Participant); //elli tzid
         $em->flush(); //besh ysob fi base de donnee
-
-       $accountSid = 'AC92f7e404547cf2736427dd218cd01a28';
-            $authToken = 'aa5eff3ac65bb9325e475404c37f303f';
-            $client = new Client($accountSid, $authToken);
-
-            $message = $client->messages->create(
-               '+' . $form->get('tel')->getData(), // replace with admin's phone number
-                [
-                    'from' => '+12764009477', // replace with your Twilio phone number
-                    'body' => 'vous avez participer dans levent ' ,
-                ]
-            );
-
-       
-        return $this->redirectToRoute('appback3');
+$this->addFlash(
+                    'delP',
+                    ' Participation Sauvgarder avec succés'
+                );
+       return $this->redirectToRoute('afficher', ['id' => $Participant->getId()]);
         
         }
         return $this->render('Participant/add3.html.twig', array("formParticipant"=>$form->createView()));
        // return $this->render('Participant/add.html.twig', array("formParticipant"=>$form->createView));
 
-    }
 
+
+    }
      
    
 
@@ -109,7 +110,8 @@ class ParticipantController extends AbstractController
         if ($form->isSubmitted())
         { $em = $doctrine->getManager();
             $em->flush();
-            return $this->redirectToRoute('appback3');
+           
+       return $this->redirectToRoute('afficher', ['id' => $Participant->getId()]);
         }
         return $this->renderForm("Participant/add3.html.twig",
             ["formParticipant"=>$form]) ;
@@ -126,8 +128,43 @@ class ParticipantController extends AbstractController
         $em = $doctrine->getManager();
         $em->remove($c);
         $em->flush() ;
+        $this->addFlash(
+                    'delP',
+                    ' Participation supprimer avec succés'
+                );
         return $this->redirectToRoute('appback3');
     }
+
+    #[Route('/Participant/delete2/{id}', name: 'delete5')]
+
+    public function delete2($id, ManagerRegistry $doctrine)
+    {$c = $doctrine
+        ->getRepository(Participant::class)
+        ->find($id);
+        $em = $doctrine->getManager();
+        $em->remove($c);
+        $em->flush() ;
+        return $this->redirectToRoute('affichefront1');
+    }
+
+
  
+  #[Route('/Participant/affiche/{id}', name: 'afficher')]
+ public function showAction(int $id): Response
+{
+    $participant = $this->getDoctrine()->getRepository(Participant::class)->find($id);
+
+    if (!$participant) {
+        throw $this->createNotFoundException('Participant introuvable');
+    }
+
+    return $this->render('participant/affich.html.twig', [
+        'participant' => $participant,
+    ]);
+}
+
+
+
+
     
 }

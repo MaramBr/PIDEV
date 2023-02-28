@@ -71,12 +71,20 @@ class Evenement
     #[ORM\ManyToOne(inversedBy: 'evenements')]
     private ?Sponsor $Sponsors = null;
 
-    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'evenements')]
-    private Collection $Participants;
+    #[ORM\ManyToMany(cascade:['persist','remove'],targetEntity: Participant::class, mappedBy: 'evenement')]
+    
+    private Collection $participants;
 
+
+    #[ORM\Column(length: 255)]
+    private ?string $nbParticipant = null;
+
+    
     public function __construct()
     {
         $this->Participants = new ArrayCollection();
+        $this->evenementParticipants = new ArrayCollection();
+        $this->participants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -190,7 +198,10 @@ class Evenement
         $this->getType();
         $this->getDescription();
         $this->getLieu();
+        $this->getNbParticipant();
         $this->getSponsors();
+       
+        
     }
 
      /**
@@ -198,13 +209,14 @@ class Evenement
       */
      public function getParticipants(): Collection
      {
-         return $this->Participants;
+         return $this->participants;
      }
 
      public function addParticipant(Participant $participant): self
      {
-         if (!$this->Participants->contains($participant)) {
-             $this->Participants->add($participant);
+         if (!$this->participants->contains($participant)) {
+             $this->participants->add($participant);
+             $participant->addEvenement($this);
          }
 
          return $this;
@@ -212,10 +224,24 @@ class Evenement
 
      public function removeParticipant(Participant $participant): self
      {
-         $this->Participants->removeElement($participant);
+         if ($this->participants->removeElement($participant)) {
+             $participant->removeEvenement($this);
+         }
 
          return $this;
      }
 
-    
+     public function getNbParticipant(): ?string
+     {
+         return $this->nbParticipant;
+     }
+
+     public function setNbParticipant(string $nbParticipant): self
+     {
+         $this->nbParticipant = $nbParticipant;
+
+         return $this;
+     }
+
+     
 }

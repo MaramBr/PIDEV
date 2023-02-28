@@ -56,6 +56,11 @@
                                                  <td>
                                                     {{i.Sponsors}}
                                                 </td>
+                                                   <td>
+                        {% for a in  i.getParticipants().toArray() %} 
+                             {{ a.ID}} 
+                        {% endfor %}
+                        </td>
                                                  <td>
                                                   
                                                   <a href="{{ path('deleteEvenement', {id:i.ID}) }}"class="btn btn-danger">supprimer </a>
@@ -75,7 +80,7 @@
                           </tbody>
 
                   
-                  
+
                       </table>
                       <input type="text" id="search" class="form-control" placeholder="Search">
                     </div>

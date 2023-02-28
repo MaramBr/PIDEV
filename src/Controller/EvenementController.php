@@ -17,6 +17,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Evenement\CancellationEvenement;
 use Symfony\Component\EvenementDispatcher\EvenementDispatcherInterface;
 use Symfony\App\Controller\EventNotificationService;
+use App\Service;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+
 
 
  
@@ -170,15 +174,35 @@ class EvenementController extends AbstractController
 
     #[Route('/Evenement/delete/{id}', name: 'deleteEvenement')]
 
-    public function deleteEvenement($id, ManagerRegistry $doctrine)
+    public function deleteEvenement($id, ManagerRegistry $doctrine,MailerInterface $mailer)
     {$c = $doctrine
         ->getRepository(Evenement::class)
         ->find($id);
         $em = $doctrine->getManager();
         $em->remove($c);
         $em->flush() ;
+
+
+
+        $email = (new Email())
+        ->from('emna.abbessi@esprit.tn')
+        ->To('emna.abessi55@gmail.com')
+        ->subject('Event Annuler')
+        ->text(" l'evenement est canceled");
+        
+         try {
+        $mailer->send($email);
+        $this->addFlash('message','E-mail  de réinitialisation du mp envoyé :');
+    } catch (TransportExceptionInterface $e) {
+           
+
+        
+       
+ 
         return $this->redirectToRoute('afficheback');
     }
+
+}
  
     
     
@@ -195,6 +219,25 @@ $retour=json_encode($jsonContent);
 return new Response($retour);
 
 }
+
+public function sendEmail(MailerInterface $mailer): Response
+    {   $to ='emna.abbessi@esprit.tn';
+        $email = (new Email())
+            ->from('emna.abbessi@esprit.tn')
+            ->to('$to')
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('Time for Symfony Mailer!')
+            ->text('Sending emails is fun again!')
+            ->html('<p>See Twig integration for better HTML integration!</p>');
+
+        return $this->mailer->send($email);
+
+      
+    }
     
 }
+
 

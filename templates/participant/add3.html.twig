@@ -14,7 +14,7 @@
                         
 						<div class="billing-details">
 							<div class="section-title">
-								<h3 class="title">Billing address</h3>
+								<h3 class="title">Participer Maintenant !</h3>
 							</div>
                             
 							  {{ form_start(formParticipant , {'attr': {'novalidate':'novalidate'}} ) }}
@@ -31,6 +31,9 @@
 
                         <div class="form-group">
                         {{ form_row(formParticipant.tel, {'label':'tel' ,'attr':{'placeholder': 'tel...', 'class':'form-control'}}) }}</div>
+					
+					<div class="form-group">
+                        {{ form_row(formParticipant.evenement, {'label':'Les evenements disponibles :' ,'attr':{'placeholder': 'tel...', 'class':'form-control'}}) }}</div>
 					
                       <button type="click here" class="btn btn-primary mr-2" >Participer</button>
                        {{form_end(formParticipant)}}

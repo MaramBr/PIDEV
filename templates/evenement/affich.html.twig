@@ -32,13 +32,14 @@
 							<div class="section-nav">
 								<!-- tab -->
 								<div id="tab1" class="tab-pane active">
-									<div class="products-slick" data-nav="#slick-nav-1">
+									<div class="products-slick" data-nav="#slick-nav-2">
 										<!-- product -->
 									
-                    {% for i in Evenement %}
+                    {% for i in result %}
 										<div class="product">
 											<div class="product-img">
-												<img  src="{{ asset('/uploads/brochures/'~i.Image) }}" alt="">
+												<img src="{{ asset('/uploads/brochures/'~i.Image) }}" alt="" width="300px" height="600px">
+
 												<div class="product-label">
 													
 												</div>
@@ -107,7 +108,10 @@
 									<div id="slick-nav-1" class="products-slick-nav"></div>
 								</div>
 								<!-- /tab -->
+								
 							</div>
+						</div>
+						<div style="right: 0" class="fa fa-exchange"> >{{ knp_pagination_render(result) }}
 						</div>
 					</div>
 					<!-- Products tab & slick -->

@@ -23,7 +23,12 @@ use Symfony\Component\Mime\Email;
 
 use Knp\Snappy\Pdf;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use PHPMailer\PHPMailer\PHPMailer;
 
+
+use Knp\Component\Pager\PaginatorInterface;
 
  
 class EvenementController extends AbstractController
@@ -40,11 +45,16 @@ class EvenementController extends AbstractController
 
    
     #[Route('/Evenement/afficher', name: 'affichefront')]
-    public function affiche1(ManagerRegistry $em): Response
+    public function affiche1(ManagerRegistry $em,PaginatorInterface $paginator,Request $request): Response
     {
         $repo=$em->getRepository(Evenement::class);
         $result=$repo->findAll();
-        return $this->render ('Evenement/affich.html.twig',['Evenement'=>$result]);
+        $Evenement= $paginator->paginate(
+            $result,
+            $request->query->getInt('page',1),//num page
+            1
+        );
+        return $this->render ('Evenement/affich.html.twig',['result'=>$Evenement]);
    
        
     }
@@ -174,39 +184,49 @@ class EvenementController extends AbstractController
 
     
 
-    #[Route('/Evenement/delete/{id}', name: 'deleteEvenement')]
+  
 
-    public function deleteEvenement($id, ManagerRegistry $doctrine,MailerInterface $mailer)
-    {$c = $doctrine
-        ->getRepository(Evenement::class)
-        ->find($id);
-        $em = $doctrine->getManager();
-        $em->remove($c);
-        $em->flush() ;
-
-
-
-        $email = (new Email())
-        ->from('emna.abbessi@esprit.tn')
-        ->To('emna.abessi55@gmail.com')
-        ->subject('Event Annuler')
-        ->text(" l'evenement est canceled");
-        
-         try {
-        $mailer->send($email);
-        $this->addFlash('message','E-mail  de réinitialisation du mp envoyé :');
-    } catch (TransportExceptionInterface $e) {
-           
-
-        
-       
- 
-        return $this->redirectToRoute('afficheback');
-    }
-
-}
- 
+#[Route('/Evenement/delete/{id}', name: 'deleteEvenement')]
+public function deleteEvenement($id, ManagerRegistry $doctrine, MailerInterface $mailer)
+{   
     
+    $evenement = $doctrine->getRepository(Evenement::class)->find($id);
+    
+    if (!$evenement) {
+        throw $this->createNotFoundException('Evenement introuvable');
+    }
+    
+    // Supprimer l'événement
+    $entityManager = $doctrine->getManager();
+    $entityManager->remove($evenement);
+    $entityManager->flush();
+    
+    // Envoyer un e-mail de notification
+    $mailer = new PHPMailer();
+    $mailer->isSMTP();
+    $mailer->SMTPSecure = 'tls';
+    $mailer->SMTPAutoTLS = false;
+    $mailer->Host = 'smtp.gmail.com';
+    $mailer->Port = 587;
+    $mailer->SMTPAuth = true;
+    $mailer->Username = 'emna.abbessi@esprit.tn';
+    $mailer->Password = '12715163';
+    $mailer->setFrom('emna.abbessi@esprit.tn');
+    $mailer->addAddress('emna.abbessi@esprit.tn');
+    $mailer->Subject = 'Evenement supprimé';
+    $mailer->Body = 'L\'événement '.$evenement->getId().' a été supprimé.';
+    
+    if (!$mailer->send()) {
+        // Gestion des erreurs d'envoi de l'e-mail
+        $this->addFlash('danger', 'Une erreur est survenue lors de l\'envoi de l\'e-mail de notification.');
+    } else {
+        // Succès de l'envoi de l'e-mail
+        $this->addFlash('success', 'L\'événement a été supprimé avec succès et un e-mail de notification a été envoyé.');
+    }
+    
+    return $this->redirectToRoute('afficheback');
+}
+
     
  #[Route('/searchEvenement', name: 'searchEvenement')]
   
@@ -239,7 +259,14 @@ public function sendEmail(MailerInterface $mailer): Response
 
       
     }
-    
+
+
+
+
+
 }
+
+    
+
 
 

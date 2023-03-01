@@ -33,6 +33,10 @@ use Swift_Message;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use PHPMailer\PHPMailer\PHPMailer;
+
 
 
 
@@ -88,6 +92,15 @@ public function add(MailerInterface $mailer, ManagerRegistry $doctrine, Request 
         $events = $form->get('evenement')->getData();
 
         foreach ($events as $evenement) {
+
+            // Check if the number of participants for the event is greater than zero
+            if ($evenement->getNbParticipant() <= 0) {
+                $this->addFlash(
+                    'error',
+                    'Impossible d\'ajouter un participant à l\'événement ' . $evenement->getNom() . ' car le nombre maximum de participants est atteint.'
+                );
+                return $this->redirectToRoute('add3');
+            }
             // Update the number of participants for the event
             $evenement->setNbParticipant($evenement->getNbParticipant() - 1);
 
@@ -184,8 +197,30 @@ public function add(MailerInterface $mailer, ManagerRegistry $doctrine, Request 
     ]);
 }
 
+ 
+#[Route('/pdf', name:'export_pdf', methods: ["GET"])]
+     
+    public function pdf(ParticipantRepository $ParticipantRepository, Dompdf $dompdf)
+    {
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('evenement/pdf.html.twig', [
+            'participant' => $ParticipantRepository->findAll(),
+        ]);
 
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
 
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
 
-    
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (inline view)
+        $dompdf->stream("ListeDesParticipants.pdf", [
+            "participant" => true
+        ]);
+    }
+
+  
 }

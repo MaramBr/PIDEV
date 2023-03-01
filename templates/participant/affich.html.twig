@@ -6,7 +6,7 @@
 
 
 
- {%  for message in app.flashes('delP')  %}
+ {%  for message in app.flashes('addP')  %}
                                <div class="alert alert-info" role="alert">
                                    {{message}}                               </div>
                            {% endfor %}
@@ -48,6 +48,9 @@
 						
 						<a href="{{ path('delete3', {id:participant.ID}) }}" class="primary-btn order-submit">Annuler participation</a>
                         <a href="{{ path('update3', {id:participant.ID}) }}" class="primary-btn order-submit">Update</a>
+						      <a href="{{ path('export_pdf') }}" class="btn btn-info">Exporter en PDF</a>
+							 
+
 					</div>
 
 

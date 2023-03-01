@@ -5,10 +5,12 @@ use Symfony\Component\Mailer\Transport\Smtp\SmtpTransport;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Participant;//controller
+use App\Entity\Participant;
+use App\Entity\Evenement;//controller
 use Doctrine\Persistence\ManagerRegistry;//controller
 use App\Repository\ParticipantRepository;//controller
 use Symfony\Component\Mailer\Transport;
+use App\Repository\EvenementRepository;
 use Symfony\Component\Mailer\Transport\Smtp\Stream\SocketStream;
 use App\Form\ParticipantType;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,6 +33,8 @@ use Swift_Message;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+
+
 
 
 use Twilio\Rest\Client;
@@ -70,31 +74,47 @@ class ParticipantController extends AbstractController
 
 
 
-    #[Route('/Participant/add', name: 'add3')]
-    public function add(MailerInterface $mailer,ManagerRegistry $doctrine,Request $request): Response
-    {
-        $Participant=new Participant() ;
-        //$participant = $this->getDoctrine()->getRepository(Participant::class)->find($id);
-        $form=$this->createForm(ParticipantType::class,$Participant); //sna3na objet essmo form aamlena bih appel lel Participanttype
-        $form->handleRequest($request);
-        if( $form->isSubmitted() && $form->isValid() )  //amaalna verification esq taadet willa le aadna prob fi code ou nn
-       {
-        $em=$doctrine->getManager(); //appel lel manager
-        $em->persist($Participant); //elli tzid
-        $em->flush(); //besh ysob fi base de donnee
-$this->addFlash(
-                    'delP',
-                    ' Participation Sauvgarder avec succés'
-                );
-       return $this->redirectToRoute('afficher', ['id' => $Participant->getId()]);
-        
+   #[Route('/Participant/add', name: 'add3')]
+public function add(MailerInterface $mailer, ManagerRegistry $doctrine, Request $request): Response
+{
+    $participant = new Participant();
+    $form = $this->createForm(ParticipantType::class, $participant);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em = $doctrine->getManager();
+
+        // Get the events associated with the participation
+        $events = $form->get('evenement')->getData();
+
+        foreach ($events as $evenement) {
+            // Update the number of participants for the event
+            $evenement->setNbParticipant($evenement->getNbParticipant() - 1);
+
+            // Associate the participant with the event
+            $participant->addEvenement($evenement);
+
+            // Save the event to the database
+            $em->persist($evenement);
         }
-        return $this->render('Participant/add3.html.twig', array("formParticipant"=>$form->createView()));
-       // return $this->render('Participant/add.html.twig', array("formParticipant"=>$form->createView));
 
+        // Save the participant to the database
+        $em->persist($participant);
+        $em->flush();
 
+        $this->addFlash(
+            'addP',
+            'Participation sauvegardée avec succès.'
+        );
 
+        return $this->redirectToRoute('afficher', ['id' => $participant->getId()]);
     }
+
+    return $this->render('Participant/add3.html.twig', [
+        'formParticipant' => $form->createView(),
+    ]);
+}
+
      
    
 
@@ -102,6 +122,7 @@ $this->addFlash(
 
     public function  updateParticipant (ManagerRegistry $doctrine,$id,  Request  $request) : Response
     { $Participant = $doctrine
+
         ->getRepository(Participant::class)
         ->find($id);
         $form = $this->createForm(ParticipantType::class, $Participant);

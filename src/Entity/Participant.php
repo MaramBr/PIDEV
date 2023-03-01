@@ -19,15 +19,29 @@ class Participant
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"nom evenement doit etre non vide")]
+    #[Assert\Regex(
+         pattern:"/^[^0-9]+$/",
+         message:"Le nom ne doit pas contenir de chiffres"
+     )]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"nom evenement doit etre non vide")]
+    #[Assert\Regex(
+         pattern:"/^[^0-9]+$/",
+         message:"Le nom ne doit pas contenir de chiffres"
+     )]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+     #[Assert\NotBlank(message:"l'email doit etre non vide")]
+     #[Assert\Email(message:"L'email n'est pas valide ")]
     private ?string $email = null;
 
     #[ORM\Column]
+ #[Assert\NotBlank(message:"AGE doit etre non vide")]
+ 
+
     private ?int $age = null;
 
  
@@ -36,6 +50,7 @@ class Participant
     private ?int $tel = null;
 
     #[ORM\ManyToMany(targetEntity: Evenement::class, inversedBy: 'participants')]
+
     private Collection $evenement;
 
     

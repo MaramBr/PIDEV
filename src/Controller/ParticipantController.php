@@ -156,18 +156,35 @@ public function add(MailerInterface $mailer, ManagerRegistry $doctrine, Request 
     #[Route('/Participant/delete/{id}', name: 'delete3')]
 
     public function delete($id, ManagerRegistry $doctrine)
-    {$c = $doctrine
+{
+    $participant = $doctrine
         ->getRepository(Participant::class)
         ->find($id);
-        $em = $doctrine->getManager();
-        $em->remove($c);
-        $em->flush() ;
-        $this->addFlash(
-                    'delP',
-                    ' Participation supprimer avec succés'
-                );
-        return $this->redirectToRoute('appback3');
+
+    $em = $doctrine->getManager();
+    $em->remove($participant);
+
+    // Get the events associated with the participation
+    $events = $participant->getEvenement();
+
+    foreach ($events as $evenement) {
+        // Increment the nbParticipant attribute of the event
+        $evenement->setNbParticipant($evenement->getNbParticipant() + 1);
+
+        // Save the event to the database
+        $em->persist($evenement);
     }
+
+    $em->flush();
+
+    $this->addFlash(
+        'delP',
+        'Participation supprimée avec succès'
+    );
+
+    return $this->redirectToRoute('appback3');
+}
+
 
     #[Route('/Participant/delete2/{id}', name: 'delete5')]
 

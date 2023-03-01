@@ -77,6 +77,10 @@ class Evenement
 
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Nombre Participant  doit etre non vide")]
+    #[Assert\Length(min:0,max:1000, minMessage:"Doit etre > =0.", maxMessage:"Doit etre <=1000")]
+
+     
     private ?string $nbParticipant = null;
 
     

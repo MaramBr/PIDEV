@@ -42,6 +42,12 @@ class Coaching
     #[ORM\OneToMany(mappedBy: 'Coachings', targetEntity: RendezVous::class)]
     private Collection $rendezVouses;
 
+    #[ORM\Column]
+    private ?int $DislikeButton = 0;
+
+    #[ORM\Column]
+    private ?int $LikeButton = 0;
+
    
 
     public function __construct()
@@ -137,6 +143,30 @@ class Coaching
         return (string)  $this->getCours();
        
         return(string)  $this->getDispoCoach();
+    }
+
+    public function getDislikeButton(): ?int
+    {
+        return $this->DislikeButton;
+    }
+
+    public function setDislikeButton(int $DislikeButton): self
+    {
+        $this->DislikeButton = $DislikeButton;
+
+        return $this;
+    }
+
+    public function getLikeButton(): ?int
+    {
+        return $this->LikeButton;
+    }
+
+    public function setLikeButton(int $LikeButton): self
+    {
+        $this->LikeButton = $LikeButton;
+
+        return $this;
     }
 
    

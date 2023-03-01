@@ -1,0 +1,84 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Coaching{% endblock %}
+
+
+{% block body %}
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- Product main img -->
+					<div class="col-md-5 col-md-push-2">
+						<div id="product-main-img">
+							<div class="product-preview">
+								<img src="./img/product01.png" alt="">
+      <img src="{{ asset('/uploads/coach/' ~ Coaching.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%">
+
+							</div>
+							
+						</div>
+					</div>
+					<!-- /Product main img -->
+
+					<!-- Product thumb imgs -->
+					<div class="col-md-2  col-md-pull-5">
+						<div id="product-imgs">
+							
+						</div>
+					</div>
+					<!-- /Product thumb imgs -->
+
+					<!-- Product details -->
+					<div class="col-md-5">
+						<div class="product-details">
+							<div>
+								<div class="product-rating">
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star-o"></i>
+								</div>
+								<a class="review-link" href="#">10 Review(s) | Add your review</a>
+							</div>
+							<div>
+								<h3 class="product-price">{{Coaching.Cours}}</h3>
+                               <h4 class="order-total">Disponibilite : {{Coaching.dispoCoach}}</h4>
+
+							</div>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+							<div class="product-options">
+								<label>
+									
+
+							<form method="POST" action="{{ path('like', {'id': Coaching.id}) }}">
+                <button type="submit" name="like" class="btn btn-success">J'aime ({{ Coaching.likeButton }})</button>
+
+            </form>									
+								</label>
+								<label>
+									<form method="POST" action="{{ path('dislike', {'id': Coaching.id}) }}">
+        <button type="submit" name="dislike" class="btn btn-danger">Je n'aime pas ({{ Coaching.DislikeButton }})</button></form>
+								</label>
+							</div>
+
+							<div class="add-to-cart">
+								
+						<a href="{{ path('addrdv2', {id:Coaching.id}) }}" class="primary-btn order-submit">Réserver votre Coach</a>
+							</div>
+
+						
+						
+
+						
+
+						</div>
+					</div>
+					<!-- /Product details -->
+{% endblock %}
+{% block footer %}
+{% endblock %}

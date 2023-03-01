@@ -2,11 +2,26 @@
 
 {% block title %}Coaching{% endblock %}
 
+
 {% block body %}
+
+=
+<style>
+.maram-actions {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
+
+</br> </br>
+<div class="maram-actions" justify-content: center>
+              </div>
 
 					<div class="col-md-5 order-details">
 						<div class="section-title text-center">
-							<h3 class="title">Coaching</h3>
+								<div><strong class="order-total"><div>Séance de {{Coaching.Cours}}</div></strong></div>
 						</div>
 						<div class="order-summary">
 							<div class="order-col">
@@ -44,6 +59,14 @@
 								
 							</div>
 
+							<form method="POST" action="{{ path('like', {'id': Coaching.id}) }}">
+                <button type="submit" name="like" class="btn btn-success">J'aime ({{ Coaching.likeButton }})</button>
+
+            </form>
+<form method="POST" action="{{ path('dislike', {'id': Coaching.id}) }}">
+        <button type="submit" name="dislike" class="btn btn-danger">Je n'aime pas ({{ Coaching.DislikeButton }})</button></form>
+      
+
 						<a href="{{ path('addrdv2', {id:Coaching.id}) }}" class="primary-btn order-submit">Réserver votre Coach</a>
 						
 						<div class="modal white falling" id="modale-contact">
@@ -51,6 +74,70 @@
 	</div>
 					</div>
                     <div>
+
+
+<!-- include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUJ+307U5yEx1q6GSYGSHK7+PXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+<script>
+    // variable to store the current rating index
+    var ratedIndex = -1;
+
+    // function to reset the star colors to white
+    function resetStarsColors() {
+        $('.la-star').css('color', 'white');
+    }
+
+    // function to set the color of stars up to a maximum index to gold
+    function setStars(max) {
+        for (var i = 0; i <= max; i++) {
+            $('.la-star:eq(' + i + ')').css('color', 'gold');
+        }
+    }
+
+    // function to get the stored rating index from local storage
+    function getStoredRatingIndex() {
+        if (localStorage.getItem('ratedIndex') != null) {
+            return parseInt(localStorage.getItem('ratedIndex'));
+        }
+        return -1;
+    }
+
+    $(document).ready(function() {
+        // reset star colors on page load
+        resetStarsColors();
+
+        // get stored rating index and set stars accordingly
+        var storedIndex = getStoredRatingIndex();
+        if (storedIndex != -1) {
+            ratedIndex = storedIndex;
+            setStars(ratedIndex);
+        }
+
+        // handle mouse click on star rating
+        $(".la-star").on('click', function() {
+            ratedIndex = parseInt($(this).data("index"));
+            localStorage.setItem('ratedIndex', ratedIndex);
+        });
+
+        // handle mouseover on star rating
+        $(".la-star").mouseover(function() {
+            resetStarsColors();
+            var currentIndex = parseInt($(this).data('index'));
+            setStars(currentIndex);
+        });
+
+        // handle mouseleave on star rating
+        $(".la-star").mouseleave(function() {
+            resetStarsColors();
+            if (ratedIndex != -1) {
+                setStars(ratedIndex);
+            }
+        });
+    });
+</script>
+
+
      
 
 {% endblock %}

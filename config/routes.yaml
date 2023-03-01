@@ -2,6 +2,6 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-search:
-  path: /search
-  controller: App\Controller\Coaching::afficherback
+# search:
+#   path: /search
+#   controller: App\Controller\Coaching::afficherback

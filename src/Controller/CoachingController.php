@@ -23,13 +23,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Filesystem\Filesystem;
 use App\Repository\RendezVousRepository;//controller
 use App\Entity\RendezVous;//controller
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CoachingController extends AbstractController
 {
     #[Route('/coaching', name: 'app_coaching')]
     public function index(): Response
     {
-        return $this->render('coaching/index.html.twig', [
+        return $this->render('coaching/coachdetaille.html.twig', [
             'controller_name' => 'CoachingController',
         ]);
     }
@@ -154,7 +157,7 @@ class CoachingController extends AbstractController
         $repo=$mg->getRepository(Coaching::class);
         $resultat = $repo ->find($id);
         $logger->info("The array is: " . json_encode($resultat));
-        return $this->render('coaching/index.html.twig', [
+        return $this->render('coaching/coachdetaille4.html.twig', [
             'Coaching' => $resultat,
         ]);
     }
@@ -186,15 +189,22 @@ class CoachingController extends AbstractController
     public function ajoutjson(ManagerRegistry $doctrine,Request $request,NormalizerInterface $normalizer): Response
     {
         $Coaching =new Coaching();
-        $Coaching->SetCours($request->get('cours'));
-        $Coaching->SetDispoCoach($request->get('dispoCoach'));
-        $Coaching->SetImgCoach($request->get('imgCoach'));
+        $cours=$request->query->get('cours');
+        $dispocoach=$request->query->get('dispoCoash');
+        $img=$request->query->get('imgCoach');
         $em=$doctrine->getManager();
+
+        $Coaching->setCours('cours');
+        $Coaching->setDispoCoach('dispocoach');
+        $Coaching->setimgCoach('img');
+
         $em->persist($Coaching);
         $em->flush();
-        $coachingNormalises=$normalizer->normalize($Coaching,'json',['groups'=>"Coaching"]);
 
-        return new Response (json_encode($coachingNormalises));
+        $serializer =new Serializer([new ObjectNormalizer()]);
+        $formatted=$serializer->normalize($Coaching);
+
+        return new JsonResponse ($formatted);
     }
 
     #[Route('/stat', name: 'stat', methods: ['GET'])]
@@ -233,32 +243,6 @@ class CoachingController extends AbstractController
     }
 
 
-    #[Route('/stat2', name: 'stat2', methods: ['GET'])]
-
-    public function stat2(): Response
-{
-    $entityManager = $this->getDoctrine()->getManager();
-    $repository = $entityManager->getRepository(Coaching::class);
-
-    // Count total number of Coachings
-    $totalCoachings = $repository->createQueryBuilder('a')
-        ->select('COUNT(a.id)')
-        ->getQuery()
-        ->getSingleScalarResult();
-
-    // Query for all RendezVouss and group them by Coaching
-    $query = $repository->createQueryBuilder('a')
-        ->select('a.cours as cours, COUNT(a.id) as count, COUNT(a.id) / :total * 100 as percentage')
-        ->setParameter('total', $totalCoachings)
-        ->groupBy('a.cours')
-        ->getQuery();
-
-    $Coachings = $query->getResult();
-
-    return $this->render('coaching/stats.html.twig', [
-        'Coachings' => $Coachings,
-    ]);
-}
 
 
 
@@ -291,5 +275,73 @@ class CoachingController extends AbstractController
     }
 
 
+
+
+
+    #[Route('/updatejson/{id}', name: 'updatejson')]
+
+    public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+               $em = $this->getDoctrine()->getManager();
+               $Coaching= $em->getRepository(Coaching::class)->find($id);
+               $Coaching->setCours('cours');
+$Coaching->setDispoCoach('dispocoach');
+$Coaching->setimgCoach('img');
+
+$em->persist($Coaching);
+               $em->flush();
+               $jsonContent=$Normalizer->normalize($Coaching, 'json', ['groups' => 'Coachings']);
+return new Response("Coachingupdated successfully" .json_encode ($jsonContent));
+    }
+
     
+
+    #[Route('/deletejson/{id}', name: 'deletejson')]
+
+    public function deletejson(Request $request, $id)
+    {           $id=$request->get('id');
+               $em = $this->getDoctrine()->getManager();
+               $Coaching= $em->getRepository(Coaching::class)->find($id);
+               
+
+                $em->remove($Coaching);
+                $em->flush();
+
+            
+               $jsonContent=$Normalizer->normalize($Coaching, 'json', ['groups' => 'Coachings']);
+return new Response("Coaching deleted successfully" .json_encode ($jsonContent));
+    }
+
+
+    #[Route('/like/{id}', name: 'like', methods: ['POST'])]
+public function likeCoaching(Request $request, Coaching $Coaching): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+
+    $Coaching->setLikeButton($Coaching->getLikeButton() + 1);
+
+    $entityManager->persist($Coaching);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('detaille', ['id' => $Coaching->getId()]);
+}
+
+
+    
+
+#[Route('/dislike/{id}', name: 'dislike', methods: ['POST'])]
+
+public function dislikeCoaching(Request $request, Coaching $Coaching): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+
+    $Coaching->setDislikeButton($Coaching->getDislikeButton() + 1);
+
+    $entityManager->persist($Coaching);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('detaille', ['id' => $Coaching->getId()]);
+}
+
+   
 }

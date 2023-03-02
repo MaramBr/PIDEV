@@ -16,9 +16,15 @@
                             <th>nom</th>
                             <th>prenom</th>
                             <th>image</th>
-                                                        <th>password</th>
-
+                            <th>password</th>
                            <th>roles</th>
+                            <th>Etat</th>
+                             <th>Modifier</th>
+                           <th>Activer</th>
+                            <th>Bloquer</th>
+                          <th>Supprimer</th>
+
+
 
                             
                           </tr>
@@ -36,10 +42,18 @@
 {% for unrole in f.roles %}
 <li>{{unrole}}</li>
 {% endfor %} 
+                                <td> {{f.isActive }} </td>
+
 </td>
 
                             <td><a href="utilisateur/update/{{f.id}}" class="btn btn-primary mr-2" >modifier</a></td>
-                            <td><a href="utilisateur/delete/{{f.id}}" class="btn btn-dark" >supprimer</a></td>
+                           <td><a href="/user/{{f.id}}/enable" class="btn btn-success" >Activer</a></td>
+                          <td><a href="/user/{{f.id}}/disable" class="btn btn-danger" >Bloquer</a></td>
+                             <td><a href="utilisateur/delete/{{f.id}}" class="btn btn-dark" >supprimer</a></td>
+
+
+
+
                           </tr>
                           {% endfor %}
                         </tbody>

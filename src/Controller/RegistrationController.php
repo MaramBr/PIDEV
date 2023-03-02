@@ -76,13 +76,15 @@ class RegistrationController extends AbstractController
                 $newFile
                );
                $user->setImage($newFile);
-          
+               $user->setisActive(true);
+
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('password')->getData()
                 )
+                
             );
 
             $entityManager->persist($user);

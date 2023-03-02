@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -109,7 +109,37 @@ class HomeController extends AbstractController
                 return $this->redirectToRoute('home', $return);
 
         }
- 
+ /**
+     * @Route("/user/{id}/enable", name="user_enable")
+     */
+    public function enableUser(User $user): Response
+    {
+        $user->setisActive(true);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('listing');
+    }
+
+    /**
+     * @Route("/user/{id}/disable", name="user_disable")
+     */
+    public function disableUser(User $user): Response
+    {
+        $user->setisActive(0);
+        $now = new \DateTime();
+        $disabledUntil = clone $now;
+        $disabledUntil->modify('+2 minute');
+
+        $user->setDisabledUntil($disabledUntil);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('listing');
+    }
     // #[Route('/backuser', name: 'backuser')]
     // public function backuser(): Response
     // {
@@ -144,6 +174,62 @@ public function listing2(UserRepository $repo,Request $request,$id)
 }
 
 
+#[Route("/ALLUsers", name: "listUser")]
+    public function getUsers(UserRepository $repo, NormalizerInterface $normalizer)
+    {
+        $users = $repo->findAll();
+        $usersNormalises  = $normalizer->normalize($users, 'json', ['groups' => "users"]);
+        $json = json_encode($usersNormalises);
+        return new Response($json);
+    }
+    #[Route("/Users/{id}", name: "User")]
+    public function UserId($id, UserRepository $repo, NormalizerInterface $normalizer)
+    {
+        $users = $repo->find($id);
+        $usersNormalises  = $normalizer->normalize($users, 'json', ['groups' => "users"]);
+        $json = json_encode($usersNormalises);
+        return new Response($json);
+    }
+    #[Route("/addUserJSON/new", name: "addUserJSON")]
+    public function addUserJSON(Request $req, NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = new User();
+        $user->setNom($req->get('nom'));
+        $user->setAdresse($req->get('adresse'));
+        $user->setEmail($req->get('email'));
+        $hashedPassword = password_hash($req->get('password'), PASSWORD_DEFAULT);
+        $user->setPassword($hashedPassword);
+        $user->setImage($req->get('image'));
+        $em->persist($user);
+        $em->flush();
+
+        $jsonContent = $Normalizer->normalize($user, 'json', ['groups' => 'users']);
+        return new Response(json_encode($jsonContent));
+    }
+    #[Route("/updateUserJSON/{id}", name: "updateUserJSON")]
+    public function updateUserJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+        $user->setNom($req->get('nom'));
+        $user->setAdresse($req->get('adresse'));
+        $user->setEmail($req->get('email'));
+        $user->setImage($req->get('image'));
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($user, 'json', ['groups' => 'users']);
+        return new Response("User updated successfully " . json_encode($jsonContent));
+    }
+    #[Route("/deleteUserJSON/{id}", name: "deleteUserJSON")]
+    public function deleteUserJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+        $em->remove($user);
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($user, 'json', ['groups' => 'users']);
+        return new Response("User deleted successfully " . json_encode($jsonContent));
+    }
 
 
 }

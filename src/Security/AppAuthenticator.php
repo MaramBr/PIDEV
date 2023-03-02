@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Security;
-
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +14,8 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class AppAuthenticator extends AbstractLoginFormAuthenticator
 {
@@ -24,17 +26,29 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     // public function __construct(private UrlGeneratorInterface $urlGenerator)
     // {
     // }
+    // private $entityManager;
 
-    private $router;
+    // public function __construct(EntityManagerInterface $entityManager)
+    // {
+    //     $this->entityManager = $entityManager;
+    // }
+    // private $router;
 
-    public function __construct(UrlGeneratorInterface $router)
-    {
-        $this->router = $router;
-    }
+    // public function __construct(UrlGeneratorInterface $router)
+    // {
+    //     $this->router = $router;
+    // }
   
 
     // ...
+    private $entityManager;
+    private $router;
 
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $router)
+    {
+        $this->entityManager = $entityManager;
+        $this->router = $router;
+    }
     private function generateUrl($route, $parameters = array())
     {
         return $this->router->generate($route, $parameters);
@@ -43,9 +57,18 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
+        $request->getSession()->set(Security::LAST_USERNAME, $email);
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
+        // if (!$user || !$user->isIsActive()) {
+        //     throw new AuthenticationException('Invalid credentials.');
+        // }
+        $disabledUntil = $user->getDisabledUntil();
 
+        if ($disabledUntil && $disabledUntil > new \DateTime() && !$user->isIsActive()) {
+            throw new AuthenticationException(sprintf('Your account has been disabled. Please try again in %d seconds.', $disabledUntil->getTimestamp() - time()));
+        }
         return new Passport(
             new UserBadge($email),
             new PasswordCredentials($request->request->get('password', '')),

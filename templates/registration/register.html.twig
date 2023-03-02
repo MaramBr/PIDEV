@@ -9,29 +9,30 @@
 				<!-- row -->
 				<div class="row">
 
-					<div class="col-md-7">
+					<div class="col-md-5">
 						<!-- Billing Details -->
 						<div class="billing-details">
 							<div class="section-title">
 								<h3 class="title">S'inscrire</h3>
 							</div>
+							
                                                {{ form_start(registrationForm, {'attr': {'novalidate':'novalidate'}} ) }}
 
 
 							 {# {{ form_start(registrationForm}} #}
-                             	<div class="form-group">
+                             	<div class=col-md-5">
                     {{ form_row(registrationForm.nom , {'label':'nom','attr':{'placeholder':'nom' , 'class':'input'}})}}
 							</div>
-							<div class="form-group">
+							<div class=col-md-5">
                     {{ form_row(registrationForm.prenom , {'label':'prenom','attr':{'placeholder':'prenom' , 'class':'input'}})}}
 							</div>
                          
-						<div class="form-group">	
+						<div class=col-md-5">	
                         {{ form_row(registrationForm.email , {'label':'email','attr':{'placeholder':'user@gmail.com' , 'class':'input'}})}}
 
 							</div>
 
-						 <div class="form-group">
+						 <div class=col-md-5">
                              {{ form_row(registrationForm.password, { 'label': 'Password','attr':{'placeholder':'**********' , 'class':'input'} }) }} 
 							    
 							</div> 
@@ -66,6 +67,12 @@
                              {{ form_row(registrationForm.Image, { 'label':'image','attr':{  'class':'file'} }) }}
 										
 							</div>
+							<div class="form-group">
+						
+									
+{{form_widget(registrationForm.captcha) }}										
+							</div>
+							
 							   <button type="submit" class="btn btn-primary" >Register</button>
 							
 									

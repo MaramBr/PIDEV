@@ -6,6 +6,7 @@ use App\Form\PwdType;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Form\AdminType;
+use App\Form\UpdatebackType;
 use App\Form\EditType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -155,28 +156,28 @@ class RegistrationController extends AbstractController
         //         return $this->redirectToRoute('membre');
         // }
         $user=$repository->find($id);
-        $form=$this->createForm(AdminType ::class,$user);
+        $form=$this->createForm(UpdatebackType ::class,$user);
         
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
 
-            $uploadedFile = $form['Image']->getData();
-            $destination = $this->getParameter('kernel.project_dir').'/public/uploads';
-            $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-            $newFile = $originalFilename.'-'.uniqid().'.'.$uploadedFile->guessExtension();
-            $uploadedFile->move(
-                $destination,
-                $newFile
-               );
-               $user->setImage($newFile);
+            // $uploadedFile = $form['Image']->getData();
+            // $destination = $this->getParameter('kernel.project_dir').'/public/uploads';
+            // $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+            // $newFile = $originalFilename.'-'.uniqid().'.'.$uploadedFile->guessExtension();
+            // $uploadedFile->move(
+            //     $destination,
+            //     $newFile
+            //    );
+            //    $user->setImage($newFile);
 
          
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
-                )
-            );
+            // $user->setPassword(
+            //     $userPasswordHasher->hashPassword(
+            //         $user,
+            //         $form->get('password')->getData()
+            //     )
+            // );
 
 
 //    $user->setPassword(

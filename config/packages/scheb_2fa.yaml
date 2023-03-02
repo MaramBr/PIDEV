@@ -10,7 +10,7 @@ scheb_two_factor:
         sender_name: E-Fit
     trusted_device:
        enabled: true 
-       lifetime: 5184000
+       lifetime: 2
        extend_lifetime: false
        cookie_name: trusted_device
        cookie_secure: false

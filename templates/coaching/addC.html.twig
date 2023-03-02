@@ -21,7 +21,9 @@
                     <form class="forms-sample">
                      
                       
-                      
+                       <div class="form-group">
+                        {{ form_row(formCoaching.descCoach, {'label':'Description' ,'attr':{'placeholder': 'Description...', 'class':'form-control'}}) }}
+                      </div>
                       <div class="form-group">
                         {{ form_row(formCoaching.dispoCoach, {'label':'Disponibilte' ,'attr':{'placeholder': 'Disponibilte...', 'class':'form-control'}}) }}
                       </div>

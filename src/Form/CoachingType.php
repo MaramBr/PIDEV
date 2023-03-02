@@ -28,6 +28,10 @@ class CoachingType extends AbstractType
                     'Fitness' => 'Fitness',
                     'Gymnas' => 'Gymnas',
                     'Boxing' => 'Boxing',
+                    'Musculation' => 'Musculation',
+                    'Pilates' => 'Pilates',
+                   
+                    
 
                                      
                 ],
@@ -38,7 +42,7 @@ class CoachingType extends AbstractType
                 
             ])
             
-          
+            ->add('descCoach')
          
         
             ->add('dispoCoach', ChoiceType::class, [

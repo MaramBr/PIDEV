@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Notify</title>
+
+{% block body %}
+    <h1>Edit Notify</h1>
+
+    {{ include('notify/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_notify_index') }}">back to list</a>
+
+    {{ include('notify/_delete_form.html.twig') }}
+{% endblock %}

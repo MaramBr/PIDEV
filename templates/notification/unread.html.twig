@@ -1,9 +1,0 @@
-{% if notifications is not empty %}
-    <ul>
-    {% for notification in notifications %}
-        <li><a href="{{ notification.url }}">{{ notification.message }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Aucune notification.</p>
-{% endif %}

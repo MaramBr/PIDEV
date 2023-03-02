@@ -48,11 +48,20 @@ class Coaching
     #[ORM\Column]
     private ?int $LikeButton = 0;
 
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $descCoach = null;
+
+    #[ORM\OneToMany(mappedBy: 'coach', targetEntity: Notify::class)]
+    private Collection $notifies;
+
+   
+
    
 
     public function __construct()
     {
         $this->rendezVouses = new ArrayCollection();
+        $this->notifies = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -168,6 +177,50 @@ class Coaching
 
         return $this;
     }
+
+    public function getDescCoach(): ?string
+    {
+        return $this->descCoach;
+    }
+
+    public function setDescCoach(string $descCoach): self
+    {
+        $this->descCoach = $descCoach;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notify>
+     */
+    public function getNotifies(): Collection
+    {
+        return $this->notifies;
+    }
+
+    public function addNotify(Notify $notify): self
+    {
+        if (!$this->notifies->contains($notify)) {
+            $this->notifies->add($notify);
+            $notify->setCoach($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotify(Notify $notify): self
+    {
+        if ($this->notifies->removeElement($notify)) {
+            // set the owning side to null (unless already changed)
+            if ($notify->getCoach() === $this) {
+                $notify->setCoach(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
 
    
 }

@@ -24,12 +24,13 @@ use MercurySeries\FlashyBundle\FlashyNotifier;
 
 
 
+
 class RendezVousController extends AbstractController
 {
     #[Route('/rendez/vous', name: 'app_rendez_vous')]
     public function index(): Response
     {
-        return $this->render('rendez_vous/index.html.twig', [
+        return $this->render('rendez_vous/calendar.html.twig', [
             'controller_name' => 'RendezVousController',
         ]);
     }
@@ -185,47 +186,6 @@ class RendezVousController extends AbstractController
     }
 
 
-/*
-
-    #[Route('/notif', name: 'notif')]
-      public function reserverSeanceCoaching(Request $request, NotificationService $notificationService)
-    {
-        // Créer un formulaire pour la réservation d'une séance de coaching
-        $form = $this->createForm(ReservationType::class);
-        
-        $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer les données du formulaire
-            $reservation = $form->getData();
-            
-            // Enregistrer la réservation dans la base de données
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($reservation);
-            $entityManager->flush();
-            
-            // Envoyer une notification au coach
-            $this->sendNotificationToCoach($reservation, $notificationService);
-            
-            // Rediriger l'utilisateur vers la page de confirmation
-            return $this->redirectToRoute('confirmation_reservation');
-        }
-        
-        return $this->render('reservation/reserver.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-    
-    private function sendNotificationToCoach(RendezVous $reservation, NotificationService $notificationService)
-    {
-        $message = 'Nouvelle réservation effectuée par ' . $reservation->getCoaching()->getcours() . ' ' . $reservation->getClient()->getPrenom() . ' pour une séance de coaching avec vous.';
-    
-        // Envoyer la notification au coach
-        $notificationService->sendNotification($reservation->getCoaching(), $message);
-    }
-*/
-   
-
 
 
 
@@ -274,8 +234,31 @@ public function notify(FlashyNotifier $flashy): Response
 
     
 }
+/*
+#[Route('/calendar', name: 'calendar')]
 
+public function onCalendarSetData(RendezVous $calendar)
+    {
+        $start = $calendar->getStart();
+        $end = $calendar->getEnd();
+        $filters = $calendar->getFilters();
 
+        // You may want to make a custom query from your database to fill the calendar
+
+        $calendar->addEvent(new Event(
+            'Event 1',
+            new \DateTime('Tuesday this week'),
+            new \DateTime('Wednesdays this week')
+        ));
+
+        // If the end date is null or not defined, it creates a all day event
+        $calendar->addEvent(new Event(
+            'All day event',
+            new \DateTime('Friday this week')
+        ));
+    }
+
+*/
 #[Route('/listerdv/{id}', name: 'listerdv')]
 
     public function listerdv(Coaching $coaching): Response

@@ -26,6 +26,9 @@ use App\Entity\RendezVous;//controller
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\Notify;
+use App\Repository\NotifyRepository;//controller
+
 
 class CoachingController extends AbstractController
 {
@@ -62,18 +65,36 @@ class CoachingController extends AbstractController
      
   
 
-    
-    #[Route('/afficherback', name: 'afficherback')]
-    public function afficherback(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
+    /*
+    #[Route('/afficherback', name: 'afficherback', methods: ['GET'])]
+    public function afficherback(ManagerRegistry $mg,NormalizerInterface $normalizer,NotifyRepository $notify): Response
     {
         $repo=$mg->getRepository(Coaching::class);
         $resultat = $repo ->FindAll();
-        $coachingNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Coaching"]);
+        $notif=$notify->FindAll();
+        $coachingNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Coaching","Notify"]);
         $json=json_encode($coachingNormalises);
 
         return $this->render('coaching/afficherback.html.twig', [
             'Coaching' => $resultat,
+            'notify' => $notify,
         ]);
+    }
+*/
+    #[Route('/afficherback', name: 'afficherback', methods: ['GET'])]
+
+    public function affiche1(ManagerRegistry $mg,NotifyRepository $notify): Response
+    {
+        $repo=$mg->getRepository(Coaching::class);
+        $notify=$mg->getRepository(Notify::class);
+
+        $result=$repo->findAll();
+        $notif=$notify->FindAll();
+        return $this->render ('coaching/afficherback.html.twig',['Coaching'=>$result
+                                                                ,'notif'=>$notif
+]);
+   
+       
     }
 
     #[Route('/addcoach', name: 'addcoach')]
@@ -116,7 +137,7 @@ class CoachingController extends AbstractController
 
          return $this->redirectToRoute('afficherback');
         }
-      //  return $this->render('RendezVouscontroller2/add.html.twig',array("form_student"=>$Form->createView()));
+      //  return $this->render('RendezVouscontroller2/add.html.twig',array("form_Coaching"=>$Form->createView()));
         return $this->renderForm('coaching/addC.html.twig',array("formCoaching"=>$Form));
     }
 
@@ -157,7 +178,7 @@ class CoachingController extends AbstractController
         $repo=$mg->getRepository(Coaching::class);
         $resultat = $repo ->find($id);
         $logger->info("The array is: " . json_encode($resultat));
-        return $this->render('coaching/coachdetaille4.html.twig', [
+        return $this->render('coaching/coachdetaille.html.twig', [
             'Coaching' => $resultat,
         ]);
     }

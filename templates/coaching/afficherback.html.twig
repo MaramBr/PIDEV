@@ -16,11 +16,13 @@
                             <th>id</th>
                            
                             <th>Cours</th>
-                             <th>Disponibilte</th>
+                            <th>Disponibilte</th>
+
                              <th>img</th>
                              <th>Modifier</th>
                              <th>Supprimer </th>
                               <th>Liste des rendez_vous pour chaque cours </th>
+
 
 
                             
@@ -33,6 +35,7 @@
                             <td>{{a.id }}</td>
                            
                             <td> {{a.Cours  }} </td>
+
 
 
                              <td> {{a.dispoCoach }} </td>
@@ -89,4 +92,30 @@
             search();
         });
     </script>
+{% endblock %}
+
+
+{% block notify %}
+   
+<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                                    {% for i in notif %}
+
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-calendar text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                    
+                      <p class="preview-subject mb-1">{{i.message}}</p>
+                      <p class="text-muted ellipsis mb-0"> un Rendez_Vous a été ajouter </p>
+                    </div>
+                  </a>
+                 {% endfor %}
+                  <p class="p-3 mb-0 text-center">voir tous les notifications</p>
+                </div>
+
 {% endblock %}

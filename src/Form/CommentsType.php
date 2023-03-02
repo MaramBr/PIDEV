@@ -14,6 +14,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Captcha\Bundle\CaptchaBundle\Validator\Constraints\ValidCaptcha;
+use Gregwar\CaptchaBundle\Type\CaptchaType;
 
 class CommentsType extends AbstractType
 {
@@ -41,7 +43,16 @@ class CommentsType extends AbstractType
                 'mapped' => false
             ])
             ->add('envoyer', SubmitType::class)
+///
+            ->add('captcha', CaptchaType::class,[
+                'attr' => [
+                   
+                    'class' => "form-control"
+                ],
+                ]
+            )
         ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

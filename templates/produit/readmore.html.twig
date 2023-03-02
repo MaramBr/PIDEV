@@ -7,7 +7,10 @@
 
 
 
-
+{%  for message in app.flashes('message')  %}
+                               <div class="alert alert-info" role="alert">
+                                   {{message}}                               </div>
+                           {% endfor %}
 
 
 
@@ -73,7 +76,7 @@
 				{{ form_start(commentForm) }}
 				    {{ form_row(commentForm.email) }}
 				    {{ form_row(commentForm.nickname) }}
-                    
+                    {{form_widget(commentForm.captcha) }}
                     <div id="editor"></div>
 				{{ form_end(commentForm) }}
 			</div>

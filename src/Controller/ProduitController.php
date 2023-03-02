@@ -18,6 +18,7 @@ use Psr\Log\LoggerInterface;
 use App\Entity\Comments;
 use App\Form\CommentsType;
 use DateTime;
+use Knp\Component\Pager\PaginatorInterface;
 
  
 class ProduitController extends AbstractController
@@ -32,19 +33,24 @@ class ProduitController extends AbstractController
 
    
     #[Route('/Produit/afficher', name: 'app')]
-    public function afficheFront(ProduitRepository $annoncesRepo, Request $request): Response
-    {
-        // On définit le nombre d'éléments par page
-        $limit = 1;
-         // On récupère le numéro de page
-         $page = (int)$request->query->get("page", 1);
-         $Produit = $annoncesRepo->getPaginatedAnnonces($page, $limit)
-         ;
-          // On récupère le nombre total d'annonces
-        $total = $annoncesRepo->getTotalProduits();
-         return $this->render('produit/affich.html.twig', compact('Produit','total','limit','page'));
+    
+    
+        public function affiche1(ManagerRegistry $em,PaginatorInterface $paginator,Request $request): Response
+        {
+            $repo=$em->getRepository(Produit::class);
+            $data=$repo->findAll();
+            $Produit= $paginator->paginate(
+                $data,
+                $request->query->getInt('page',1),//num page
+                1
+            );
+            return $this->render ('produit/affich.html.twig',['data'=>$Produit]);
        
-    }
+           
+        }
+
+       
+    
     #[Route('/afficherjson', name: 'json')]
 
     public function affichercoachjson(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
@@ -94,8 +100,8 @@ class ProduitController extends AbstractController
         $comment->setParent($parent ?? null );
          $em->persist($comment);
          $em->flush();
-         $this->addFlash('message', 'Votre commentaire a bien été envoyé');
-            return $this->redirectToRoute('app');
+         $this->addFlash('message', 'Votre commentaire a été bien envoyé');
+            return $this->redirectToRoute('detaille', ['id' => $id]);
 
 
  }

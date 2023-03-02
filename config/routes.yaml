@@ -2,7 +2,3 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-export_pdf:
-    path: /pdf
-    controller: App\Controller\ParticipantController::pdf
-

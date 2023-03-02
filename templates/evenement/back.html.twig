@@ -1,144 +1,82 @@
 {% extends 'baseback.html.twig' %}
 
 {% block body %}
+
 <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    
-                    <p class="card-description"> table<code>des types</code>
-                    </p>
-                    <div class="table-responsive">
-                      <table class="table">
-                      
-                        <thead>
-                          <tr>
-                          <th><button type="button" class="btn btn-outline-warning">  identifiant</button></th>
-                          
-                            <th><button type="button" class="btn btn-outline-danger">Nom Event</button></th>
-                            <th><button type="button" class="btn btn-outline-success">Date debut</button></th>
-                          <th><button type="button" class="btn btn-outline-warning"> Date fin</button></th>
-                          <th><button type="button" class="btn btn-outline-danger"> image</button></th>
-                            <th><button type="button" class="btn btn-outline-success">Lieu</button></th>
-                            <th><button type="button" class="btn btn-outline-warning">  Description</button></th>
-                            <th><button type="button" class="btn btn-outline-danger">Type</button></th>
-                            <th><button type="button" class="btn btn-outline-success">Sponsor</button></th>
-                            
-                          </tr>
-                        </thead>
-                        <tbody>
-                        
-                                                      {% for i in Evenement %}
-
-                                            <tr>
-                                                <td>
-                                                    {{i.ID}}
-                                                </td>
-                                                <td>
-                                                   {{i.Nom}}
-                                                </td>
-                                               
-                                                <td>
-                                                    {{ i.DateDebut|date('Y-m-d H:i:s')  }}
-                                                </td>
-                                                <td>
-                                                    {{ i.DateFin|date('Y-m-d H:i:s')  }}
-                                                </td>
-                                                <td><img src="{{ asset('/uploads/brochures/' ~ i.Image) }}?t={{ date().getTimestamp() }}" alt="image"  width = "10%"></td>
-                                              <td>
-                                                    {{i.Lieu}}
-                                                </td>
-                                                 <td>
-                                                    {{i.Description}}
-                                                </td>
-                                                <td>
-                                                    {{i.Type}}
-                                                </td>
-                                                 <td>
-                                                    {{i.Sponsors}}
-                                                </td>
-                                                   <td>
-                        {% for a in  i.getParticipants().toArray() %} 
-                             {{ a.ID}} 
-                        {% endfor %}
-                        </td>
-                                                 <td>
-                                                  
-                                                  <a href="{{ path('deleteEvenement', {id:i.ID}) }}"class="btn btn-danger">supprimer </a>
-                                                </td>
-                                                 <td>
-                                                   <a href="{{ path('updateEvenement', {id:i.ID}) }}" class="btn btn-success">mettre a jour </a>
-                                                </td>
-                                               
-                          </tr>
-                          
-                          {% endfor %}
-                    
-
-                          
-                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/add1">Ajouter evenement </a></td>
-                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Sponsor/add"> ajouter Sponsor </a> </td>
-                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/afficher"> front</a> </td>
-                          <tbody id="searchtab">
-                          </tbody>
-
-                  
-
-                      </table>
-
-                         
-                      <input type="text" id="search" class="form-control" placeholder="Search">
-                    </div>
-                  </div>
-                     
+    <div class="card">
+        <div class="card-body">
+            {% for message in app.flashes('danger') %}
+                <div class="alert alert-info" role="alert">
+                    {{ message }}
                 </div>
+            {% endfor %}
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-info" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <p class="card-description"> table<code>des types</code></p>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Identifiant</th>
+                            <th>Nom Event</th>
+                            <th>Date debut</th>
+                            <th>Date fin</th>
+                            <th>Image</th>
+                            <th>Lieu</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>Nombre Participant</th>
+                            <th>Sponsor</th>
+                            <th>Liste Participants</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in Evenement %}
+                            <tr>
+                                <td>{{ i.ID }}</td>
+                                <td>{{ i.Nom }}</td>
+                                <td>{{ i.DateDebut|date('Y-m-d ') }}</td>
+                                <td>{{ i.DateFin|date('Y-m-d ') }}</td>
+                                <td><img src="{{ asset('/uploads/brochures/' ~ i.Image) }}?t={{ date().getTimestamp() }}" alt="image" width="10%"></td>
+                                <td>{{ i.Lieu }}</td>
+                                <td>{{ i.Description }}</td>
+                                <td>{{ i.Type }}</td>
+                                <td>{{ i.Sponsors }}</td>
+                                 <td>{{ i.nbParticipant}}</td>
+                                <td>
+                                    {% for a in i.getParticipants().toArray() %} 
+                                        {{ a.nom }} 
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <a href="{{ path('deleteEvenement', {id: i.ID}) }}" class="btn btn-danger">supprimer</a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('updateEvenement', {id: i.ID}) }}" class="btn btn-success">mettre a jour</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
                 
- 
+            </div>
+        </div>
+    </div>
+</div>
 
-<script src="https//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
-<script
-$( document ).ready(function() {
-  $("#search").keyup(function(e){
-    var value = $(this).val();
-    $.ajax({
-      url : "{{path ('afficheback')}}",
-      type : 'GET',
-      data: {
-        'searchValue' :value
-      },
-
-      success :function(retour){
-        if(retour){
-          $('#t tbody#searchtab').empty();
-          $.each(JSON.parse(retour),function(i,obj)){
-            $('#t tbody#searchtab').empty();
-            $.each(JSON.parse(retour),function(i,obj){
-              $('#t tbody#all').hide();
-              $('#t tbody#searchtab').append(<tr> <td> '+obj.ID+'</td>
-              <td> '+obj.Nom+' </td>
-              <td>'+obj.Description+' </td>
-              <td> '+obj.DateDebut+'</td> 
-              <td> '+obj.DateFin+'</td> 
-              <td> '+obj.Type+'</td> 
-              <td>'+obj.lieu+' </td><td>
-              <a
-               href="updateStudent/'+obj.id'">modifier</a></br>
-             <a href="deleteStudent/'obj.id+'">supprimer</a></td> </tr>);
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#search").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("table tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
-          }
-          else
-          {
-            $('#t tbody#all').show();
-            $('#t tbody#searchtab').empty();
-            $('#t tbody#searchtab').fadeIn('fast');
-            }
-  }},
-  });
-  return false;
-          });
         });
+    });
 </script>
 
- 
-
 {% endblock %}
- 

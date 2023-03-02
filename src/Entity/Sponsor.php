@@ -22,15 +22,18 @@ class Sponsor
          pattern:"/^[^0-9]+$/",
          message:"Le nom ne doit pas contenir de chiffres"
      )]
+     #[Groups("Sponsor")]
     private ?string $nomSponsor = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"l'email doit etre non vide")]
      #[Assert\Email(message:"L'email n'est pas valide ")]
+     #[Groups("Sponsor")]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:"Investissement doit etre non vide")]
+    #[Groups("Sponsor")]
     private ?string $invest = null;
 
     #[ORM\OneToMany(mappedBy: 'Sponsors', targetEntity: Evenement::class)]

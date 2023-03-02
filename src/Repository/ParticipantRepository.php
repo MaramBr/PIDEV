@@ -64,5 +64,13 @@ class ParticipantRepository extends ServiceEntityRepository
 //        ;
 //    }
 
- 
+  public function findParticipantByNom($nom)
+    {
+        return $this->createQueryBuilder('participant')
+            ->where('participant.nom LIKE  :nom')
+            ->setParameter('nom', '%'.$nom. '%')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

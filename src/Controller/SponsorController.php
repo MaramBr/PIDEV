@@ -92,5 +92,16 @@ class SponsorController extends AbstractController
         $em->flush() ;
         return $this->redirectToRoute('appback');
     }
+
+     #[Route('/searchSponsor', name: 'searchSponsor')]
+public function searchSponsorx(Request $request, NormalizerInterface $Normalizer, SponsorRepository $sr)
+{
+    $repository = $this->getDoctrine()->getRepository(Sponsor::class);
+    $requestString = $request->get('searchValue');
+    $Sponsors = $repository->findSponsorByNom($requestString);
+    $jsonContent = $Normalizer->normalize($Sponsors, 'json', ['groups' => 'Sponsor']);
+    $retour = json_encode($jsonContent);
+    return new Response($retour);
+}
  
 }

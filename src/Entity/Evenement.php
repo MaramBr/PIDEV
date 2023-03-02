@@ -82,6 +82,7 @@ class Evenement
 
      
     private ?string $nbParticipant = null;
+    
 
     
     public function __construct()
@@ -204,6 +205,7 @@ class Evenement
         $this->getLieu();
         $this->getNbParticipant();
         $this->getSponsors();
+      
        
         
     }

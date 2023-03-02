@@ -52,7 +52,7 @@ class EvenementController extends AbstractController
         $Evenement= $paginator->paginate(
             $result,
             $request->query->getInt('page',1),//num page
-            1
+            3
         );
         return $this->render ('Evenement/affich.html.twig',['result'=>$Evenement]);
    
@@ -202,6 +202,7 @@ public function deleteEvenement($id, ManagerRegistry $doctrine, MailerInterface 
     $entityManager->flush();
     
     // Envoyer un e-mail de notification
+    $participants = $evenement->getParticipants();
     $mailer = new PHPMailer();
     $mailer->isSMTP();
     $mailer->SMTPSecure = 'tls';
@@ -211,10 +212,14 @@ public function deleteEvenement($id, ManagerRegistry $doctrine, MailerInterface 
     $mailer->SMTPAuth = true;
     $mailer->Username = 'emna.abbessi@esprit.tn';
     $mailer->Password = '12715163';
-    $mailer->setFrom('emna.abbessi@esprit.tn');
-    $mailer->addAddress('emna.abbessi@esprit.tn');
-    $mailer->Subject = 'Evenement supprimé';
-    $mailer->Body = 'L\'événement '.$evenement->getId().' a été supprimé.';
+    $mailer->setFrom('E-Fit');
+    
+    foreach ($participants as $participant) {
+        $mailer->addAddress($participant->getEmail());
+    }
+    
+    $mailer->Subject = 'Evenement Annulé';
+    $mailer->Body = 'L\'événement ' .$evenement->getNom().' a été Annulé.';
     
     if (!$mailer->send()) {
         // Gestion des erreurs d'envoi de l'e-mail
@@ -229,36 +234,16 @@ public function deleteEvenement($id, ManagerRegistry $doctrine, MailerInterface 
 
     
  #[Route('/searchEvenement', name: 'searchEvenement')]
-  
- public function searchEvenementx(Request $request,NormalizerInterface $Normalizer,EvenementRepository $sr)
- {
-$repository = $this->getDoctrine()->getRepository(Evenement::class);
-$requestString=$request->get('searchValue');
-$Evenements = $sr->findEvenementByNom($requestString);
-$jsonContent = $Normalizer
-->normalize($Evenements,'json',['groups'=>'Evenements']);
-$retour=json_encode($jsonContent);
-return new Response($retour);
-
+public function searchEvenementx(Request $request, NormalizerInterface $Normalizer, EvenementRepository $sr)
+{
+    $repository = $this->getDoctrine()->getRepository(Evenement::class);
+    $requestString = $request->get('searchValue');
+    $Evenements = $repository->findEvenementByNom($requestString);
+    $jsonContent = $Normalizer->normalize($Evenements, 'json', ['groups' => 'Evenement']);
+    $retour = json_encode($jsonContent);
+    return new Response($retour);
 }
 
-public function sendEmail(MailerInterface $mailer): Response
-    {   $to ='emna.abbessi@esprit.tn';
-        $email = (new Email())
-            ->from('emna.abbessi@esprit.tn')
-            ->to('$to')
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again!')
-            ->html('<p>See Twig integration for better HTML integration!</p>');
-
-        return $this->mailer->send($email);
-
-      
-    }
 
 
 

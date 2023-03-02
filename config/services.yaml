@@ -25,13 +25,5 @@ services:
 
   # Alias for the Dompdf\Dompdf class
   # Service Dompdf
-  dompdf:
-    class: Dompdf\Dompdf
-    arguments: ~
-
-  # Service pour l'exportation PDF
-  app.pdf_exporter:
-    class: App\Service\PdfExporter
-    arguments: ["@dompdf"]
-
+ 
     

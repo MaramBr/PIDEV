@@ -36,12 +36,8 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use PHPMailer\PHPMailer\PHPMailer;
-
-
-
-
-
 use Twilio\Rest\Client;
+
 
  
 class ParticipantController extends AbstractController
@@ -120,6 +116,38 @@ public function add(MailerInterface $mailer, ManagerRegistry $doctrine, Request 
             'Participation sauvegardée avec succès.'
         );
 
+        //////////////////////SMS////////////////////////////////
+          
+
+
+  /////////////////////////Notifier Participant/////////////////////////////     
+    $mailer = new PHPMailer();
+    $mailer->isSMTP();
+    $mailer->SMTPSecure = 'tls';
+    $mailer->SMTPAutoTLS = false;
+    $mailer->Host = 'smtp.gmail.com';
+    $mailer->Port = 587;
+    $mailer->SMTPAuth = true;
+    $mailer->Username = 'emna.abbessi@esprit.tn';
+    $mailer->Password = '12715163';
+    $mailer->setFrom('E-Fit');
+    $mailer->addAddress($participant->getEmail());
+   
+    
+    $mailer->Subject = 'Participation';
+    $mailer->Body = 'Participation chez ' .$evenement->getNom().' avec succes';
+    
+    if (!$mailer->send()) {
+        // Gestion des erreurs d'envoi de l'e-mail
+        $this->addFlash('danger', 'Une erreur est survenue lors de l\'envoi de l\'e-mail de notification.');
+    } else {
+        // Succès de l'envoi de l'e-mail
+        $this->addFlash('success', 'L\'événement a été supprimé avec succès et un e-mail de notification a été envoyé.');
+    }
+
+
+
+
         return $this->redirectToRoute('afficher', ['id' => $participant->getId()]);
     }
 
@@ -186,17 +214,39 @@ public function add(MailerInterface $mailer, ManagerRegistry $doctrine, Request 
 }
 
 
-    #[Route('/Participant/delete2/{id}', name: 'delete5')]
+
+
+     #[Route('/Participant/delete2/{id}', name: 'delete5')]
 
     public function delete2($id, ManagerRegistry $doctrine)
-    {$c = $doctrine
+{
+    $participant = $doctrine
         ->getRepository(Participant::class)
         ->find($id);
-        $em = $doctrine->getManager();
-        $em->remove($c);
-        $em->flush() ;
-        return $this->redirectToRoute('affichefront1');
+
+    $em = $doctrine->getManager();
+    $em->remove($participant);
+
+    // Get the events associated with the participation
+    $events = $participant->getEvenement();
+
+    foreach ($events as $evenement) {
+        // Increment the nbParticipant attribute of the event
+        $evenement->setNbParticipant($evenement->getNbParticipant() + 1);
+
+        // Save the event to the database
+        $em->persist($evenement);
     }
+
+    $em->flush();
+
+    $this->addFlash(
+        'delP',
+        'Participation supprimée avec succès'
+    );
+
+    return $this->redirectToRoute('affichefront1');
+}
 
 
  
@@ -215,29 +265,52 @@ public function add(MailerInterface $mailer, ManagerRegistry $doctrine, Request 
 }
 
  
-#[Route('/pdf', name:'export_pdf', methods: ["GET"])]
-     
-    public function pdf(ParticipantRepository $ParticipantRepository, Dompdf $dompdf)
-    {
-        // Retrieve the HTML generated in our twig file
-        $html = $this->renderView('evenement/pdf.html.twig', [
-            'participant' => $ParticipantRepository->findAll(),
-        ]);
 
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
 
-        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-        $dompdf->setPaper('A4', 'portrait');
+    /**
+ * @Route("/participant/pdfP/{id}", name="pdfP")
+ */
+public function pdfP(ParticipantRepository $repository, $id): Response
+{
+    // Configure Dompdf according to your needs
+    $pdfOptions = new Options();
+    $pdfOptions->set('defaultFont', 'Arial');
 
-        // Render the HTML as PDF
-        $dompdf->render();
+    // Instantiate Dompdf with our options
+    $dompdf = new Dompdf($pdfOptions);
+    $participant = $repository->find($id);
 
-        // Output the generated PDF to Browser (inline view)
-        $dompdf->stream("ListeDesParticipants.pdf", [
-            "participant" => true
-        ]);
-    }
+    // Retrieve the HTML generated in our twig file
+    $html = $this->renderView('Participant/pdf.html.twig', [
+        'participant' => $participant = $this->getDoctrine()->getRepository(Participant::class)->find($id)
+    ]);
 
+    // Load HTML to Dompdf
+    $dompdf->loadHtml($html);
+
+    // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+    $dompdf->setPaper('A4', 'portrait');
+
+    // Render the HTML as PDF
+    $dompdf->render();
+
+    // Output the generated PDF to Browser (force download)
+    $dompdf->stream("mypdf.pdf", [
+        "Attachment" => false
+    ]);
+    exit(0);
+}
   
+
+ #[Route('/searchParticipant', name: 'searchParticipant')]
+public function searchParticipantx(Request $request, NormalizerInterface $Normalizer, ParticipantRepository $sr)
+{
+    $repository = $this->getDoctrine()->getRepository(Participant::class);
+    $requestString = $request->get('searchValue');
+    $Participants = $repository->findParticipantByNom($requestString);
+    $jsonContent = $Normalizer->normalize($Participants, 'json', ['groups' => 'Participant']);
+    $retour = json_encode($jsonContent);
+    return new Response($retour);
+}
+
 }

@@ -1,18 +1,53 @@
-<table>
-  <thead>
-    <tr>
-      <th>Nom</th>
-      <th>Prénom</th>
-      <th>Email</th>
+<!DOCTYPE html>
+<html>
+<head>
+
+    {% block css %}
+        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" type="text/css" media="all" />
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" media="all" />
+        <link href="{{ asset('css/fasthover.css') }}" rel="stylesheet" type="text/css" media="all" />
+
+        <link href='//fonts.googleapis.com/css?family=Glegoo:400,700' rel='stylesheet' type='text/css'>
+        <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+        <link href="{{ asset('adminStyle/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    {% endblock %}
+</head>
+<body>
+<hr>
+
+<h1 align="center" style="color:orange;"> Votre Invitation  </h1>
+<p class="text-warning bg-dark"></p>
+<hr>
+<p class="text-warning bg-dark"></p>
+<p class="text-warning bg-dark" align="center"><u></u></p>
+<p class="text-warning bg-dark" align="center"></p>
+
+<p class="text-warning bg-dark" align="center"></p>
+<table class="table table-bordered" id="participantTable" width="100%" cellspacing="0">
+
+
+    <tr align="center">
+        <td style="color:orange;"><b><u>Votre Identifiant</u></b></td>
+        <td>{{ participant.id }}</td>
     </tr>
-  </thead>
-  <tbody>
-    {% for participant in participants %}
-      <tr>
+    <tr align="center">
+        <td style="color:orange;"><b><u>Nom</u></b></td>
         <td>{{ participant.nom }}</td>
+    </tr>
+    <tr align="center">
+        <td style="color:orange;"><b><u>Prenom</u></b></td>
         <td>{{ participant.prenom }}</td>
-        <td>{{ participant.email }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
+    </tr>
+    <tr align="center">
+        <td style="color:orange;"><b><u>Numéro de Téléphone</u></b></td>
+        <td>{{ participant.tel }}</td>
+    
+
 </table>
+<p class="text-warning bg-dark"></p>
+<p class="text-warning bg-dark"></p>
+       <p class="text-warning bg-dark">Cher Participant, Voici votre invitation pour L'evenement " {% for a in  participant.getEvenement().toArray() %} 
+                             {{ a.nom}} 
+                        {% endfor %}  ".</p>
+</body>
+</html>

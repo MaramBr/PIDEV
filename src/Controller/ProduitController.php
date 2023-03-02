@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use App\Entity\Category;
 use App\Repository\ProduitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,6 +45,23 @@ class ProduitController extends AbstractController
          return $this->render('produit/affich.html.twig', compact('Produit','total','limit','page'));
        
     }
+    #[Route('/afficherjson', name: 'json')]
+
+    public function affichercoachjson(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
+    {
+        $repo=$mg->getRepository(Produit::class);
+        $resultat = $repo ->FindAll();
+        $coachingNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Produit"]);
+        $json=json_encode($coachingNormalises);
+        return new Response ($json);
+    }
+
+
+
+
+
+
+
     #[Route('/detaille/{id}', name: 'detaille')]
     public function detaille($id,ManagerRegistry $mg, Produit $Produit, LoggerInterface $logger, Request $request): Response
     {
@@ -65,7 +83,7 @@ class ProduitController extends AbstractController
 
      // On récupère le contenu du champ parentid
      $parentid = $commentForm->get("parentid")->getData();
-
+     //$parentid = $commentForm->getParent().id->getData();
          // On va chercher le commentaire correspondant
          $em = $this->getDoctrine()->getManager();
          if($parentid != null){
@@ -73,7 +91,7 @@ class ProduitController extends AbstractController
         }
 
         // On définit le parent
-        $comment->setParent($parent ?? null);
+        $comment->setParent($parent ?? null );
          $em->persist($comment);
          $em->flush();
          $this->addFlash('message', 'Votre commentaire a bien été envoyé');
@@ -222,15 +240,18 @@ class ProduitController extends AbstractController
         $em->flush() ;
         return $this->redirectToRoute('appback');
     }
-    #[Route('/searchProduit' , name: 'searchProduitx')]
-      public function searchProduitx(Request $request,NormalizerInterface $Normalizer,ProduitRepository $sr)
-     {
-       $repository=$this->getDoctrine()->getRepository(Produit::class);
-       $requestString=$request->get('searchValue');
-       $Produit=$sr->findProduitByNom($requestString);
-       $jsonContent=$Normalizer->normalize($Produit, 'json' ,['groups'=>'Produit']);
-       $retour=json_encode($jsonContent);
-       return new Response($retour);
-}
+    //////
+    
+
+    //////
+#[Route('/category/{id}', name: 'category_articles')]
+    public function articles(Category $category): Response
+    {
+        $articles = $category->getProduits();
+        return $this->render('category/listeP.html.twig', [
+            'category' => $category,
+            'articles' => $articles,
+        ]);
+    }
 
 }

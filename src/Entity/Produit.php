@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use App\Entity\Produit;
 use App\Repository\ProduitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,8 +9,10 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+
 use Gedmo\Mapping\Annotation as Gedmo;
 
+use Gedmo\Mapping\Annotation\Rating;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 /**
@@ -26,7 +28,7 @@ class Produit
 
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+      * @ORM\Column(type="float", nullable=true)
      * @Gedmo\Rating
      */
     private $rating;

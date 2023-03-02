@@ -13,7 +13,7 @@
 					<!-- section title -->
 					<div class="col-md-12">
 						<div class="section-title">
-							<h3 class="title">Notre produits|  <a href="{{ path('appfront2') }}">Catégorie</a></h3>
+							<h3 class="title">Notre produits</h3>
 							<div class="section-nav">
 								<ul class="section-tab-nav tab-nav">
 									<li class="active"><a data-toggle="tab" href="#tab1"></a></li>
@@ -27,12 +27,6 @@
 
 					<!-- /section title -->
 
-
-
-
-
-
-
 					<!-- Products tab & slick -->
 					<div class="col-md-12">
 						<div class="row">
@@ -40,11 +34,14 @@
 								<!-- tab -->
 								<div id="tab1" class="tab-pane active">
 									<div class="products-slick" data-nav="#slick-nav-1">
-									{% for a in Produit %}
+									{% for a in articles %}
                               <div class="product">
 											<div class="product-img">
 														<img src="{{asset('/uploads/produits/'~a.Image)}}" alt="" width = "10%">
-												
+												<div class="product-label">
+													<span class="sale">-30%</span>
+													<span class="new">NEW</span>
+												</div>
 											</div>
 											<div class="product-body">
 												<p class="product-category">Category</p>
@@ -77,32 +74,7 @@
 									
 										<a href="{{ path('detaille' ,{id:a.id}) }}" class="primary-btn f-btn">detaille</a>
 									{% endfor %}
-									<ul class="pagination">
-                  <li class="{{(page == 1) ? 'disabled' : ''}}">
-                  <a href="?page = 1">
-                  <i class="fass fa-step-backward"></i>
-                  </a>
-                  </li>
-                  <li class="{{(page == 1) ? 'disabled' : ''}}">
-                  <a href="{{ (page > 1)  ? '?page=' ~ (page - 1) : '' }} ">
-                    <i class="fass fa-angle-left"></i>
-                  </a>
-
-                  </li>
-                  {% set pages = (total / limit)| round(0, 'ceil')%}
-                  {% for item in 1..pages%}
-
-                  <li class="{{ (page == item) ? 'active' : '' }}">
-                 <a href="?page={{item}}">{{item}}</a>
-                 </li>
-                  {% endfor%}
-                  <li class="{{(page == pages) ? 'disabled' : ''}}">
-                  <a href="{{ (page < pages)  ? '?page=' ~ (page + 1) : '' }} ">
-                    <i class="fass fa-angle-right"></i>
-                  </a>
-
-                  </li>
-                  </ul>
+								
 										<!-- /product -->
 									</div>
 									<div id="slick-nav-1" class="products-slick-nav"></div>

@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Produit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @extends ServiceEntityRepository<Produit>
@@ -47,7 +49,7 @@ class ProduitRepository extends ServiceEntityRepository
          ->getResult();
     }
 
-    public function findAllWithRating()
+   /* public function findAllWithRating()
     {
         $qb = $this->createQueryBuilder('p')
                   ->leftJoin('p.ratings', 'r')
@@ -55,7 +57,7 @@ class ProduitRepository extends ServiceEntityRepository
                   ->groupBy('p.id');
 
         return $qb->getQuery()->getResult();
-    }
+    }*/
     /**
      * Returns all Annonces per page
      * @return void 

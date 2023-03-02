@@ -4,6 +4,17 @@
 
 {% block body %}
  <!-- About Section Begin -->
+
+
+
+
+
+
+
+
+
+
+
     <section class="home-about spad">
         <div class="container">
        <div class="row">
@@ -17,14 +28,27 @@
                     </div>
                      <a href="#" class="primary-btn">Acheter</a>
                 </div>
-             
-                <div class="col-lg-6">
-                    <div class="about-img">
-                         <img src="{{ asset('/uploads/produits/' ~ Produit.Image) }}?t={{ date().getTimestamp() }}" alt="image"  width = "10%">
-                           
-                    </div>
-                    </div>
-                </div>
+     <div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- Product main img -->
+					<div class="col-md-5 col-md-push-2">
+						<div id="product-main-img">
+							<div class="product-preview">
+								<img src="{{ asset('/uploads/produits/' ~ Produit.Image) }}" alt="">
+							</div>
+						</div>
+					</div>
+					</div>
+					
+						
+						
+				</div>
+			</div>
+		</div>
+               
                 <div class="grix xs2 sm3 gutter-0 card">
 			<div class="grix xs2 sm3 gutter-0 card">
 			<div class="col-xs2 col-sm3">

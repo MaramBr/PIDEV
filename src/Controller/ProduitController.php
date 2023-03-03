@@ -10,6 +10,8 @@ use App\Entity\Produit;//controller
 use Doctrine\Persistence\ManagerRegistry;//controller
 use App\RepositoryProduitRepository;//controller
 use App\Form\ProduitType;
+use App\Form\SearchProduitType;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -42,7 +44,7 @@ class ProduitController extends AbstractController
             $Produit= $paginator->paginate(
                 $data,
                 $request->query->getInt('page',1),//num page
-                1
+                3
             );
             return $this->render ('produit/affich.html.twig',['data'=>$Produit]);
        
@@ -259,5 +261,65 @@ class ProduitController extends AbstractController
             'articles' => $articles,
         ]);
     }
+
+
+    #[Route('/listVoyageWithSearchPrix', name: 'listVoyageWithSearchPrix')]
+
+    public function listProduitWithSearchPrix(Request $request, ProduitRepository $ProduitRepository,PaginatorInterface $paginator)
+    {
+        //All of Student
+        $Produit= $ProduitRepository->findAll();
+        $data= $paginator->paginate(
+            $Produit,
+            $request->query->getInt('page',1),//num page
+            1
+        );
+        
+        //search
+        $sform = $this->createForm(SearchProduitType::class);
+        $sform->add("Recherche",SubmitType::class);
+        $sform->handleRequest($request);
+        if ($sform->isSubmitted()) {
+            $Prix_Produit = $sform->get('prix')->getData();
+            $resulta = $ProduitRepository->searchprix($Prix_Produit);
+            $data= $paginator->paginate(
+                $resulta,
+                $request->query->getInt('page',1),//num page
+                1
+            );
+            return $this->render('Produit/search.html.twig', array(
+                "data" => $data,
+                "search" => $sform->createView()));
+        }
+        return $this->render('Produit/search.html.twig', array(
+            "data" => $data,
+            "search" => $sform->createView()));
+    }
+
+
+   /* #[Route('/filtreP', name: 'app_filtre')]
+      public function filtre(ProduitRepository $productRepository ,Request $request, ManagerRegistry $em,PaginatorInterface $paginator)
+    {
+        $repo=$em->getRepository(Produit::class);
+        
+        $data= $paginator->paginate(
+            $resulta,
+            $request->query->getInt('page',1),//num page
+            1
+        );
+
+
+
+
+        $minPrice = $request->query->get('min_price');
+        $maxPrice = $request->query->get('max_price');
+
+        $Produit = $productRepository->findByPriceRange($minPrice, $maxPrice);
+
+        return $this->render('Produit/affich.html.twig', [
+            'Produit' => $Produit,'data'=>$data
+           
+        ]);
+    }*/
 
 }

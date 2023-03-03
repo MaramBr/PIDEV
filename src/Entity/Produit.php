@@ -10,9 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 
-use Gedmo\Mapping\Annotation\Rating;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 /**
@@ -26,14 +24,6 @@ class Produit
 {
      
 
-
-    /**
-      * @ORM\Column(type="float", nullable=true)
-     * @Gedmo\Rating
-     */
-    private $rating;
-
-    // ...
 
 
 

@@ -9,29 +9,13 @@
 
 {%  for message in app.flashes('message')  %}
                                <div class="alert alert-info" role="alert">
-                                   {{message}}                               </div>
+                                   {{message}}                              
+								   
+							    </div>
                            {% endfor %}
 
-
-
-
-
-
-
-    <section class="home-about spad">
-        <div class="container">
-       <div class="row">
-              <div class="col-lg-6">
-                    <div class="about-text">
-                     <h1> <p class="short-details"> {{Produit.Nom}}  </p> </h1>
-                        <p class="short-details"> Catégorie : {{Produit.Categorys}}</p>
-                        
-                        <p class="long-details"> Description : {{Produit.Description}}</p>
-                      <p class="short-details"> Prix : {{Produit.Prix}}</p>
-                    </div>
-                     <a href="#" class="primary-btn">Acheter</a>
-                </div>
-     <div class="section">
+						   		<!-- SECTION -->
+		<div class="section">
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
@@ -40,25 +24,106 @@
 					<div class="col-md-5 col-md-push-2">
 						<div id="product-main-img">
 							<div class="product-preview">
-								<img src="{{ asset('/uploads/produits/' ~ Produit.Image) }}" alt="">
+								<img src="./img/product01.png" alt="">
+      <img src="{{ asset('/uploads/produits/' ~ Produit.Image) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%">
+
 							</div>
+							
+							
 						</div>
 					</div>
+					<!-- /Product main img -->
+
+					<!-- Product thumb imgs -->
+					<div class="col-md-2  col-md-pull-5">
+						<div id="product-imgs">
+							
+						</div>
 					</div>
-					
+					<!-- /Product thumb imgs -->
+
+
+					<!-- Product details -->
+					<div class="col-md-5">
+						<div class="product-details">
+							<div>
+								<div class="product-rating">
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star-o"></i>
+								</div>
+								<a class="review-link" href="#">10 Review(s) | Add your review</a>
+							</div>
+							<div>
+								<h3 class="product-price">{{Produit.Nom}}</h3>
+                               <h4 class="order-total">Catégorie : {{Produit.Categorys}}</h4>
+
+							</div>
+{{Produit.Description}}
+							<div class="product-options">
+								
+								
+							</div>
+
+							<div class="add-to-cart">
+								
+						<a href="#" class="primary-btn order-submit">Acheter</a>
+							</div>
+
 						
 						
-				</div>
-			</div>
-		</div>
-               
+
+						
+
+						</div>
+					</div>
+					<!-- /Product details -->
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div>
+               <ul
                 <div class="grix xs2 sm3 gutter-0 card">
 			<div class="grix xs2 sm3 gutter-0 card">
 			<div class="col-xs2 col-sm3">
 				<h2>Liste des commentaires</h2>
 				{% for comment in Produit.comments %}
 					{% if comment.parent == null %}
-						<h3>Commentaire de {{comment.nickname}}</h3>
+						<h5>Commentaire de {{comment.nickname}}</h5>
 						<p>Publié le {{comment.createdAt|date("d/m/Y H:i") }}</p>
 						<div>{{comment.content|raw}}</div>
 						<p><a href="#ajout-commentaire" data-reply data-id="{{comment.id}}" class="btn primary press">Répondre</a></p>
@@ -71,12 +136,16 @@
 					{% endif %}
 				{% endfor %}
 			</div>
+
+
+
 			<div class="col-xs2 col-sm3" id="ajout-commentaire">
 				<h2>Ajouter un commentaire</h2>
-				{{ form_start(commentForm) }}
+
 				    {{ form_row(commentForm.email) }}
 				    {{ form_row(commentForm.nickname) }}
                     {{form_widget(commentForm.captcha) }}
+					
                     <div id="editor"></div>
 				{{ form_end(commentForm) }}
 			</div>

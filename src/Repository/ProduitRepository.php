@@ -81,6 +81,40 @@ public function getTotalProduits($filters = null){
 
     return $query->getQuery()->getSingleScalarResult();
 }
+public function findByPriceRange($minPrice, $maxPrice)
+{
+    return $this->createQueryBuilder('p')
+        ->where('p.prix >= :minPrice')
+        ->andWhere('p.prix <= :maxPrice')
+        ->setParameter('minPrice', $minPrice)
+        ->setParameter('maxPrice', $maxPrice)
+        ->getQuery()
+        ->getResult();
+}
+
+
+
+
+
+
+
+
+/*public function searchprix($Prix_Produit)
+    {
+        $EM=$this->getEntityManager();
+        $query = $EM->createQuery('select v from App\Entity\Produit v  WHERE v.prix  BETWEEN :a AND :b ')
+            ->setParameter('a', 0)
+            ->setParameter('b', $Prix_Produit);
+        return $query->getResult();
+
+
+    }*/
+
+
+
+
+
+
 
 //    /**
 //     * @return Produit[] Returns an array of Produit objects

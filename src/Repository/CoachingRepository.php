@@ -92,4 +92,5 @@ public function findCoachingByCours($cours): ?Coaching
         ;
    }
 
+ 
 }

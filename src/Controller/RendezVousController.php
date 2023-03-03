@@ -205,7 +205,7 @@ public function statsrdv(CoachingRepository $coachingRepository): Response
 
     // Query for all products and group them by category
     $query = $repository->createQueryBuilder('c')
-        ->select('c.Coachings as Coaching, COUNT(c.id) as count, COUNT(c.id) / :total * 100 as percentage')
+        ->select('c.Id as Coachings, COUNT(c.id) as count, COUNT(c.id) / :total * 100 as percentage')
         ->setParameter('total', $totalRendezVous)
         ->groupBy('c.Coachings')
         ->getQuery();
@@ -245,15 +245,15 @@ public function onCalendarSetData(RendezVous $calendar)
 
         // You may want to make a custom query from your database to fill the calendar
 
-        $calendar->addEvent(new Event(
-            'Event 1',
+        $calendar->addRendezVous(new RendezVous(
+            'RendezVous 1',
             new \DateTime('Tuesday this week'),
             new \DateTime('Wednesdays this week')
         ));
 
-        // If the end date is null or not defined, it creates a all day event
-        $calendar->addEvent(new Event(
-            'All day event',
+        // If the end date is null or not defined, it creates a all day RendezVous
+        $calendar->addRendezVous(new RendezVous(
+            'All day RendezVous',
             new \DateTime('Friday this week')
         ));
     }
@@ -269,5 +269,84 @@ public function onCalendarSetData(RendezVous $calendar)
             'rdv' => $rdv,
         ]);
     }
+
+
+    
+    #[Route('/calendar', name: 'calendar')]
+
+    public function calendar(ManagerRegistry $doctrine): Response
+    {
+
+        $RendezVouss = $doctrine->getRepository(RendezVous::class)->findAll();
+        $rdvs = [];
+
+        foreach($RendezVouss as $RendezVous){
+          
+            $rdvs[] = [
+                'id'=>$RendezVous->getId(),
+                'title' => $RendezVous->getCoachings()->getCours(),
+                'date' => $RendezVous->getDaterdv()->format('Y-m-d'),
+            ];
+        }
+        $data = json_encode($rdvs);
+      
+        return $this->render('rendez_vous/calendar.html.twig'          
+        , compact('data'));
+    }
+
+    #[Route('/calendar/{id}', name: 'rdv_deplacer',methods:['POST'])]
+
+     public function deplacerrdv(Request $request, RendezVous $rdv, ManagerRegistry $doctrine): JsonResponse
+     {
+        $donnees = json_decode($request->getContent());
+        
+         $start = $donnees->date;
+        //  dump("$start");
+        //  VarDumper::dump($start);
+
+         $now = new DateTimeImmutable($start);
+        //$newDate = $now->setDate(2023, 4, 1);
+        
+         
+         $rdv->setDaterdvv($now);
+        
+
+
+         $entityManager=$doctrine->getManager();
+         $entityManager->flush();
+     
+         return new JsonResponse(['success' => true]);
+     }
+     #[Route('/order_By_Date', name: 'order_By_Date',methods:['GET'])]
+
+     public function order_By_Date(Request $request,RendezVousRepository $RendezVousRepository): Response
+     {
+ //list of students order By Dest
+         $RendezVousByDate = $RendezVousRepository->order_By_Date();
+ 
+         return $this->render('rendez_vous/afficherfront.html.twig', [
+             'rdv' => $RendezVousByDate,
+         ]);
+ 
+         //trie selon Prix
+ 
+     }
+     
+     #[Route('/order_By_Nom', name: 'order_By_Nom',methods:['GET'])]
+ 
+ 
+     public function order_By_Nom(Request $request,RendezVousRepository $RendezVous): Response
+     {
+ //list of students order By Dest
+         $RendezVousByNom = $RendezVous->order_By_Nom();
+ 
+         return $this->render('rendez_vous/afficherfront.html.twig', [
+             'rdv' => $RendezVousByNom,
+         ]);
+ 
+         //trie selon Date normal
+ 
+     }
+ 
 }
 

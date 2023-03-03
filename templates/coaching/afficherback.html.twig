@@ -8,7 +8,13 @@
                     <h4 class="card-title">Basic Table</h4>
 
                 </br>
-                   
+                    <form class="d-flex align-items-center col-12 col-md-8 col-lg-3">
+               <span class="position-absolute pl-3 search-icon">
+                <i class="fe fe-search"></i>
+              </span>
+<input type="search" id="myInput" class="form-control pl-6" placeholder="Search séance de coaching" />
+          
+            </form>
                     <div class="table-responsive">
                       <table class="table">
                         <thead>
@@ -28,7 +34,7 @@
                             
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="myTable">
                         
                         {% for a in Coaching %}
                           <tr>
@@ -57,14 +63,27 @@
                     </p>
                     
               <p class="card-description">  <code> <a href="{{ path('stat') }}" class="btn btn-warning" >Statistique</a></code>
-                 <input type="text" id="search_term" class="form_control" placeholder="Search">
+
+                
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+              <script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
 
                     </div>
                   </div>
                 </div>
+                
 
 
- <script>
+ {# <script>
         // Fonction de recherche Ajax
         function search() {
             // Récupérer le terme de recherche à partir du champ de recherche
@@ -91,7 +110,7 @@
         $('#search_term').on('keyup', function() {
             search();
         });
-    </script>
+    </script> #}
 {% endblock %}
 
 

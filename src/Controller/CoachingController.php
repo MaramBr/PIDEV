@@ -338,8 +338,10 @@ return new Response("Coaching deleted successfully" .json_encode ($jsonContent))
 public function likeCoaching(Request $request, Coaching $Coaching): Response
 {
     $entityManager = $this->getDoctrine()->getManager();
-
     $Coaching->setLikeButton($Coaching->getLikeButton() + 1);
+    if ( $Coaching->setLikeButton($Coaching->getLikeButton() == 1) )
+
+            $Coaching->getDislikeButton() == 0  ;
 
     $entityManager->persist($Coaching);
     $entityManager->flush();
@@ -355,14 +357,31 @@ public function likeCoaching(Request $request, Coaching $Coaching): Response
 public function dislikeCoaching(Request $request, Coaching $Coaching): Response
 {
     $entityManager = $this->getDoctrine()->getManager();
-
     $Coaching->setDislikeButton($Coaching->getDislikeButton() + 1);
 
+  if(  $Coaching->setDislikeButton($Coaching->getDislikeButton() == 1))
+       { $Coaching->getLikeButton() == 0 ;}
     $entityManager->persist($Coaching);
     $entityManager->flush();
 
     return $this->redirectToRoute('detaille', ['id' => $Coaching->getId()]);
 }
 
+
+
+    #[Route('/order_By_Nom', name: 'order_By_Nom', methods: ['GET'])]
+
+    public function order_By_Nom(Request $request,CoachingRepository $CoachingRepository): Response
+    {
+//list of students order By Dest
+        $CoachingByNom = $CoachingRepository->order_By_Nom();
+
+        return $this->render('coaching/afficherfront.html.twig', [
+            'Coaching' => $CoachingByNom,
+        ]);
+
+        //trie selon Date normal
+
+    }
    
 }

@@ -1,0 +1,49 @@
+
+
+
+{% extends 'baseback.html.twig' %}
+
+
+{% block title %}Coaching{% endblock %}
+
+{% block body %}
+
+
+
+<h4 class="card-title">Basic form elements</h4>
+                    
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic form elements</h4>
+                    <p class="card-description"> Table d'ajout </p>
+                    {{ form_start(formCoaching , {'attr': {'novalidate':'novalidate'}} ) }}
+                    <form class="forms-sample">
+                     
+                      
+                       <div class="form-group">
+                        {{ form_row(formCoaching.descCoach, {'label':'Description' ,'attr':{'placeholder': 'Description...', 'class':'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        {{ form_row(formCoaching.dispoCoach, {'label':'Disponibilte' ,'attr':{'placeholder': 'Disponibilte...', 'class':'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+                        {{ form_row(formCoaching.imgCoach, {'label':'Image' ,'attr':{'placeholder': 'img...', 'class':'form-control'}}) }}
+                      </div>
+                      <div class="form-group">
+{{ form_widget(formCoaching.cours, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+
+                      <button type="submit" class="btn btn-primary mr-2" >Ajouter</button>
+                    
+                      </div>
+                      {{ form_end(formCoaching)}}
+
+	</div>
+
+
+
+
+  
+                        {% endblock %}

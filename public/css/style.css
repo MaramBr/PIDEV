@@ -112,7 +112,7 @@ ul, ol {
 .primary-btn2 {
   display: inline-block;
   padding: 12px 30px;
-  background-color: #ff0000;
+  background-color: #d10000;;
   border: none;
   border-radius: 40px;
   color: #FFF;
@@ -970,7 +970,7 @@ textarea.input {
 }
 
 .product .product-body .product-rating>i.fa-star {
-  color: #ef233c;
+  color: #d16500;;
 }
 
 .product .product-body .product-rating:after {
@@ -1059,7 +1059,7 @@ textarea.input {
   border: 2px solid transparent;
   height: 40px;
   padding: 0 30px;
-  background-color: #ef233c;
+  background-color: #d16500;;
   color: #FFF;
   text-transform: uppercase;
   font-weight: 700;
@@ -1553,7 +1553,7 @@ textarea.input {
   border: 2px solid transparent;
   height: 40px;
   padding: 0 30px;
-  background-color: #ef233c;
+  background-color: #d16500;;
   color: #FFF;
   text-transform: uppercase;
   font-weight: 700;

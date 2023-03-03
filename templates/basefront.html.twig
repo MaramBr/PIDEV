@@ -15,7 +15,7 @@
 		<link type="text/css" rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}"/>
 
 		<!-- Slick -->
-		<link type="text/css" rel="stylesheet" href="{{asset('css/slick.')}}"/>
+		<link type="text/css" rel="stylesheet" href="{{asset('css/slick.css')}}"/>
 		<link type="text/css" rel="stylesheet" href="{{asset('css/slick-theme.css')}}"/>
 
 		<!-- nouislider -->
@@ -23,6 +23,7 @@
 
 		<!-- Font Awesome Icon -->
 		<link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
 
 		<!-- Custom stlylesheet -->
 		<link type="text/css" rel="stylesheet" href="{{asset('css/style.css')}}"/>
@@ -41,7 +42,7 @@
 						<li><a href="#"><i class="fa fa-map-marker"></i>La petite ariana </a></li>
 					</ul>
 					<ul class="header-links pull-right">
-						<li><a href="#"><i class="fa fa-user-o"></i>Mon compte</a></li>
+						<li><a href="{{ path('afficherback') }}"><i class="fa fa-user-o"></i>Mon compte</a></li>
 					</ul>
 				</div>
 			</div>
@@ -165,11 +166,13 @@
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
+						<li><a href="#">Home</a></li>
 						<li><a href="#">Produit</a></li>
 						<li><a href="#">Categories</a></li>
 						<li><a href="#">Evénement</a></li>
-						<li><a href="#">Coaching</a></li>
+						<li ><a href="{{ path('affichercoach') }}">Coaching</a></li>
+					    <li ><a href="{{ path('afficherrdv') }}">Rendez_Vous</a></li>
+
 						<li><a href="#">Commande</a></li>
 						<li><a href="#">Réclamation</a></li>
 					</ul>
@@ -990,6 +993,7 @@
 		</div>
 		<!-- /NEWSLETTER -->
 {% endblock %}
+{% block footer %}
 		<!-- FOOTER -->
 		<footer id="footer">
 			<!-- top footer -->
@@ -1075,9 +1079,13 @@ version d'eux-mêmes.</p>
 			<!-- /bottom footer -->
 		</footer>
 		<!-- /FOOTER -->
-
+{% endblock %}
 {% block js%}
 		<!-- jQuery Plugins -->
+		 <script src="//code.jquery.com/jquery.js"></script>
+    <!-- Load Flashy default JavaScript -->
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+    <!-- Include Flashy default partial -->
 		<script src="{{asset('js/jquery.min.js')}}"></script>
 		<script src="{{asset('js/bootstrap.min.js')}}"></script>
 		<script src="{{asset('js/slick.min.js')}}"></script>

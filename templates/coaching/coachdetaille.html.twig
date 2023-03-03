@@ -1,0 +1,124 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Coaching{% endblock %}
+
+
+{% block body %}
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- Product main img -->
+					<div class="col-md-5 col-md-push-2">
+						<div id="product-main-img">
+							<div class="product-preview">
+								<img src="./img/product01.png" alt="">
+      <img src="{{ asset('/uploads/coach/' ~ Coaching.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%">
+
+							</div>
+							
+						</div>
+					</div>
+					<!-- /Product main img -->
+
+					<!-- Product thumb imgs -->
+					<div class="col-md-2  col-md-pull-5">
+						<div id="product-imgs">
+							
+						</div>
+					</div>
+					<!-- /Product thumb imgs -->
+
+					<!-- Product details -->
+					<div class="col-md-5">
+						<div class="product-details">
+							<div class="rating-widget">
+                                
+                                <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+                                <div class="rating" >
+								<i class="order-total" >Rating</i>
+                                    <i class="las la-star fa-2x"  data-index="0"></i>
+                                    <i class="las la-star fa-2x"  data-index="1"></i>
+                                    <i class="las la-star fa-2x"  data-index="2"></i>
+                                    <i class="las la-star fa-2x"  data-index="3"></i>
+                                    <i class="las la-star fa-2x"  data-index="4"></i>
+                            </div>
+                         
+                            <script
+  src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script>
+    var ratedIndex = -1;
+    $(document).ready(function () {
+        resetStarsColors();
+
+        if(localStorage.getItem('ratedIndex') !=null)
+          setStars(parseInt(localStorage.getItem('ratedIndex')));
+
+        $('.la-star').on('click', function (){
+            ratedIndex = parseInt($(this).data('index'));
+            localStorage.setItem('ratedIndex' , ratedIndex);
+        });
+       $('.la-star').mouseover(function () {
+          resetStarsColors();
+          var currentIndex = parseInt($(this).data('index'));
+          setStars(ratedIndex);
+       });
+       $('.la-star').mouseleave(function() {
+           resetStarsColors();
+
+           if (ratedIndex != -1)
+              setStars(ratedIndex);
+    });
+});
+
+function setStars(max){
+    for (var i=0; i<= max; i++)
+          $('.la-star:eq('+i+')').css('color','gold');
+}
+function resetStarsColors(){
+    $('.la-star').css('color' , 'white')
+}
+</script>
+                            
+                        </div>
+							<div>
+								<h3 class="product-price">{{Coaching.Cours}}</h3>
+                               <h4 class="order-total">Disponibilite : {{Coaching.dispoCoach}}</h4>
+
+							</div>
+{{Coaching.descCoach}}
+							<div class="product-options">
+								<label>
+									
+
+							<form method="POST" action="{{ path('like', {'id': Coaching.id}) }}">
+                <button type="submit" name="like" class="btn btn-success">J'aime ({{ Coaching.likeButton }})</button>
+
+            </form>									
+								</label>
+								<label>
+									<form method="POST" action="{{ path('dislike', {'id': Coaching.id}) }}">
+        <button type="submit" name="dislike" class="btn btn-danger">Je n'aime pas ({{ Coaching.DislikeButton }})</button></form>
+								</label>
+							</div>
+
+							
+
+							<div class="add-to-cart">
+								
+						<a href="{{ path('addrdv2', {id:Coaching.id}) }}" class="primary-btn order-submit">Réserver votre Coach</a>
+							</div>
+
+						
+						
+
+						
+
+						</div>
+					</div>
+					<!-- /Product details -->
+{% endblock %}
+{% block footer %}
+{% endblock %}

@@ -63,4 +63,17 @@ class RendezVousRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+public function order_By_Date()
+{
+    return $this->createQueryBuilder('s')
+        ->orderBy('s.daterdv', 'ASC')
+        ->getQuery()->getResult();
+}
+public function order_By_Nom()
+   {
+       return $this->createQueryBuilder('s')
+           ->orderBy('s.Coachings', 'ASC')
+           ->getQuery()->getResult();
+   }
 }

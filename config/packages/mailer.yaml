@@ -1,3 +1,5 @@
+# config/packages/mailer.yaml
 framework:
     mailer:
-        dsn: '%env(MAILER_DSN)%'
+      dsn: 'gmail+smtp://maram.brinsi@esprit.tn:98568813@default'
+      message_bus: false

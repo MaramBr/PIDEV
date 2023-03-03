@@ -6,6 +6,8 @@ use App\Repository\CoachingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CoachingRepository::class)]
@@ -14,76 +16,68 @@ class Coaching
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("Coaching")]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $nomCoach = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $prenomCoach = null;
+   
 
-    #[ORM\Column(length: 255)]
-    private ?string $emailCoach = null;
 
     
 
     #[ORM\Column(length: 255)]
+    #[Groups("Coaching")]
+    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")] 
     private ?string $cours = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("Coaching")]
+    #[Assert\NotBlank(message:"Cette valeur ne doit pas être vide.")]
     private ?string $dispoCoach = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("Coaching")]
     private ?string $imgCoach = null;
 
     #[ORM\OneToMany(mappedBy: 'Coachings', targetEntity: RendezVous::class)]
     private Collection $rendezVouses;
 
+    #[ORM\Column]
+    private ?int $DislikeButton = 0;
+
+    #[ORM\Column]
+    private ?int $LikeButton = 0;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $descCoach = null;
+
+    #[ORM\OneToMany(mappedBy: 'coach', targetEntity: Notify::class)]
+    private Collection $notifies;
+
+   
+
+   
+
     public function __construct()
     {
         $this->rendezVouses = new ArrayCollection();
+        $this->notifies = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
     }
-
-    public function getNomCoach(): ?string
+    public function setId(int $id): self
     {
-        return $this->nomCoach;
-    }
-
-    public function setNomCoach(string $nomCoach): self
-    {
-        $this->nomCoach = $nomCoach;
+        $this->id = $id;
 
         return $this;
     }
+   
 
-    public function getPrenomCoach(): ?string
-    {
-        return $this->prenomCoach;
-    }
+  
 
-    public function setPrenomCoach(string $prenomCoach): self
-    {
-        $this->prenomCoach = $prenomCoach;
-
-        return $this;
-    }
-
-    public function getEmailCoach(): ?string
-    {
-        return $this->emailCoach;
-    }
-
-    public function setEmailCoach(string $emailCoach): self
-    {
-        $this->emailCoach = $emailCoach;
-
-        return $this;
-    }
 
    
 
@@ -152,4 +146,81 @@ class Coaching
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return (string)  $this->getCours();
+       
+        return(string)  $this->getDispoCoach();
+    }
+
+    public function getDislikeButton(): ?int
+    {
+        return $this->DislikeButton;
+    }
+
+    public function setDislikeButton(int $DislikeButton): self
+    {
+        $this->DislikeButton = $DislikeButton;
+
+        return $this;
+    }
+
+    public function getLikeButton(): ?int
+    {
+        return $this->LikeButton;
+    }
+
+    public function setLikeButton(int $LikeButton): self
+    {
+        $this->LikeButton = $LikeButton;
+
+        return $this;
+    }
+
+    public function getDescCoach(): ?string
+    {
+        return $this->descCoach;
+    }
+
+    public function setDescCoach(string $descCoach): self
+    {
+        $this->descCoach = $descCoach;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notify>
+     */
+    public function getNotifies(): Collection
+    {
+        return $this->notifies;
+    }
+
+    public function addNotify(Notify $notify): self
+    {
+        if (!$this->notifies->contains($notify)) {
+            $this->notifies->add($notify);
+            $notify->setCoach($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotify(Notify $notify): self
+    {
+        if ($this->notifies->removeElement($notify)) {
+            // set the owning side to null (unless already changed)
+            if ($notify->getCoach() === $this) {
+                $notify->setCoach(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
+
+   
 }

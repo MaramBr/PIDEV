@@ -44,8 +44,9 @@
                                 <td>{{ i.Lieu }}</td>
                                 <td>{{ i.Description }}</td>
                                 <td>{{ i.Type }}</td>
-                                <td>{{ i.Sponsors }}</td>
+                                
                                  <td>{{ i.nbParticipant}}</td>
+                                 <td>{{ i.Sponsors }}</td>
                                 <td>
                                     {% for a in i.getParticipants().toArray() %} 
                                         {{ a.nom }} 
@@ -59,9 +60,21 @@
                                 </td>
                             </tr>
                         {% endfor %}
-                    </tbody>
-                </table>
+                              </tbody>
                 
+                           <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/add1">Ajouter evenement </a></td>
+                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Participant/add"> ajouter Participant </a> </td>
+                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/afficher"> Routour</a> </td>
+                       
+                 </table>
+                
+                    <button type="button" class="btn btn-outline-danger">Trie</button>
+                    <ul>
+                        <li><a href="{{ path('order_By_Nom')}}">Trie par Nom</a></li>
+                        <li><a href="{{ path('order_By_type')}}">Trie par type</a></li>
+                        
+                    </ul>
+                </li>
             </div>
         </div>
     </div>

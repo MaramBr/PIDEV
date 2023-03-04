@@ -245,8 +245,39 @@ public function searchEvenementx(Request $request, NormalizerInterface $Normaliz
 }
 
 
+/**
+     * @Route("/order_By_Nom", name="order_By_Nom" ,methods={"GET"})
+     */
+    public function order_By_Nom(Request $request,EvenementRepository $EvenementRepository): Response
+    {
+//list of students order By Nom
+        $Evenement = $EvenementRepository->orderByNom();
 
+        return $this->render('Evenement/back.html.twig', [
+            'Evenement' => $Evenement,
+        ]);
 
+        //trie selon Nom
+
+    }
+
+    /**
+     * @Route("/order_By_type", name="order_By_type" ,methods={"GET"})
+     */
+    public function order_By_type(Request $request,EvenementRepository $EvenementRepository): Response
+    {
+//list of students order By type
+        $Evenement = $EvenementRepository->orderBytype();
+
+        return $this->render('Evenement/back.html.twig', [
+            'Evenement' => $Evenement,
+        ]);
+
+        //trie selon type
+
+    }
+    
+    
 
 
 }

@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    }
+   
+    .container1{
+    width: 100px;
+    position:absolute;
+    
+    }
+    .btn1{
+    width: 100%;
+    height: 35px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    }
+    .btn1::before{
+ content: "USER"; 
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.062);
+    border: 2px solid #FF5F6D;
+    padding-left: 1em;
+    background: linear-gradient(to right, white 80%, #FF5F6D 20%);
+    }
+    .btn1::after{
+    content: '\f062';
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 700;
+    width: 20%;
+    height: 110%;
+    color: white;
+    transform: rotate(180deg);
+    transition: all .4s;
+    }
+    .btn1:checked::after{
+    transform: rotate(0deg);
+    }
+    .list{
+    position: absolute;
+    margin-top: 0.5em;
+    width: 100%;
+    height: 175px;
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    display: flex;
+    flex-direction: column;
+    transition: all .4s;
+    }
+    input:checked ~ .list{
+    clip-path: none;
+    }
+    .list a{
+    height: 25%;
+    display: flex;
+    align-items: center;
+    padding: 0.3em 0 0.3em 1em;
+    text-decoration: none;
+    margin: 0.3em 0;
+    background: white;
+    color: rgb(36, 36, 36);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.062);
+    transition: background .4s;
+    }
+    .list a:hover{
+    background: #FF5F6D;
+    color: white;
+    }
+    input[type="checkbox-1"]{
+      display: none;
+    }
+    /* label{
+      border: 1px solid #0a0909;
+      padding :10px;
+      display :block;
+      position:fixed;
+      margin:10px;
+      cursor:pointer;
+
+    } */
+    label::before{
+      background: #1b1313;
+      color:#0a0505;
+      content:"";
+      display: block;
+      border-radius: 50%;
+      border : 1px solid #808080;
+      position:fixed;
+      top: -5px;
+      left:-5px;
+      width: 25px;
+      height: 25px;
+      text-align: center;
+      transition: .4s linear;
+ transform: scale(0);
+
+    }
+    label img{
+      height: 100px;
+      width: 100px;
+      transition: 0.2s linear;
+      transform-origin: 50% 50%;
+    }
+     :checked + label{
+      border-color:#333;
+      box-shadow:2px 3px 25px rgba(0, 0, 0, 0.062)
+    } 
+
+    :checked + label img {
+      transform: scale (0.9);
+    }
+
+
+
+
+
+ 

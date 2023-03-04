@@ -86,15 +86,15 @@
             <span class="nav-link">Navigation</span>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="#">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            <li class="nav-item menu-items">
+            <a class="nav-link"  href="listing" >
               <span class="menu-icon">
                 <i class="mdi mdi-laptop"></i>
               </span>
@@ -104,7 +104,7 @@
             
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/forms/basic_elements.html">
+            <a class="nav-link" href="#">
               <span class="menu-icon">
                 <i class="mdi mdi-playlist-play"></i>
               </span>
@@ -339,7 +339,9 @@
                       </div>
                     </div>
                     <div class="preview-item-content">
-                      <p class="preview-subject mb-1">Log out</p>
+                       <p class="preview-subject mb-1"> <a class="btn " href="{{ path('membre') }}"> Log out</a> </p> 
+                      							 {# <a class="btn " href="{{ path('membre') }}"> Log out</a>  #}
+
                     </div>
                   </a>
                   <div class="dropdown-divider"></div>

@@ -1,0 +1,60 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Category{% endblock %}
+
+{% block body %}
+<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+					<!-- section title -->
+					{% for i in Category %}
+                <div class="col-lg-3 col-sm-6">
+                
+                    <div class="trainer-item">
+                        
+                           <div> 
+                            <div class="trainer-text">
+                               
+                               <a href="{{ path('category_articles' ,{id:i.id}) }}" class="primary-btn cta-btn"><h5>{{i.libelle}}</h5></a>
+                              
+                            </div>
+                            
+                         
+                        </div>
+                           <br/>   
+                    </div>
+                    
+                </div>
+              
+                  {% endfor%}
+
+					<!-- /section title -->
+
+					
+									
+										<!-- /product -->
+									</div>
+									<div id="slick-nav-1" class="products-slick-nav"></div>
+								</div>
+								<!-- /tab -->
+							</div>
+						</div>
+					</div>
+					<!-- Products tab & slick -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+
+		<br>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
+

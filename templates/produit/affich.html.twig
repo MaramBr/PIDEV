@@ -1,0 +1,124 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+<!-- SECTION -->
+
+<form method="get" action="{{ path('app_filtre') }}">
+        <label for="min_price">Minimum Price:</label>
+        <input type="number" name="min_price" id="min_price" value="{{ app.request.query.get('min_price') }}">
+        <br>
+
+        <label for="max_price">Maximum Price:</label>
+        <input type="number" name="max_price" id="max_price" value="{{ app.request.query.get('max_price') }}">
+        <br>
+
+        <button type="c-btn">Filter</button>
+    </form>
+
+
+
+
+
+
+
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+					<!-- section title -->
+					<div class="col-md-12">
+						<div class="section-title">
+							<h3 class="title">Notre produits|  <a href="{{ path('appfront2') }}">Catégorie</a></h3>
+							<div class="section-nav">
+								<ul class="section-tab-nav tab-nav">
+									<li class="active"><a data-toggle="tab" href="#tab1"></a></li>
+									<li><a data-toggle="tab" href="#tab1">Appareils</a></li>
+									<li><a data-toggle="tab" href="#tab1">Accessoires</a></li>
+									<li><a data-toggle="tab" href="#tab1">Vêtement</a></li>
+								</ul>
+							</div>
+							</div>
+					</div>
+
+					<!-- /section title -->
+
+
+
+
+
+
+					<!-- Products tab & slick -->
+
+<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- shop -->
+					{% for a in data %}
+					<div class="col-md-4 col-xs-6">
+						<div class="shop">
+							<div class="shop-img">
+								<img src="{{asset('/uploads/produits/'~a.Image)}}" alt="">
+							</div>
+							<div class="shop-body">
+								<h3>{{a.Nom }}</h3>
+								<h3>{{a.Prix }}</h3>
+								<a href="{{ path('detaille' ,{id:a.id}) }}" class="cta-btn">details <i class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+					</div>
+					<!-- /shop -->
+					{% endfor %}
+
+					
+
+		<!-- store bottom filter -->
+						 <div class="store-filter clearfix">
+						
+							<ul class="store-pagination">
+								
+								<li><a href="{{ knp_pagination_render(data) }}"></a></li>
+							<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+							</ul>
+						</div>
+						
+
+
+
+					</div>
+					</div> 
+
+
+
+
+
+
+
+					
+					
+
+
+								<!-- /tab -->
+							</div>
+						</div>
+					</div>
+					<!-- Products tab & slick -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+
+		<br>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
+

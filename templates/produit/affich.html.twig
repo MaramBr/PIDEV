@@ -69,7 +69,7 @@
 							<div class="shop-body">
 								<h3>{{a.Nom }}</h3>
 								<h3>{{a.Prix }}</h3>
-								<a href="{{ path('detaille' ,{id:a.id}) }}" class="cta-btn">detaille <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="{{ path('detaille' ,{id:a.id}) }}" class="cta-btn">details <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -89,11 +89,33 @@
 
 					</div>
 					</div>
-								<div style="right: 0">{{ knp_pagination_render(data) }}</div>
+							<!-- store bottom filter -->
+						<div class="store-filter clearfix">
+						
+							<ul class="store-pagination">
+								
+								<li><a href="{{ knp_pagination_render(data) }}"></a></li>
+							
+							</ul>
+						</div>
+
+
+
+
+
+      <div style="right: 0">{{ knp_pagination_render(data) }}</div>
 										<!-- /product -->
 									</div>
 									<div id="slick-nav-1" class="products-slick-nav"></div>
 								</div>
+
+							
+						
+
+
+
+
+
 								<!-- /tab -->
 							</div>
 						</div>

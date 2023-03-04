@@ -79,33 +79,13 @@
 
 						</div>
 					</div>
+					</div>
+					
 					<!-- /Product details -->
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+					<div class="btn-group">
+    <a href="{{ path('app_testfront_like', {'id': Produit.id, 'type': 'like'}) }}" class="btn btn-success"><i class="fa fa-thumbs-up"></i> Like</a>
+    <a href="{{ path('app_testfront_like', {'id': Produit.id, 'type': 'dislike'}) }}" class="btn btn-danger"><i class="fa fa-thumbs-down"></i> Dislike</a>
+    <div class="text-muted mb-2">{{ Produit.likes }} likes / {{ Produit.dislikes }} dislikes</div>
 
 
 </div>
@@ -139,11 +119,18 @@
 
 
 
+
+
 			<div class="col-xs2 col-sm3" id="ajout-commentaire">
 				<h2>Ajouter un commentaire</h2>
-
+{{form_start(commentForm, {'attr': {'novalidate':'novalidate'}})}}
+		
 				    {{ form_row(commentForm.email) }}
 				    {{ form_row(commentForm.nickname) }}
+				
+					 {{ form_row(commentForm.content) }} 
+				
+					
                     {{form_widget(commentForm.captcha) }}
 					
                     <div id="editor"></div>

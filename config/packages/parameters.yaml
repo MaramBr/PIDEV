@@ -1,0 +1,4 @@
+parameters:
+    recaptcha.site_key: '6Le9eLkkAAAAAK1IEmEz7yDJO_xpvy79kb5rjBQA'
+    recaptcha.secret_key: '6Le9eLkkAAAAABAH27fZITCDsF7cSQCd5GyEZs2e'
+   

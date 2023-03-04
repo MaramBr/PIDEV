@@ -1,12 +1,12 @@
 twig:
 
      form_themes: ['bootstrap_5_layout.html.twig']
-    default_path: '%kernel.project_dir%/templates'
+     default_path: '%kernel.project_dir%/templates'
     # form_themes: ['bootstrap_4_layout.html.twig']
-    globals:
+     globals:
         recaptcha_site_key: '6Le9eLkkAAAAAK1IEmEz7yDJO_xpvy79kb5rjBQA'
 when@test:
-    twig:
+     twig:
         strict_variables: true
 
 

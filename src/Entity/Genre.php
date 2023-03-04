@@ -6,6 +6,7 @@ use App\Repository\GenreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GenreRepository::class)]
 class Genre
@@ -16,6 +17,10 @@ class Genre
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Regex(
+        pattern:"/^[^0-9]+$/",
+        message:"Le nom ne doit pas contenir de chiffres"
+    )]
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'genre', targetEntity: Reclamation::class)]
@@ -34,6 +39,11 @@ class Genre
     public function getLibelle(): ?string
     {
         return $this->libelle;
+    }
+    
+    public function __toString()
+    {
+        return (string) $this->getlibelle();
     }
 
     public function setLibelle(string $libelle): self

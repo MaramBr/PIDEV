@@ -1,0 +1,32 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic form elements</h4>
+                    <p class="card-description"> Ajouter un Type </p>
+                    {{ form_start(form1 , {'attr': {'novalidate':'novalidate'}} ) }}
+                    <form class="forms-sample">
+                      <div class="form-group">
+                        {{ form_row(form1.libelle, {'label':'Votre libelle' ,'attr':{'placeholder': 'libelle...', 'class':'form-control'}}) }}
+                      </div>
+                     
+                      {{ form_widget(form1.ajouter , {'attr': {'class':'btn btn-primary mr-2'}} ) }}
+{{ form_end(form1) }}
+                      </form>
+                      
+                      
+                      <br>
+                      <a href="/affichergenre" class="btn btn-dark">Afficher les Types</a>
+                      <a href="/affichreclamation1" class="btn btn-dark">Afficher les Réclamations</a>
+                    
+                    
+                     
+                    </div>
+                </div>
+            </div>
+
+            
+{% endblock %}

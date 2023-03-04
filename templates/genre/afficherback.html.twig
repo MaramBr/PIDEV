@@ -1,0 +1,36 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+<div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic Table</h4>
+                    <p class="card-description"> table<code>des types</code>
+                    </p>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>id</th>
+                            <th>libelle</th>
+                            
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for f in genres %}
+                          <tr>
+                            <td>{{f.id }}</td>
+                            <td> {{f.libelle }} </td>
+                            <td><a href="updategenre/{{f.id}}" class="btn btn-primary mr-2" >modifier</a></td>
+                            <td><a href="removegenre/{{f.id}}" class="btn btn-dark" >supprimer</a></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      <a href="/addgenre" class="btn btn-dark">retour</a>
+                    </div>
+                  </div>
+                </div>
+                
+              
+{% endblock %}

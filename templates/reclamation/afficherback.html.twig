@@ -1,0 +1,68 @@
+{% extends 'baseBack.html.twig' %}
+{% block body %}
+<div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic Table</h4>
+                    <p class="card-description"> table<code>des Reclamations</code>
+                    </p>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>id</th>
+                            <th>user</th>
+                            <th>titre</th>
+                            <th>type</th>
+                            <th>description</th>
+                            <th>date</th>
+                            <th>Status</th>
+                            <th>traitement</th>
+                            
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for a in rec %}
+                          <tr>
+                            <td>{{a.id }}</td>
+                            <td> {{a.user }} </td>
+                            <td> {{a.TitreR}} </td>
+                            <td> {{a.genre}} </td>
+                            <td> {{a.DescriptionR}} </td>
+                            <td> {{a.DateR.format('j-m-y') }} </td>
+                            <td> {% if a.StatusR == "En attente" %}
+                            <span class="badge badge-warning">{{ a.StatusR }}</span>
+                            {% elseif a.StatusR == "Confirmée" %}
+                            <span class="badge badge-success">{{ a.StatusR }}</span>
+                            {% elseif a.StatusR == "En cours de preparation" %}
+                             <span class="badge badge-info">{{ a.StatusR }}</span>
+                            {% endif %}</td>
+                            <td> {{a.traitement}} </td>
+                            <td>
+                            {% if a.StatusR !='Confirmée' %}
+            
+                               <a href="updaterb/{{a.id}}" class="btn btn-primary mr-2" >modifier</a>
+                            {% endif %}
+                            </td>
+                            <td><a href="{{ path('app_removerecback', {id:a.id}) }}" class="btn btn-dark" >supprimer</a></td>
+                            
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      <br>
+                      <br>
+                        <a class="btn btn-success" href="{{path('PDF_Reclamation') }}">  PDF </a>
+                        <script type="text/javascript">
+                            function imprimer_page(){
+                                window.print();
+                            }
+                        </script>
+                    
+                      <a href="/addgenre" class="btn btn-dark">Retour</a>
+                    </div>
+                  </div>
+                </div>
+                
+              
+{% endblock %}

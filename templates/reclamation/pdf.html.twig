@@ -1,0 +1,118 @@
+<h1 class="align-center">Bienvenue dans votre application E-fit </h1>
+
+<p>Voila la liste de tout les reclamations en attentes</p>
+<table class="table" border="5" >
+    <thead>
+    <tr>
+            <th>id</th>
+            <th>user</th>
+            <th>titre</th>
+            <th>type</th>
+            <th>description</th>
+            <th>date</th>
+            <th >Status</th>
+            <th >traitement</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for a in reclamations %}
+    {% if a.StatusR == "En attente" %}
+        <tr>
+            <td> {{a.id }}</td>
+            <td> {{a.user }} </td>
+            <td> {{a.TitreR}} </td>
+            <td> {{a.genre}} </td>
+            <td> {{a.DescriptionR  }} </td>
+            <td> {{a.DateR.format('j-m-y')}} </td>
+            <td> {{a.StatusR}}</td>
+             <td> {{a.traitement}}</td>
+            </tr>
+            {% endif %}
+    {% else %}
+        <tr>
+            <td colspan="8">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br>
+<br>
+<br>
+<br>
+
+<p>Voila la liste de tout les reclamations en cours de préparation</p>
+<table class="table" border="5" >
+    <thead>
+    <tr>
+            <th>id</th>
+            <th>user</th>
+            <th>titre</th>
+            <th>type</th>
+            <th>description</th>
+            <th>date</th>
+            <th >Status</th>
+            <th >traitement</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for a in reclamations %}
+    {% if a.StatusR == "En cours de preparation" %}
+        <tr>
+            <td> {{a.id }}</td>
+            <td> {{a.user }} </td>
+            <td> {{a.TitreR}} </td>
+            <td> {{a.genre}} </td>
+            <td> {{a.DescriptionR  }} </td>
+            <td> {{a.DateR.format('j-m-y')}} </td>
+            <td> {{a.StatusR}}</td>
+             <td> {{a.traitement}}</td>
+            </tr>
+            {% endif %}
+    {% else %}
+        <tr>
+            <td colspan="8">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<br>
+<br>
+<br>
+<br>
+
+<p>Voila la liste de tout les reclamations confirmées</p>
+<table class="table" border="5" >
+    <thead>
+    <tr>
+            <th>id</th>
+            <th>user</th>
+            <th>titre</th>
+            <th>type</th>
+            <th>description</th>
+            <th>date</th>
+            <th >Status</th>
+            <th >traitement</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for a in reclamations %}
+    {% if a.StatusR == "Confirmée" %}
+        <tr>
+            <td> {{a.id }}</td>
+            <td> {{a.user }} </td>
+            <td> {{a.TitreR}} </td>
+            <td> {{a.genre}} </td>
+            <td> {{a.DescriptionR  }} </td>
+            <td> {{a.DateR.format('j-m-y')}} </td>
+            <td> {{a.StatusR}}</td>
+            <td> {{a.traitement}}</td>
+            </tr>
+            {% endif %}
+    {% else %}
+        <tr>
+            <td colspan="8">no records found</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>

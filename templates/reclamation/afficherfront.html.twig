@@ -1,0 +1,138 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Reclamation{% endblock %}
+{% block topheader %}
+			<!-- TOP HEADER -->
+			<div id="top-header">
+				<div class="container">
+					<ul class="header-links pull-left">
+						<li><a href="#"><i class="fa fa-phone"></i>29 757 417</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i> E-FIT@gmail.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i>La petite ariana </a></li>
+					</ul>
+					<ul class="header-links pull-right">
+						<li><a href="#"><i class="fa fa-user-o"></i>Mon compte</a></li>
+					</ul>
+				</div>
+			</div>
+			{% endblock %}
+{% block header %}
+
+<nav id="navigation">
+			<!-- container -->
+			<div class="container">
+				<!-- responsive-nav -->
+				<div id="responsive-nav">
+					<!-- NAV -->
+					<ul class="main-nav nav navbar-nav">
+						<li><a href="/reclamation1">Home</a></li>
+						<li><a href="#">Produit</a></li>
+						<li><a href="#">Categories</a></li>
+						<li><a href="#">Evénement</a></li>
+						<li><a href="#">Coaching</a></li>
+						<li><a href="#">Commande</a></li>
+						<li class="active"><a href="/addreclamation">Réclamation</a></li>
+					</ul>
+					<!-- /NAV -->
+				</div>
+				<!-- /responsive-nav -->
+			</div>
+			<!-- /container -->
+		</nav>
+
+
+{% endblock %}
+
+{% block body %}
+<!--
+<script>
+setTimeout(() => {
+  const box = document.getElementById('box');
+
+  // 👇️ hides element (still takes up space on the page)
+  box.style.visibility = 'hidden';
+}, 500);
+
+</script>
+-->
+<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+                    <div class="row">
+                     <input id="ajax-search-input" type="text" name="search" placeholder="Rechercher..." class="input">
+
+					<div class="col-md-17">
+                <div class="card">
+                  <div class="card-body">
+                  <br>
+                    <h4 class="card-title">Table des Reclamation</h4>
+                    
+                    </p>
+                    <div class="table-responsive">
+                    <br>
+                    
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            
+                            <th>titre</th>
+                            <th>type</th>
+                            <th>description</th>
+                            <th>date</th>
+                            <th >Status</th>
+                            <th>traitement</th>
+                            <th >Modifier</th>
+                            <th>supprimer</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for a in recl %}
+                          <tr>
+                            
+                            <td> {{a.TitreR}} </td>
+                            <td> {{a.genre}} </td>
+                            <td> {{a.DescriptionR  }} </td>
+                            <td> {{a.DateR.format('j-m-y')}} </td>
+                            
+                            <td> {% if a.StatusR == "En attente" %}
+                            <span class="badge badge-warning">{{ a.StatusR }}</span>
+                            {% elseif a.StatusR == "Confirmée" %}
+                            <span class="badge badge-success">{{ a.StatusR }}</span>
+                            {% elseif a.StatusR == "En cours de preparation" %}
+                             <span class="badge badge-info">{{ a.StatusR }}</span>
+                            {% endif %}</td>
+                            <td> {{a.traitement}} </td>
+                            
+                            
+                            <td > 
+                            
+
+                             {% if a.StatusR not in ['En cours de preparation', 'Confirmée']  %}
+                        <a class="primary-btn order-submit" href="{{ path('app_updater', {'id': a.id}) }}">Modifier</a>
+                              {% endif %}
+                            
+
+
+                            
+                            
+                            </td>
+                            <td><a href="removerecfront/{{a.id}}" class="primary-btn2 order-submit">supprimer</a></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>                     
+                      <a href="/addreclamation" class="primary-btn order-submit" >Ajouter</a>
+                      
+                       <br>
+                    </div>
+                  </div>
+                </div>
+                 </div>
+                  </div>
+                </div>
+                </div>
+           
+
+
+{% endblock %}

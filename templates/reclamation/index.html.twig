@@ -1,0 +1,88 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Reclamation{% endblock %}
+
+{% block topheader %}
+			<!-- TOP HEADER -->
+			<div id="top-header">
+				<div class="container">
+					<ul class="header-links pull-left">
+						<li><a href="#"><i class="fa fa-phone"></i>29 757 417</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i> E-FIT@gmail.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i>La petite ariana </a></li>
+					</ul>
+					<ul class="header-links pull-right">
+						<li><a href="#"><i class="fa fa-user-o"></i>Mon compte</a></li>
+					</ul>
+				</div>
+			</div>
+{% endblock %}
+
+{% block header %}
+<nav id="navigation">
+			<!-- container -->
+			<div class="container">
+				<!-- responsive-nav -->
+				<div id="responsive-nav">
+					<!-- NAV -->
+					<ul class="main-nav nav navbar-nav">
+						<li><a href="/fit">Home</a></li>
+						<li><a href="#">Produit</a></li>
+						<li><a href="#">Categories</a></li>
+						<li><a href="#">Evénement</a></li>
+						<li><a href="#">Coaching</a></li>
+						<li><a href="#">Commande</a></li>
+						<li class="active"><a href="/addreclamation">Réclamation</a></li>
+					</ul>
+					<!-- /NAV -->
+				</div>
+				<!-- /responsive-nav -->
+			</div>
+			<!-- /container -->
+		</nav>
+{% endblock %}
+
+
+{% block body %}
+
+<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+                    
+
+					<div class="col-md-8">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Ajouter reclamation</h3>
+							</div>
+                            {{ form_start(form2 , {'attr': {'novalidate':'novalidate'}} ) }}
+							<div class="form-group">
+                                {{ form_row(form2.TitreR, {'label':'Titre','attr':{'placeholder': 'Titre ...','class':'input'}})}}
+							</div>
+							<div class="form-group">
+								{{ form_row(form2.user , {'label':'User','attr':{'placeholder': 'User ...','class':'input'}})}}
+							</div>
+							<div class="form-group">
+								{{ form_row(form2.genre , {'label':'Type','attr':{'placeholder':'Type ...' , 'class':'input'}})}}
+							</div>
+							<div class="form-group">
+								{{ form_row(form2.DescriptionR , {'label':'Description','attr':{'placeholder': 'Description ...','class':'input'}})}}
+							</div>
+							
+							
+					       <button type="submit" class="primary-btn order-submit"  >reclamer</button>
+						   <a href="/affichreclamation2" class="primary-btn2 order-submit"  >Afficher reclamation</a>
+                           
+						   {{ form_end(form2) }}
+						</div>
+					
+             </div>
+             </div>
+             </div>
+
+					<!-- Order Details -->
+
+{% endblock %}
+

@@ -1,0 +1,28 @@
+
+{% extends 'baseback.html.twig' %}
+{% block title %}Evenement{% endblock %}
+
+{% block body %}
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic form elements</h4>
+                    <p class="card-description"> Basic form elements </p>
+                    {{ form_start(formSponsor , {'attr': {'novalidate':'novalidate'}} ) }}
+                    <form class="forms-sample">
+                      <div class="form-group">
+                        {{ form_row(formSponsor.nomSponsor, {'label':'Votre nom' ,'attr':{'placeholder': 'nom...', 'class':'form-control'}}) }}
+						<div class="form-group">
+                        {{ form_row(formSponsor.email, {'label':'Votre email' ,'attr':{'placeholder': 'email...', 'class':'form-control'}}) }}
+						<div class="form-group">
+                        {{ form_row(formSponsor.invest, {'label':'Investissement' ,'attr':{'placeholder': 'Invest...', 'class':'form-control'}}) }}
+						
+                      </div>
+                      <button type="click here" class="btn btn-primary mr-2" >ajouter sponsor</button>
+                       {{form_end(formSponsor)}}
+                    </form>
+                     
+                    </div>
+                </div>
+            </div>
+			  {%endblock%}

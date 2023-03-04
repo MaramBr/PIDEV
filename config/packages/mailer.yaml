@@ -3,3 +3,9 @@ framework:
         # dsn: '%env(MAILER_DSN)%'
         dsn: 'gmail+smtp://rayan.lahmar@esprit.tn:201JMT3276@default'
         message_bus:  false
+#  mailer:
+#     dsn: 'gmail+smtp://emna.abbessi@esprit.tn:12715163@default'
+#     message_bus: false
+
+
+    

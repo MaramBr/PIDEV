@@ -1,0 +1,79 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Participant{% endblock %}
+
+{% block body %}
+
+
+
+ {%  for message in app.flashes('addP')  %}
+                               <div class="alert alert-info" role="alert">
+                                   {{message}}                               </div>
+                           {% endfor %}
+                           
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+		<!-- /Order notes -->
+					
+
+					<!-- Order Details -->
+                    
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">YOU JOINED US In : </h3>
+							<h1><div> {% for a in  participant.getEvenement().toArray() %} 
+                             {{ a.nom}} 
+                        {% endfor %} </div></h1>
+                          
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+							
+								
+								<div><strong>Votre Nom</strong></div>
+								<div>{{participant.nom}}</div>
+                                
+							</div>
+                            <div class="order-col">
+								<div><strong>Votre Prenom</strong></div>
+								<div>{{participant.prenom}}</div>
+							</div>
+                            <div class="order-col">
+								<div><strong>Votre Gmail</strong></div>
+								<div>{{participant.email}}</div>
+							</div>
+                            <div class="order-col">
+								<div><strong>Numero de telephone </strong></div>
+								<div>+216{{participant.tel}}</div>
+							</div>
+							
+						
+						<a href="{{ path('delete3', {id:participant.ID}) }}" class="primary-btn order-submit">Annuler participation</a>
+                        <a href="{{ path('update3', {id:participant.ID}) }}" class="primary-btn order-submit">Update</a>
+						      <a href="{{ path('pdfP',{id:participant.ID}) }}" class="btn btn-info">Exporter en PDF</a>
+							 
+
+					</div>
+
+
+                    
+              
+					<!-- /Order Details -->
+                   
+ </div>
+ </div>
+ </div>
+{% endblock %}
+
+
+{% block footer %}
+
+
+{% endblock %}
+
+
+
+

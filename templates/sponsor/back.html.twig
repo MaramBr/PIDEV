@@ -1,0 +1,90 @@
+{% extends 'baseback.html.twig' %}
+
+{% block title %}E-FIT!{% endblock %}
+
+{% block body %}
+
+<div class="panel-header panel-header-sm">
+            </div>
+            <div class="content">
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                                                                                            
+
+                        <div class="card">
+                            <div class="card-header">
+
+                                <h4 class="card-title"> Simple Table</h4>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+
+                                    <table class="table">
+
+                                        <thead class=" text-primary">
+
+                                        <th><button type="button" class="btn btn-outline-warning">  identifiant</button></th>
+                          
+                            <th><button type="button" class="btn btn-outline-danger">Nom Sponsor</button></th>
+                            <th><button type="button" class="btn btn-outline-success">Email Sponor</button></th>
+                            <th><button type="button" class="btn btn-outline-warning">  Investissement</button></th>
+                                            
+                                            
+                                             
+                                        </thead>
+
+                                        <tbody>
+                                                      {% for i in Sponsor %}
+
+                                            <tr>
+                                                <td>
+                                                    {{i.ID}}
+                                                </td>
+                                                <td>
+                                                   {{i.nomSponsor}}
+                                                </td>
+                                                <td>
+                                                    {{ i.email }}
+                                                </td>
+                                              <td>
+                                                    {{i.Invest}}
+                                                </td>
+                                                 
+                                                 <td>
+                                                <a class="btn btn-danger" href="{{ path('delete', {id:i.ID}) }}">supprimer </a>
+                                                    
+                                                </td>
+                                                 <td>
+                                                  <a class="btn btn-success" href="{{ path('update', {id:i.ID}) }}">mettre a jour </a>
+                                            </tr>
+                                           {% endfor%}
+                                           
+                                         <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/add1">Ajouter evenement </a></td>
+                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Sponsor/add"> ajouter Sponsor </a> </td>
+                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/afficher"> front</a> </td>
+                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                           
+                            
+                </div>
+            </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#search").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("table tr").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+{% endblock %}

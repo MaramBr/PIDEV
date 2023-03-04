@@ -1,0 +1,180 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}E-FIT!{% endblock %}
+
+{% block body %}
+
+<div class="panel-header panel-header-sm">
+            </div>
+            <div class="content">
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                                                                                            
+
+                        <div class="card">
+                            <div class="card-header">
+
+                                <h4 class="card-title"> Simple Table</h4>
+                            </div>
+{#rechercher#}
+<form class="d-flex align-items-center col-12 col-md-8 col-lg-3">
+               <span class="position-absolute pl-3 search-icon">
+                <i class="fe fe-search"></i>
+              </span>
+<input type="search" id="myInput" class="form-control pl-6" placeholder="Search Produit" />
+          
+            </form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+              <script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+{#rechercher#}
+
+
+
+
+
+
+
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+
+                                    <table class="table">
+
+                                        <thead class=" text-primary">
+                                            <th>
+                                                ID
+                                            </th>
+                                            <th>
+                                                Nom
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+                                             <th>
+                                                Quantite
+                                            </th>
+                                            <th class="text-right">
+                                                Prix
+                                            </th>
+                                            <th class="text-right">
+                                                category
+                                            </th>
+                                             <th class="text-right">
+                                                Image
+                                            </th>
+                                        
+                                             <th class="text-right">
+                                              Delete
+                                            </th>
+                                             <th class="text-right">
+                                                Update
+                                            </th>
+                                        </thead>
+
+                                        <tbody id="myTable">
+                                                      {% for i in Produit %}
+
+                                            <tr>
+                                                <td>
+                                                    {{i.ID}}
+                                                </td>
+                                                <td>
+                                                   {{i.Nom}}
+                                                </td>
+                                                <td>
+                                                    {{i.Description}}
+                                                </td>
+
+                                                 <td>
+                                                    {{i.quantite}}
+                                                </td>
+                                              <td>
+                                                    {{i.Prix}}
+                                                </td>
+                                                <td>
+                                                    {{i.Categorys}}
+                                                </td>
+                                               <td><img src="{{ asset('/uploads/produits/' ~ i.Image) }}?t={{ date().getTimestamp() }}" alt="image"  width = "10%"></td>
+                                               <td>
+                                                    <a href="{{ path('delete', {id:i.ID}) }}">supprimer </a>
+                                                </td>
+                                                 <td>
+                                                    <a href="{{ path('update', {id:i.ID}) }}">mise à jour </a>
+                                                </td>
+                                            </tr>
+                                           {% endfor%}
+                                        </tbody>
+                                    </table>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                           
+                            
+                </div>
+            </div>
+<script
+src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script>
+$( document ).ready(function(){
+    $("#search").keyup(function(e){
+        var value = $(this).val();
+        $.ajax({
+            url : "{{ path('appback') }}",
+            type : 'GET',
+            data: {
+                'searchValue' : value
+            },
+            success : function(retour){
+                if(retour){
+                    $('#t tbody#searchtab').empty();
+                    $.each(JSON.parse(retour), function(i, obj) {
+                        $('#t tbody#all').hide();
+                        $('#t tbody#searchtab').append(
+                          
+                        <td> '+obj.id+'</td>
+                        <td> '+obj.Nom+' </td>
+    
+                        <td> 
+                        <a href="Produit/update/'+obj.id+'">modifier </a>
+                         </br>
+                        <a href="Produit/delete/'+obj.id+'">supprimer</a>
+                        </td>
+                     
+                        ); 
+                        });
+
+                        }
+                        else
+                        {
+                            $('#t tbody#all').show();
+                            $('#t tbody#searchtab').empty();
+                            $('#t tbody#searchtab').fadeIn('fast');
+                            }
+                            },
+                            });
+                            return false;
+                            });
+                            });
+                            </script> 
+
+
+
+
+
+{% endblock %}

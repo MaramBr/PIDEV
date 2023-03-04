@@ -1,7 +1,8 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+# config/routes.yaml
 
+app_products:
+    path: /Produit/afficher
+    controller: App\Controller\ProduitController::affiche1
 
 # search:
 #   path: /search

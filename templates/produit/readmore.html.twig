@@ -1,0 +1,168 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}Produit{% endblock %}
+
+{% block body %}
+ <!-- About Section Begin -->
+
+
+
+{%  for message in app.flashes('message')  %}
+                               <div class="alert alert-info" role="alert">
+                                   {{message}}                              
+								   
+							    </div>
+                           {% endfor %}
+
+						   		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- Product main img -->
+					<div class="col-md-5 col-md-push-2">
+						<div id="product-main-img">
+							<div class="product-preview">
+								<img src="./img/product01.png" alt="">
+      <img src="{{ asset('/uploads/produits/' ~ Produit.Image) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%">
+
+							</div>
+							
+							
+						</div>
+					</div>
+					<!-- /Product main img -->
+
+					<!-- Product thumb imgs -->
+					<div class="col-md-2  col-md-pull-5">
+						<div id="product-imgs">
+							
+						</div>
+					</div>
+					<!-- /Product thumb imgs -->
+
+
+					<!-- Product details -->
+					<div class="col-md-5">
+						<div class="product-details">
+							<div>
+								<div class="product-rating">
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star-o"></i>
+								</div>
+								<a class="review-link" href="#">10 Review(s) | Add your review</a>
+							</div>
+							<div>
+								<h3 class="product-price">{{Produit.Nom}}</h3>
+                               <h4 class="order-total">Catégorie : {{Produit.Categorys}}</h4>
+
+							</div>
+{{Produit.Description}}
+							<div class="product-options">
+								
+								
+							</div>
+
+							<div class="add-to-cart">
+								
+						<a href="#" class="primary-btn order-submit">Acheter</a>
+							</div>
+
+						
+						
+
+						
+
+						</div>
+					</div>
+					</div>
+					
+					<!-- /Product details -->
+					<div class="btn-group">
+    <a href="{{ path('app_testfront_like', {'id': Produit.id, 'type': 'like'}) }}" class="btn btn-success"><i class="fa fa-thumbs-up"></i> Like</a>
+    <a href="{{ path('app_testfront_like', {'id': Produit.id, 'type': 'dislike'}) }}" class="btn btn-danger"><i class="fa fa-thumbs-down"></i> Dislike</a>
+    <div class="text-muted mb-2">{{ Produit.likes }} likes / {{ Produit.dislikes }} dislikes</div>
+
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div>
+               <ul
+                <div class="grix xs2 sm3 gutter-0 card">
+			<div class="grix xs2 sm3 gutter-0 card">
+			<div class="col-xs2 col-sm3">
+				<h2>Liste des commentaires</h2>
+				{% for comment in Produit.comments %}
+					{% if comment.parent == null %}
+						<h5>Commentaire de {{comment.nickname}}</h5>
+						<p>Publié le {{comment.createdAt|date("d/m/Y H:i") }}</p>
+						<div>{{comment.content|raw}}</div>
+						<p><a href="#ajout-commentaire" data-reply data-id="{{comment.id}}" class="btn primary press">Répondre</a></p>
+
+						{# On affiche les réponses #}
+						{% for reply in comment.replies %}
+							<p>Réponse publiée par {{reply.nickname}} le {{reply.createdAt|date("d/m/Y H:i") }}</p>
+							<div>{{reply.content|raw}}</div>
+						{% endfor %}
+					{% endif %}
+				{% endfor %}
+			</div>
+
+
+
+
+
+			<div class="col-xs2 col-sm3" id="ajout-commentaire">
+				<h2>Ajouter un commentaire</h2>
+{{form_start(commentForm, {'attr': {'novalidate':'novalidate'}})}}
+		
+				    {{ form_row(commentForm.email) }}
+				    {{ form_row(commentForm.nickname) }}
+				
+					 {{ form_row(commentForm.content) }} 
+				
+					
+                    {{form_widget(commentForm.captcha) }}
+					
+                    <div id="editor"></div>
+				{{ form_end(commentForm) }}
+			</div>
+		</div>
+	</div>      
+                   
+            </div>
+      
+        </div>
+    </section>
+    <!-- About Section End -->
+    {% endblock %}
+
+{% block footer %}
+
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('ckeditor5/ckeditor.js') }}"></script>
+    <script src="{{ asset('js/ckeditor.js') }}"></script>
+	<script>
+		window.onload = () => {
+			document.querySelector("#annonce_contact_title").value = "{{ annonce.title|raw }}";
+			// On met un écouteur d'évènements sur tous les boutons répondre
+			document.querySelectorAll("[data-reply]").forEach(element => {
+				element.addEventListener("click", function(){
+					document.querySelector("#comments_parentid").value = this.dataset.id;
+				});
+			});
+		}
+		let caroulix = new Caroulix('#carousel');
+		let modal = new Modal('#modale-contact');
+	</script>
+{% endblock %}

@@ -38,6 +38,12 @@
             "./migrations/.gitignore"
         ]
     },
+    "endroid/qr-code-bundle": {
+        "version": "4.3.1"
+    },
+    "gregwar/captcha-bundle": {
+        "version": "v2.2.0"
+    },
     "knplabs/knp-paginator-bundle": {
         "version": "v5.9.0"
     },
@@ -49,9 +55,6 @@
             "version": "1.5",
             "ref": "c81bdcf4a9d4e7b1959071457f9608631865d381"
         }
-    },
-    "gregwar/captcha-bundle": {
-        "version": "v2.2.0"
     },
     "mercuryseries/flashy-bundle": {
         "version": "v5.1.0"

@@ -1,0 +1,45 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}RendezVous{% endblock %}
+
+{% block body %}
+<div class="col-8 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            {{ form_start(formRendezVous, {'attr': {'novalidate': 'novalidate'}}) }}
+            <form class="forms-sample">
+                <div class="form-group">
+                    {{ form_row(formRendezVous.Coachings, {'label': 'Cours', 'attr': {'placeholder': 'cours...', 'class': 'form-control', 'id': 'select-coachings'}}) }}
+                </div>
+                
+              
+
+                <a href="{{ path('appgetByCours', {'cours': ' '}) }}" class="primary-btn" id="afficher-btn">afficher</a>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    // Get the select element
+    const select = document.getElementById('rendez_vous_Coachings');
+    console.log(select)
+    // Get the afficher button
+    const afficherBtn = document.getElementById('afficher-btn');
+
+    // Add event listener for select element
+    select.addEventListener('change', (event) => {
+       const selectedOption = event.target.selectedOptions[0];
+    const selectedText = selectedOption.text;
+    console.log(selectedText);
+        console.log(selectedText)
+        // Update the href of the afficher button with the selected value
+        afficherBtn.href = "/getByCours/" + selectedText;
+      console.log(afficherBtn.href)
+    });
+</script>
+{% endblock %}
+
+
+
+{% block footer %}
+{% endblock %}

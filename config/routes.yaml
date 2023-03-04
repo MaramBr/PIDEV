@@ -1,6 +1,13 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+# search:
+#   path: /search
+#   controller: App\Controller\Coaching::afficherback
+
+
+
 email1:
     path: /email1
     controller: App\Controller\EmailController::sendEmail

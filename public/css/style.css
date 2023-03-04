@@ -126,6 +126,24 @@ ul, ol {
   color: #FFF;
 }
 
+.primary-btn2 {
+  display: inline-block;
+  padding: 12px 30px;
+  background-color: #d10000;;
+  border: none;
+  border-radius: 40px;
+  color: #FFF;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-align: center;
+  -webkit-transition: 0.2s all;
+  transition: 0.2s all;
+}
+
+.primary-btn2:hover, .primary-btn2:focus {
+  opacity: 0.9;
+  color: #FFF;
+}
 /*----------------------------*\
 	Inputs
 \*----------------------------*/
@@ -975,7 +993,7 @@ textarea.input {
 }
 
 .product .product-body .product-rating>i.fa-star {
-  color: #ef233c;
+  color: #d16500;;
 }
 
 .product .product-body .product-rating:after {
@@ -1064,7 +1082,7 @@ textarea.input {
   border: 2px solid transparent;
   height: 40px;
   padding: 0 30px;
-  background-color: #ef233c;
+  background-color: #d16500;;
   color: #FFF;
   text-transform: uppercase;
   font-weight: 700;
@@ -1558,7 +1576,7 @@ textarea.input {
   border: 2px solid transparent;
   height: 40px;
   padding: 0 30px;
-  background-color: #ef233c;
+  background-color: #d16500;;
   color: #FFF;
   text-transform: uppercase;
   font-weight: 700;

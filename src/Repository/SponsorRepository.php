@@ -63,4 +63,13 @@ class SponsorRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+ public function findSponsorByNom($nom)
+    {
+        return $this->createQueryBuilder('sponsorSponsor')
+            ->where('sponsorSponsor.nom LIKE  :nom')
+            ->setParameter('nom', '%'.$nom. '%')
+            ->getQuery()
+            ->getResult();
+    }
 }

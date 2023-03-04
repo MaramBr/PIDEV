@@ -6,7 +6,7 @@ use App\Repository\SponsorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: SponsorRepository::class)]
 class Sponsor
 {
@@ -16,12 +16,24 @@ class Sponsor
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"nom Sponsor doit etre non vide")]
+    #[Assert\Length(min:3, minMessage:"Votre nom inferieure a 3 caractères.")]
+    #[Assert\Regex(
+         pattern:"/^[^0-9]+$/",
+         message:"Le nom ne doit pas contenir de chiffres"
+     )]
+     #[Groups("Sponsor")]
     private ?string $nomSponsor = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"l'email doit etre non vide")]
+     #[Assert\Email(message:"L'email n'est pas valide ")]
+     #[Groups("Sponsor")]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"Investissement doit etre non vide")]
+    #[Groups("Sponsor")]
     private ?string $invest = null;
 
     #[ORM\OneToMany(mappedBy: 'Sponsors', targetEntity: Evenement::class)]
@@ -101,5 +113,13 @@ class Sponsor
         }
 
         return $this;
+    }
+
+     public function __toString()
+    {
+        return (string) $this->getnomSponsor();
+        $this->getEmail();
+        $this->getInvest();
+        
     }
 }

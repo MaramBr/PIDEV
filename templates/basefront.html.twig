@@ -9,20 +9,20 @@
 
 		<title>{% block title %}E-FIT - HTML Ecommerce Template {% endblock %}</title>
 {% block css%}
-		<link href="{{asset('https://fonts.googleapis.com/css?family=Montserrat:400,500,700')}}" rel="stylesheet">
+		<link  href="{{asset('https://fonts.googleapis.com/css?family=Montserrat:400,500,700')}}" rel="stylesheet">
 
 		<!-- Bootstrap -->
 		<link type="text/css" rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}"/>
 
 		<!-- Slick -->
-		<link type="text/css" rel="stylesheet" href="{{asset('css/slick.')}}"/>
+		<link type="text/css" rel="stylesheet" href="{{asset('css/slick.css')}}"/>
 		<link type="text/css" rel="stylesheet" href="{{asset('css/slick-theme.css')}}"/>
 
 		<!-- nouislider -->
 		<link type="text/css" rel="stylesheet" href="{{asset('css/nouislider.min.css')}}"/>
 
 		<!-- Font Awesome Icon -->
-		<link rel="stylesheet" href="{{asset('css/font-awesome.min.css')}}">
+		<link rel="stylesheet"  href="{{asset('css/font-awesome.min.css')}}">
 
 		<!-- Custom stlylesheet -->
 		<link type="text/css" rel="stylesheet" href="{{asset('css/style.css')}}"/>
@@ -74,7 +74,9 @@
 										<option value="1">Category 01</option>
 										<option value="1">Category 02</option>
 									</select>
-									<input class="input" placeholder="Search here">
+									
+									<input class="input" id="search"  placeholder="chercher">
+								
 									<button class="search-btn">Recherche</button>
 								</form>
 							</div>
@@ -165,10 +167,10 @@
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Produit</a></li>
+						<li class="active"><a href="/Evenement/afficherback">Home</a></li>
+						<li><a href="/Evenement/add">Produit</a></li>
 						<li><a href="#">Categories</a></li>
-						<li><a href="#">Evénement</a></li>
+						<li><a href="/Evenement/afficher">Evénement</a></li>
 						<li><a href="#">Coaching</a></li>
 						<li><a href="#">Commande</a></li>
 						<li><a href="#">Réclamation</a></li>
@@ -1032,7 +1034,7 @@ version d'eux-mêmes.</p>
 							<div class="footer">
 								<h3 class="footer-title">Service</h3>
 								<ul class="footer-links">
-									<li><a href="#">My Account</a></li>
+									<li><a href="/Evenement/afficherback">My Account</a></li>
 								
 									<li><a href="#">Wishlist</a></li>
 									

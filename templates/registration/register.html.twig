@@ -19,19 +19,19 @@
 
 
 							 {# {{ form_start(registrationForm}} #}
-                             	<div class="form-group">
+                             	<div>
                     {{ form_row(registrationForm.nom , {'label':'nom','attr':{'placeholder':'nom' , 'class':'input'}})}}
 							</div>
-							<div class="form-group">
+							<div >
                     {{ form_row(registrationForm.prenom , {'label':'prenom','attr':{'placeholder':'prenom' , 'class':'input'}})}}
 							</div>
                          
-						<div class="form-group">	
+						<div >	
                         {{ form_row(registrationForm.email , {'label':'email','attr':{'placeholder':'user@gmail.com' , 'class':'input'}})}}
 
 							</div>
 
-						 <div class="form-group">
+						 <div >
                              {{ form_row(registrationForm.password, { 'label': 'Password','attr':{'placeholder':'**********' , 'class':'input'} }) }} 
 							    
 							</div> 
@@ -53,19 +53,20 @@
 						
 
 
-							<div class="form-group">
+							<div >
 						
 									
                              {{ form_row(registrationForm.agreeTerms, { 'attr': {'class': 'input-checkbox'} }) }}
 										
 							</div>
 							
-								<div class="form-group">
+								<div >
 						
 									
                              {{ form_row(registrationForm.Image, { 'label':'image','attr':{  'class':'file'} }) }}
 										
 							</div>
+							{{form_widget(registrationForm.captcha) }}
 							   <button type="submit" class="btn btn-primary" >Register</button>
 							
 									

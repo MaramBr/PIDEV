@@ -36,6 +36,8 @@ class ReclamationController extends AbstractController
      {
          $reclamation = new Reclamation();
          $reclamation->setDateR(new \DateTime('now'));
+         $user=$this->getUser();
+        $reclamation->setUser($user);
          $form = $this->createForm(ReclamationType::class, $reclamation);
          $form->handleRequest($request);
      

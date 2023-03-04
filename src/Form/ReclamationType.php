@@ -16,7 +16,7 @@ class ReclamationType extends AbstractType
             ->add('TitreR')
             ->add('DescriptionR')
             ->add('genre')
-            ->add('user')
+            
         ;
     }
 

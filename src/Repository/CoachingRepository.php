@@ -63,4 +63,34 @@ class CoachingRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+public function findAvailableCoachesForCourseAndDate($cours, $dispo)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.cours = :cours')
+            ->andWhere('c.availability LIKE :dispoCoach')
+            ->setParameter('cours', $cours)
+            ->setParameter('dispoCoach', '%'.$dispo.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByCours(string $cours): ?Coaching
+{
+    return $this->findOneBy(['cours' => $cours]);
+}
+
+
+
+public function findCoachingByCours($cours): ?Coaching
+   {
+       return $this->createQueryBuilder('Coaching')
+           ->andWhere('Coaching.cours LIKE :cours')
+           ->setParameter('cours','%'.$cours.'%')
+          ->getQuery()
+           ->getResult()
+        ;
+   }
+
+ 
 }

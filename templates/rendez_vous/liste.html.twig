@@ -1,0 +1,54 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}coaching{% endblock %}
+
+{% block body %}
+
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">coaching</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div><strong>Coach</strong></div>
+							</div>
+							
+							
+							
+                         
+                             <div class="order-col">
+								<div> Disponibilte du Coach </div>
+                                <div>{{coaching.dispoCoach}}</div>
+							</div>
+                             <div class="order-col">
+								<div> Image du Coach </div>
+                                <div>    <td><img src="{{ asset('/uploads/coach/' ~ coaching.imgCoach) }}?t={{ date().getTimestamp() }}" alt="image"  width = "50%"></td>
+</div>
+							</div>
+                            <div class="order-col">
+								<div> Cours </div>
+                                <div>{{coaching.Cours}}</div>
+								<div><strong class="order-total">Coach Yoga</strong></div>
+							</div>
+						</div>
+                        
+						
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-2">
+								
+								
+							</div>
+
+						<a href="{{ path('addrdv2', {id:coaching.id}) }}" class="primary-btn order-submit">Réserver votre Coach</a>
+						<a href="{{ path('email') }}" class="primary-btn order-submit">mm</a>
+
+					</div>
+                    </div>
+					
+     
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

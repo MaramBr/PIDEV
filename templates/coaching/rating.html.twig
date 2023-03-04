@@ -1,0 +1,31 @@
+<form id="rating-form" method="POST" action="{{ path('coach_rating', {id: Coaching
+.id}) }}">
+    <label for="rating">Rate the coach:</label>
+    <select id="rating" name="rating">
+        <option value="1">1 star</option>
+        <option value="2">2 stars</option>
+        <option value="3">3 stars</option>
+        <option value="4">4 stars</option>
+        <option value="5">5 stars</option>
+    </select>
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+    var form = document.getElementById('rating-form');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var rating = document.getElementById('rating').value;
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', form.action);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                alert(xhr.responseText);
+            } else {
+                alert('Something went wrong');
+            }
+        };
+        xhr.send('rating=' + rating);
+    });
+</script>

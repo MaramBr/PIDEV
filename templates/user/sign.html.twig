@@ -1,0 +1,49 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}E-FIT!{% endblock %}
+{% block body %}
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+					<div class="col-md-7">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Billing address</h3>
+							</div>
+                            {{ form_start(registrationForm) }}
+							<div class="form-group">
+								{{ form_row(registrationForm.email) }}
+							</div>
+							<div class="form-group">
+							     {{ form_row(registrationForm.password, { label: 'Password' }) }}
+							</div>
+							<div class="form-group">
+							     {{ form_row(registrationForm.nom) }}
+							</div>
+							<div class="form-group">
+							 {{ form_row(registrationForm.agreeTerms) }}
+
+							</div>
+							   <button type="submit" class="btn">Register</button>
+							
+									
+								</div>
+							</div>
+						</div>
+
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                            {{ form_end(registrationForm) }}
+
+					
+						
+						
+{% endblock %}

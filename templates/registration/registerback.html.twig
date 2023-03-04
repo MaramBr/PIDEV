@@ -1,0 +1,124 @@
+{# {% extends 'basefront.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+ <div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+					<div class="col-md-7">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Ajouter</h3>
+							</div>
+                           
+                            {{ form_start(formback) }}
+                             	<div class="form-group">
+                    {{ form_row(formback.nom , {'label':'nom','attr':{'placeholder':'nom' , 'class':'input'}})}}
+							</div>
+							<div class="form-group">
+                    {{ form_row(formback.prenom , {'label':'prenom','attr':{'placeholder':'prenom' , 'class':'input'}})}}
+							</div>
+                         
+						<div class="form-group">	
+                        {{ form_row(formback.email , {'label':'email','attr':{'placeholder':'user@gmail.com' , 'class':'input'}})}}
+
+							</div>
+
+							<div class="form-group">
+                             {{ form_row(formback.password, { label: 'Password','attr':{'placeholder':'**********' , 'class':'input'} }) }} 
+							    
+							</div>
+						
+
+
+							{# <div class="form-group">
+						
+									
+                             {{ form_row(formback.agreeTerms, { 'attr': {'class': 'input-checkbox'} }) }}
+										
+							</div> 
+
+                            <div class="form-group">
+						
+									
+                             {{ form_row(formback.roles,  {'help_attr': {'class': 'CUSTOM_LABEL_CLASS'} }) }}
+										
+							</div>
+								<div class="form-group">
+						
+									
+                             {{ form_row(formback.Image, { 'label':'image','attr':{ 'class':'file'} }) }}
+										
+							</div>
+							   <button type="submit" class="btn">Register</button>
+							
+									
+								</div>
+							</div>
+						</div>
+
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                            {{ form_end(formback) }}
+
+					
+{% endblock %} #}
+
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic form elements</h4>
+                    <p class="card-description"> Basic form elements </p>
+                    {{ form_start(formback, {'attr': {'novalidate':'novalidate'}} ) }}
+                    <form class="forms-sample">
+                      <div class="form-group">
+                       {{ form_row(formback.nom , {'label':'nom','attr':{'placeholder':'nom' , 'class':'form-control'}})}}
+                      </div>
+					     <div class="form-group">
+                       {{ form_row(formback.prenom , {'label':'prenom','attr':{'placeholder':'prenom' , 'class':'form-control'}})}}
+                      </div>
+                         <div class="form-group">
+                       {{ form_row(formback.email , {'label':'email','attr':{'placeholder':'email' , 'class':'form-control'}})}}
+                    </div>
+						 <div class="form-group">
+               {{ form_row(formback.password, { 'label': 'Password','attr':{'placeholder':'**********' ,  'class':'form-control'} }) }} 
+							    
+							</div> 
+              
+                 
+                          <div class="form-group">
+						
+									
+                             {{ form_row(formback.roles,  {'help_attr': {'class': 'CUSTOM_LABEL_CLASS'} }) }}
+										
+							</div>
+								<div class="form-group">
+						
+									
+                             {{ form_row(formback.Image, { 'label':'image','attr':{ 'class':'file'} }) }}
+										
+							</div>
+                     <br>
+							   <button type="submit"  class="btn btn-primary mr-2">Ajouter</button>
+                    
+							
+									
+							
+                     {{ form_end(formback ) }}
+                     
+                    </form>
+               
+                    </div>
+                </div>
+            </div>
+{% endblock %}

@@ -5,37 +5,62 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Scheb\TwoFactorBundle\Model\Email\TwoFactorInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFactorInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("users")]
     private ?int $id = null;
 
+
+    
+
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups("users")]
+// #[Assert\Type(type: ['alnum'], message: "The adresse '{{ value }}' is not valid")]
+#[Assert\Email(
+    message: 'The email {{ value }} is not a valid email.',
+)]
+#[Assert\NotBlank(message:"veuillez remplir le champs")]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups("users")]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups("users")]
     private ?string $password = null;
 
+
     #[ORM\Column(length: 255)]
+    #[Groups("users")]
+    #[Assert\NotBlank(message:"veuillez remplir le champs")]
+    #[Assert\Type(type: ['alpha'], message: "The name '{{ value }}' is not valid")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("users")]
+    #[Assert\Type(type: ['alpha'], message: "The name '{{ value }}' is not valid")]
+    #[Assert\NotBlank(message:"veuillez remplir le champs")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("users")]
     private ?string $image = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reclamation::class)]
@@ -43,6 +68,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Commande::class)]
     private Collection $commandes;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups("users")]
+    private ?string $reset_token = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups("users")]
+    private ?string $authCode = null;
+
+    #[ORM\Column(nullable: false)]
+    private ?bool $isActive = false;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $disabledUntil = null;
+
 
     public function __construct()
     {
@@ -119,6 +159,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+   
     /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
@@ -234,4 +275,90 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getResetToken(): ?string
+    {
+        return $this->reset_token;
+    }
+
+    public function setResetToken(?string $reset_token): self
+    {
+        $this->reset_token = $reset_token;
+
+        return $this;
+    }
+
+    public function getAuthCode(): ?string
+    {
+        return $this->authCode;
+    }
+
+    public function setAuthCode(?string $authCode): self
+    {
+        $this->authCode = $authCode;
+
+        return $this;
+    }
+
+     /**
+     * Return true if the user should do two-factor authentication.
+     */
+    public function isEmailAuthEnabled(): bool
+    {
+ return true;
+    }
+
+    /**
+     * Return user email address.
+     */
+    public function getEmailAuthRecipient(): string
+    {
+return $this->email;
+    }
+
+    /**
+     * Return the authentication code.
+     */
+    public function getEmailAuthCode(): ?string
+    {
+ if(null == $this->authCode){
+                         throw new \LogicalException('The email authentification code was not set');
+                      }
+ return $this->authCode;
+    }
+
+    /**
+     * Set the authentication code.
+     */
+    public function setEmailAuthCode(string $authCode): void
+    {
+        $this->authCode =$authCode;
+
+    }
+
+    public function isIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(?bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getDisabledUntil(): ?\DateTimeInterface
+    {
+        return $this->disabledUntil;
+    }
+
+    public function setDisabledUntil(?\DateTimeInterface $disabledUntil): self
+    {
+        $this->disabledUntil = $disabledUntil;
+
+        return $this;
+    }
+
+
 }

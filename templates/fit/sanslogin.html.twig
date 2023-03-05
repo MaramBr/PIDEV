@@ -18,10 +18,11 @@
 					</ul>
                         {% if app.user %}
 						<ul class="header-links pull-right">
-												<div style="color: #FFFFFF; font-size: 20px; font-weight: bold; text-transform: uppercase; margin: 0; padding: 10px; position: fixed; top: 0; left: 80%; transform: translateX(-50%); right: 80px;">
-    Bonjour {{ app.user.prenom }} {{ app.user.nom }}
-</div>
 
+                                             <font color="white" style="position:absolute;font-size: 20px; font-weight: bold; text-transform: uppercase; margin: 0; padding: 10px; top: 10; left: 79%; transform: translateX(-50%); right: 0px;"> Bonjour {{ app.user.prenom }} {{ app.user.nom }} </font>
+                                                                </ul>
+
+<ul class="header-links pull-right">
                                 {# <a class="btn btn-outline-info" href="{{ path('membre') }}">Page membre</a> #}
                                                        {% if is_granted('ROLE_ADMIN') and is_granted('ROLE_Coach') %}
 																

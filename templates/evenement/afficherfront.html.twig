@@ -1,0 +1,84 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}result{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+</head>
+
+<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+
+					
+			<div class="container">
+				<!-- row -->
+
+				<div class="row">
+					<!-- shop -->
+			 {% for i in result %}		
+					<div class="col-md-4 col-xs-6">
+						<div class="shop">
+							<div class="shop-img">
+								<img src="{{ asset('/uploads/brochures/'~i.Image) }}" alt="image" >
+							</div>
+							<div class="shop-body">
+								<h3>{{i.nom}}</h3>
+								nombre Participant Restant:<h5> {{i.nbParticipant}}</h5>
+								<a href="{{ path('detaille', {id:i.id}) }}" class="cta-btn"> Plus Détailles <i class="fa fa-arrow-circle-right"></i></a>
+
+							</div>
+
+						</div>
+					</div>
+					
+		 {% endfor %}
+
+					<!-- /shop -->
+
+
+
+			</div>
+
+			{{ knp_pagination_render(result) }}
+				</div>
+				<!-- /row --> 
+			<!-- /container -->
+			
+		</div>
+		<!-- /SECTION -->
+	<div class="row">
+					<div class="col-md-12">
+						<div class="newsletter">
+							
+							<form>
+							
+                  <button class="newsletter-btn"><a href="/Participant/add" >  Participer Maintenant</a></button>
+
+                  <input type="text" class="input" id="search"  placeholder="chercher">
+
+							</form>
+							
+						</div>
+					</div>
+				</div>
+
+			</div>
+				</div>
+				<!-- /row --> 
+			<!-- /container -->
+				
+		</div>
+		<!-- /SECTION -->
+	
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
+
+
+
+
+
+

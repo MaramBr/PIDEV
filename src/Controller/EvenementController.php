@@ -30,6 +30,10 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 use Knp\Component\Pager\PaginatorInterface;
 
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
+
  
 class EvenementController extends AbstractController
 {     
@@ -54,7 +58,7 @@ class EvenementController extends AbstractController
             $request->query->getInt('page',1),//num page
             3
         );
-        return $this->render ('Evenement/affich.html.twig',['result'=>$Evenement]);
+        return $this->render ('Evenement/afficherfront.html.twig',['result'=>$Evenement]);
    
        
     }
@@ -244,6 +248,26 @@ public function searchEvenementx(Request $request, NormalizerInterface $Normaliz
     return new Response($retour);
 }
 
+ #[Route('/calendar1', name: 'calendar1')]
+public function calendar(ManagerRegistry $doctrine): Response
+{
+    $evenements = $doctrine->getRepository(Evenement::class)->findAll();
+    $rdvs = [];
+
+    foreach ($evenements as $evenement) {
+        $rdvs[] = [
+            'id' => $evenement->getId(),
+            'title' => $evenement->getNom(),
+            'start' => $evenement->getDatedebut()->format('Y-m-d'),
+            'end' => $evenement->getDatefin()->format('Y-m-d'),
+        ];
+    }
+
+    $data = json_encode($rdvs);
+
+    return $this->render('Evenement/calendar.html.twig', compact('data'));
+}
+    
 
 /**
      * @Route("/order_By_Nom", name="order_By_Nom" ,methods={"GET"})
@@ -278,7 +302,57 @@ public function searchEvenementx(Request $request, NormalizerInterface $Normaliz
     }
     
     
+#[Route('/detaille/{id}', name: 'detaille')]
+    public function detaille($id,ManagerRegistry $mg): Response
+    {
+        $repo=$mg->getRepository(Evenement::class);
+        $resultat = $repo ->find($id);
+       
+        return $this->render('Evenement/affichdetaille.html.twig', [
+            'Evenement' => $resultat,
+        ]);
+    }
 
+
+
+
+
+#[Route('/like/{id}', name: 'like', methods: ['POST'])]
+public function likeEvenement(Request $request, Evenement $Evenement): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+    $Evenement->setLikeButton($Evenement->getLikeButton() + 1);
+    if ( $Evenement->setLikeButton($Evenement->getLikeButton() == 1) )
+
+            $Evenement->getDislikeButton() == 0  ;
+
+    $entityManager->persist($Evenement);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('detaille', ['id' => $Evenement->getId()]);
+}
+
+
+    
+
+#[Route('/dislike/{id}', name: 'dislike', methods: ['POST'])]
+
+public function dislikeEvenement(Request $request, Evenement $Evenement): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+    $Evenement->setDislikeButton($Evenement->getDislikeButton() + 1);
+
+  if(  $Evenement->setDislikeButton($Evenement->getDislikeButton() == 1))
+       { $Evenement->getLikeButton() == 0 ;}
+    $entityManager->persist($Evenement);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('detaille', ['id' => $Evenement->getId()]);
+}
+
+
+
+ 
 
 }
 

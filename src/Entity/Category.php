@@ -17,12 +17,6 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"veuillez remplir le champs")]
-    #[Assert\Length(min:3, minMessage:"Votre nom inferieure a 3 caractères.")]
-    #[Assert\Regex(
-        pattern:"/^[^0-9]+$/",
-        message:" ne doit pas contenir de chiffres"
-    )]
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'Categorys', targetEntity: Produit::class)]

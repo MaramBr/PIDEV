@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CommandeProduitRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommandeProduitRepository::class)]
 class CommandeProduit
@@ -11,15 +12,21 @@ class CommandeProduit
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("commandeProduit")]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups("commandeProduit")]
     private ?int $quantiteProduit = null;
 
     #[ORM\ManyToOne(inversedBy: 'Commande')]
+    #[ORM\JoinColumn(onDelete:'CASCADE')]
+    #[Groups("commandeProduit")]
     private ?Produit $Produit = null;
 
     #[ORM\ManyToOne(inversedBy: 'commandeProduits')]
+    #[ORM\JoinColumn(onDelete:'CASCADE')]
+    #[Groups("commandeProduit")]
     private ?Commande $Commande = null;
 
     public function getId(): ?int

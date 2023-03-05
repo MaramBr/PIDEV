@@ -1,0 +1,101 @@
+{% extends 'baseBack.html.twig' %}
+{% block title %} E-fit Admin Commande {% endblock %}
+{% block body%} 
+
+<div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Basic Table</h4>
+                   
+                    <div class="table-responsive">
+                      <table class="table">
+                       {%  for message in app.flashes('updateStatus')  %}
+                            <div class="alert alert-success" role="alert">
+                                {{message}}                               </div>
+                        {% endfor %}
+                        <thead>
+                        <tr>
+                            <th>Reference</th>
+                            <th>Liste des produits</th>
+                            <th>ID de client</th>
+                            <th>Montant</th>
+                            <th>Date de creation</th>
+                            <th>Status</th>
+                             <th  >Modifier</th>
+                             <th >Supprimer</th>
+                             <th >Mission</th>
+                        </tr>
+                        </thead>
+                             <tfoot>
+                        <tr>
+                            <th>Reference</th>
+                            <th>Liste des produits</th>
+                            <th>ID de client</th>
+                            <th>Montant</th>
+                            <th>Date de creation</th>
+                            <th>Status</th>
+                            <th  >Modifier</th>
+                             <th >Supprimer</th>
+                             <th >Mission</th>
+                        </tr>
+                        </tfoot>
+
+                        <tbody>
+                      {% for i in data %}
+<tr>
+ <td>{{ i.id }}</td>
+ <td> {% for a in  i.getCommandeProduits().toArray() %}
+    <div>{{ a.getProduit().quantite}} x {{ a.getProduit().nom}} | {{ a.getProduit().prix}}.00DT</div>
+     {% endfor %} </td>
+<td>{{ i.utilisateur.id}}</td>
+ <td>{{ i.montant }}.00DT</td>
+<td>{{ i.getDateCreation().format('j-m-y') }}</td>
+  <td>{{ i.status }}</td>
+  <td><a href="{{ path('updateCommande',{'idP': i.id }) }}" class="btn btn-outline-warning">
+                                    <i class="fas fa-pen">Modifier</i>
+                                </a></td>
+                                <td><a href="{{ path('commandeDelete2',{'id':i.id}) }}" class="btn btn-outline-danger">
+                                    <i class="fas fa-pen">Supprimer</i>
+                                </a></td>
+
+                                 <td><a href="{{ path('pdfC',{'id':i.id}) }}" class="btn btn-outline-info">
+                                    <i class="fas fa-pen">Mission PDF</i>
+                                </a></td>
+                                
+                                
+
+</tr>
+
+{%endfor%}
+</tbody>
+
+    </table >
+   
+                   <button type="button" class="btn btn-success" ><a href="{{ path('stat')}}">STATISTIQUE</a></button>
+                        <li ><a href="{{ path('order_By_montant')}}">Trier par montant</a></li>
+                         <li ><a href="{{ path('order_By_date')}}">Trier par date</a></li>
+                        
+             
+
+     
+                    </div>
+                  </div>
+                </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+ $(document).ready(function(){
+    $("#search").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("table tr").each(function() {
+            if ($(this).text().toLowerCase().indexOf(value) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+});
+
+</script>
+{% endblock %} 

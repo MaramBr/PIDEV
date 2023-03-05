@@ -1,0 +1,225 @@
+{% extends 'basefront.html.twig' %}
+{% block title %} Votre panier{% endblock %}
+{% set prod = {} %}
+{% for i in data %}
+
+        {%  set prod = prod|merge([i.id]) %}
+    {% endfor %}
+{% set count=0 %}
+
+{% block cart %}
+
+
+
+
+								<div class="dropdown">
+									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-shopping-cart"></i>
+										<span>Mon panier</span>	
+                                        <div class="qty">{{data.getTotalItemCount}} </div>
+									</a>
+
+                                    <div class="cart-dropdown">
+
+                                    {% for i in data %}
+										<div class="cart-list">
+											<div class="product-widget">
+												<div class="product-img">
+													<img src={{asset('/uploads/produits/'~i.image)}} alt="" width="5%">
+												</div>
+												<div class="product-body">
+													<h3 class="product-name"><a href="#"> {{ i.nom}}</a></h3>
+													<h4 class="product-price"><span class="qty">{{ i.quantite }}x</span>{{ i.prix }}.00DT</h4>
+												</div>
+												<button class="delete"><a href="{{ path('removeP',{id : i.id}) }}"><i class="fa fa-close"></i></a></button>
+											</div>
+                                        </div>
+                                        
+									{% endfor %}
+
+                                    <div class="cart-summary">
+											<small>  {{ data|length}} Item(s) selected </small>
+                                           <div> <small>  + 7.00 Frais de livraison</small> 	</div>
+											<h5>TOTAL: {{ total + 7.00 }}.00 DT</h5>
+										</div>
+
+										<div class="cart-btns">
+											<a href="{{ path('panier',) }}" >Voir Panier</a>
+                                            <a href="{{ path('panierToCommande',{ idUtilisateur:1  }) }}">Commander <i class="fa fa-arrow-circle-right"></i></a>
+										</div>
+									
+								</div>
+                             
+  
+{% endblock %}
+
+{% block wishlist%}
+								<div>
+									<a href="{{ path('app_favorie',) }}">
+										<i class="fa fa-heart-o"></i>
+										<span>Mes Favoris</span>
+										
+									</a>
+								</div>
+								{% endblock %}
+
+   {% block NAV %}
+					<ul class="main-nav nav navbar-nav">
+						<li class=><a href="#">Home</a></li>
+						<li><a href="/Produit/afficher">Produit</a></li>
+						<li><a href="#">Categories</a></li>
+						<li><a href="#">Evénement</a></li>
+						<li><a href="#">Coaching</a></li>
+						<li><a href="/commande">Commande</a></li>
+						<li><a href="#">Réclamation</a></li>
+					</ul>  {% endblock  %}
+
+
+
+{% block body %}
+    <div class="bg-light p-3">
+        <h3>Votre panier dispose de : <span>{{data.getTotalItemCount}}  Produits</span></h3>
+    </div>
+
+        <table class="table">
+           
+                   <thead>
+                           <tr class="bg-info">
+                               <th>SL No.</th>
+                               <th>Produit</th>
+                               <th>Quantite</th>
+                               <th>Nom Produit</th>
+                               <th>prix</th>
+                               <th>Action</th>
+                           </tr>
+                           </thead>
+						    {%  for message in app.flashes('delP')  %}
+                               <div class="alert alert-success" role="alert">
+                                   {{message}}                               </div>
+                           {% endfor %}
+						    {%  for message in app.flashes('empty')  %}
+                               <div class="alert alert-danger" role="alert">
+                                   {{message}}                               </div>
+                           {% endfor %}
+						   {%  for message in app.flashes('addProduit')  %}
+                               <div class="alert alert-success" role="alert">
+                                   {{message}}                               </div>
+                           {% endfor %}
+
+            <tbody>
+            {% for i in data %}
+                               {% set count=count+1 %}
+							   
+                            <tr >
+                            
+                               <td >{{ count }}</td>
+                               <td ><a href="#"><img src={{asset('/uploads/produits/'~i.image)}} alt="" width="10%" /></a></td>
+
+                       
+                                  <td class="product-quantity" data-title="Quantity"><div class="quantity">
+                                        <a href="#" type="button"   value="-" class="minus"> - </a>
+                                        <input type="text" name="quantity" value="{{ i.quantite }}" title="Qty"  size="5">
+                                        <a href="#" type="button"  value="+" class="plus"> + </a>
+                                        </div></td>
+                               <td >
+                                       {{ i.nom}}
+                               <td >
+                                       {{ i.prix }}DT
+                               </td>
+                               <td >
+                                  <a href="{{ path('removeP',{id : i.id}) }}">
+                                  <div class="btn btn-sm btn-danger"> Supprimer </div>
+                                  </a>
+                               </td>
+                           </tr>
+                           {% endfor %}
+						    <tr class="bg-info">
+                               <th>SL No.</th>
+                               <th>Produit</th>
+                               <th>Quantite</th>
+                               <th>Nom Produit</th>
+                               <th>prix</th>
+                               <th>Action</th>
+                           </tr>
+                                      <tr>   
+                <th colspan="6" class="text-right"> 
+                  <a href="{{ path('app') }}" class="primary-btn order-submit">Continuer votre shopping</a>
+                </th>
+                </tr>
+                       </table>
+					      <div style="right: 0">{{ knp_pagination_render(data) }}</div>
+						 
+					   
+           <!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+<!-- Order Details -->
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">Confirmer Votre Panier</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div><strong>PRODUITS</strong></div>
+								<div><strong>TOTAL</strong></div>
+							</div>
+							<div class="order-products">
+                            {% for i in data %}
+								<div class="order-col">
+                                
+									<div>{{ i.quantite }}x {{ i.nom }}</div>
+									<div>{{i.prix * i.quantite}}.00 DT</div>
+								</div>
+                                {% endfor %}
+							</div>
+                              
+                              
+							<div class="order-col">
+								<div>Frait de livraison:</div>
+								<div><strong>7.00 DT</strong></div>
+							</div>
+                            
+                            
+							<div class="order-col">
+								<div><strong>TOTAL</strong></div>
+								<div><strong class="order-total">{{ total + 7.00 }}.00 DT</strong></div>
+							</div>
+                            
+						</div>
+                        <h4>Mode de payement</h4>
+						<div class="payment-method">
+							<div class="input-radio">
+								
+								<label for="payment-2">
+									<span>Espece au Livraison</span>
+									
+								</label>
+							</div>
+					
+							
+						</div>
+
+						
+						<a href="{{ path('panierToCommande',{ idUtilisateur:1  }) }}" class="primary-btn order-submit">Commander</a>
+					</div>
+					<!-- /Order Details -->
+                    	</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+                     
+
+                       <div class="clearfix"> </div>
+                   </div>
+
+               </div>
+           </div>
+
+       
+
+{% endblock %}

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommandeRepository::class)]
 class Commande
@@ -14,29 +15,39 @@ class Commande
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("commande")]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups("commande")]
     private ?\DateTimeInterface $date_creation = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("commande")]
     private ?string $status = null;
 
     #[ORM\Column]
+    #[Groups("commande")]
     private ?float $montant = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::STRING)]
+    #[Groups("commande")]
     private ?string $reference = null;
 
-    #[ORM\OneToMany(mappedBy: 'Commande', targetEntity: CommandeProduit::class)]
+    #[ORM\OneToMany(mappedBy: 'Commande',cascade:['persist','remove'], targetEntity: CommandeProduit::class)]
+    #[Groups("commande")]
     private Collection $commandeProduits;
 
     #[ORM\ManyToOne(inversedBy: 'commandes')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Groups("commande","utilisateur")]
     private ?User $utilisateur = null;
 
     public function __construct()
     {
+        $this->date_creation = date_create();
         $this->commandeProduits = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -44,11 +55,11 @@ class Commande
         return $this->id;
     }
 
+
     public function getDateCreation(): ?\DateTimeInterface
     {
         return $this->date_creation;
     }
-
     public function setDateCreation(\DateTimeInterface $date_creation): self
     {
         $this->date_creation = $date_creation;
@@ -56,11 +67,11 @@ class Commande
         return $this;
     }
 
+
     public function getStatus(): ?string
     {
         return $this->status;
     }
-
     public function setStatus(string $status): self
     {
         $this->status = $status;
@@ -68,11 +79,11 @@ class Commande
         return $this;
     }
 
+
     public function getMontant(): ?float
     {
         return $this->montant;
     }
-
     public function setMontant(float $montant): self
     {
         $this->montant = $montant;
@@ -80,11 +91,11 @@ class Commande
         return $this;
     }
 
+
     public function getReference(): ?string
     {
         return $this->reference;
     }
-
     public function setReference(string $reference): self
     {
         $this->reference = $reference;
@@ -92,6 +103,8 @@ class Commande
         return $this;
     }
 
+
+    
     /**
      * @return Collection<int, CommandeProduit>
      */

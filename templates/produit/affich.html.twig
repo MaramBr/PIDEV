@@ -2,6 +2,51 @@
 
 {% block title %}Produit{% endblock %}
 
+{% block cart %}
+
+
+
+
+								<div class="dropdown">
+									<a   class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-shopping-cart" ></i>
+										
+										<a href="{{ path('panier',) }}" >Mon panier</a>	
+                                        
+									</a>
+									
+
+                                  
+
+								</div>
+                             
+  
+{% endblock %}
+
+{% block wishlist%}
+								<div>
+									<a href="{{ path('app_favorie',) }}">
+										<i class="fa fa-heart-o"></i>
+										<span>Mes Favoris</span>
+										
+									</a>
+								</div>
+								{% endblock %}
+
+
+
+ {% block NAV %}
+					<ul class="main-nav nav navbar-nav">
+						<li ><a href="#">Home</a></li>
+						<li class='active'><a href="/Produit/afficher">Produit</a></li>
+						<li><a href="#">Categories</a></li>
+						<li><a href="#">Evénement</a></li>
+						<li><a href="#">Coaching</a></li>
+						<li ><a href="/commande">Commande</a></li>
+						<li><a href="#">Réclamation</a></li>
+					</ul>  {% endblock  %}
+
+
 {% block body %}
 <!-- SECTION -->
 

@@ -64,9 +64,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFacto
     private ?string $image = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reclamation::class)]
+    #[Groups("utilisateur")]
     private Collection $Reclamations;
 
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Commande::class)]
+    #[Groups("utilisateur")]
     private Collection $commandes;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -83,6 +85,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFacto
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $disabledUntil = null;
 
+
+
+    #[ORM\OneToOne(mappedBy: 'user',cascade:['persist','remove'], targetEntity: Panier::class)]
+    #[Groups("user")]
+    private $panier;
 
     public function __construct()
     {
@@ -366,4 +373,36 @@ return $this->email;
     }
 
 
+
+    public function getPanier(): ?Panier
+    {
+        return $this->panier;
+    }
+
+   /* public function setPanier(?Panier $panier): self
+    {
+        $this->panier = $panier;
+
+        return $this;
+    }*/
+    public function setPanier(?Panier $panier): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($panier === null && $this->panier !== null) {
+            $this->panier->setUtilisateur(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($panier !== null && $panier->getUtilisateur() !== $this) {
+            $panier->setUtilisateur($this);
+        }
+
+        $this->panier = $panier;
+
+        return $this;
+    }
+    public function __toString()
+    {
+        return sprintf('%s: %s ', $this->nom, $this->prenom);
+    }
 }

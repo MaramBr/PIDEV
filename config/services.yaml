@@ -10,6 +10,7 @@ parameters:
     Coaching_directory : '%kernel.project_dir%/public/uploads/coach'
 
 # user_directory: '%kernel.project_dir%/public/uploads/users'
+    produit_directory: '%kernel.project_dir%/public/uploads/produits'
 services:
     # default configuration for services in *this* file
     _defaults:

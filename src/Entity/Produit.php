@@ -95,10 +95,29 @@ class Produit
     #[ORM\Column(nullable: true)]
     private ?int $dislikes = null;
 
+   
+    #[ORM\ManyToMany(inversedBy: 'produits',targetEntity: Panier::class)]
+    #[ORM\JoinTable(name:'panierproduit')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Groups("produit")]
+    private Collection $panier;
+
+    #[ORM\ManyToMany(targetEntity: Favorie::class, mappedBy: 'produit')]
+    private Collection $favories;
+
+   
+    #[ORM\ManyToMany(inversedBy: 'produits',targetEntity: Panier::class)]
+    #[ORM\JoinTable(name:'panierproduit')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Groups("produit")]
+    private Collection $panier;
+
+    #[ORM\ManyToMany(targetEntity: Favorie::class, mappedBy: 'produit')]
+    private Collection $favories;
+
     public function __construct()
     {
         $this->Commande = new ArrayCollection();
-        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +195,16 @@ class Produit
         $this->Categorys = $Categorys;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->getNom();
+        $this->getDescription();
+        $this->getQuantite();
+        $this->getPrix();
+        $this->getImage();
+        $this->getCategorys();
     }
 
     /**
@@ -267,6 +296,61 @@ class Produit
     public function setDislikes(?int $dislikes): self
     {
         $this->dislikes = $dislikes;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|Panier[]
+     */
+    public function getPanier(): Collection
+    {
+        return $this->panier;
+    }
+
+    public function addPanier(Panier $panier): self
+    {
+        if (!$this->panier->contains($panier)) {
+            $this->panier->add($panier);
+            $panier->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): self
+    {
+        if ($this->panier->removeElement($panier)) {
+            $panier->removeProduit($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favorie>
+     */
+    public function getFavories(): Collection
+    {
+        return $this->favories;
+    }
+
+    public function addFavory(Favorie $favory): self
+    {
+        if (!$this->favories->contains($favory)) {
+            $this->favories->add($favory);
+            $favory->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavory(Favorie $favory): self
+    {
+        if ($this->favories->removeElement($favory)) {
+            $favory->removeProduit($this);
+        }
 
         return $this;
     }

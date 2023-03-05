@@ -14,6 +14,8 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+use Knp\Component\Pager\PaginatorInterface;
+
 class HomeController extends AbstractController
 {    /**
     * @Route("/", name="home")
@@ -147,15 +149,21 @@ class HomeController extends AbstractController
   
 
   #[Route('/listing', name: 'listing')]
-    public function listing1(UserRepository $repo,Request $request)
+    public function listing1(UserRepository $repo,Request $request,PaginatorInterface $paginator )
     { 
         
         if ($this->isGranted('ROLE_ADMIN')) {
        $user=$repo->FindAll();
-       
+       $data= $paginator->paginate(
+        $user,
+        $request->query->getInt('page',1),//num page
+        1
+    );
     
       
-       return $this->render('user/userback.html.twig',array("user"=>$user));
+       return $this->render('user/userback.html.twig',[
+        'user' => $data,
+    ]);
         }
         else
         {

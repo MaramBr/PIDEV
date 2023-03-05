@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\Expr\Value;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Twilio\Rest\Client;
+use Knp\Component\Pager\PaginatorInterface;
 
 
 class ReclamationController extends AbstractController
@@ -47,14 +48,14 @@ class ReclamationController extends AbstractController
              $em->flush();
      /*
              $accountSid = 'AC099883ea0f07c67cd19e55b497fceb12';
-             $authToken = 'd8fa6aa7c108b93017bd1d9e4916d741';
+             $authToken = '2bfd114d146f1c1ee34a507fe8e5edac';
              $client = new Client($accountSid, $authToken);
      
              $message = $client->messages->create(
                  '+21692524435', // replace with admin's phone number
                  [
                      'from' => '+12766336884', // replace with your Twilio phone number
-                     'body' => 'New réclamation par ' . $form->get('user')->getData(),
+                     'body' => 'New réclamation par ' . $user,
                  ]
              );*/
      
@@ -65,22 +66,32 @@ class ReclamationController extends AbstractController
      }
  //////////////////////////affiche fil back ////////////////////////
      #[Route('/affichreclamation1', name: 'app_affrec')]
-     public function liste1 (ManagerRegistry $mg): Response
+     public function liste1 (ManagerRegistry $mg,PaginatorInterface $paginator ,Request $request): Response
      {
          $repo=$mg->getRepository(Reclamation::class);
          $resultat = $repo ->FindAll();
+      $data= $paginator->paginate(
+        $resultat,
+        $request->query->getInt('page',1),//num page
+        5
+    );
          return $this->render('reclamation/afficherback.html.twig', [
-             'rec' => $resultat,
+             'rec' => $data,
          ]);
      } 
   //////////////////////////l'affiche fil front ////////////////////////
   #[Route('/affichreclamation2', name: 'app_affrecfront')]
-  public function liste2 (ManagerRegistry $mg): Response
+  public function liste2 (ManagerRegistry $mg,PaginatorInterface $paginator ,Request $request): Response
   {  
      $repo=$mg->getRepository(Reclamation::class);
       $resultat = $repo ->FindAll();
+      $data= $paginator->paginate(
+        $resultat,
+        $request->query->getInt('page',1),//num page
+        5
+    );
       return $this->render('reclamation/afficherfront.html.twig', [
-          'recl' => $resultat,
+          'recl' => $data,
       ]);
   } 
  

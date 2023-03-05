@@ -52,6 +52,15 @@
                       </table>
                       <br>
                       <br>
+                      <center>
+                      <nav aria-label="Page navigation example">
+                              <ul class="pagination">
+								
+								        <li class="page-item"><a href="{{ knp_pagination_render(rec) }}"></a></li>
+						
+						                    	</ul>
+						                    </nav> 
+                      </center>
                         <a class="btn btn-success" href="{{path('PDF_Reclamation') }}">  PDF </a>
                         <script type="text/javascript">
                             function imprimer_page(){

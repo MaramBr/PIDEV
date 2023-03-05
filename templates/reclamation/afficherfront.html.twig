@@ -62,12 +62,16 @@ setTimeout(() => {
                     <div class="row">
                      <input id="ajax-search-input" type="text" name="search" placeholder="Rechercher..." class="input">
 
-					<div class="col-md-17">
-                <div class="card">
-                  <div class="card-body">
+					
                   <br>
+                  <br>
+                  <center>
                     <h4 class="card-title">Table des Reclamation</h4>
-                    
+                    </center>
+                     
+                    </div>
+                  </div>
+                </div>
                     </p>
                     <div class="table-responsive">
                     <br>
@@ -109,7 +113,7 @@ setTimeout(() => {
                             
 
                              {% if a.StatusR not in ['En cours de preparation', 'Confirmée']  %}
-                        <a class="primary-btn order-submit" href="{{ path('app_updater', {'id': a.id}) }}">Modifier</a>
+                        <a class="btn btn-warning" href="{{ path('app_updater', {'id': a.id}) }}">Modifier</a>
                               {% endif %}
                             
 
@@ -117,20 +121,26 @@ setTimeout(() => {
                             
                             
                             </td>
-                            <td><a href="removerecfront/{{a.id}}" class="primary-btn2 order-submit">supprimer</a></td>
+                            <td><a href="removerecfront/{{a.id}}" class="btn btn-danger">supprimer</a></td>
                           </tr>
                           {% endfor %}
                         </tbody>
-                      </table>                     
+                      </table>    
+                      <center> 
+                           <nav aria-label="Page navigation example">
+                              <ul class="pagination">
+								
+								        <li class="page-item"><a href="{{ knp_pagination_render(recl) }}"></a></li>
+						
+						                    	</ul>
+						                    </nav>          
                       <a href="/addreclamation" class="primary-btn order-submit" >Ajouter</a>
-                      
+                      </center>
                        <br>
-                    </div>
-                  </div>
-                </div>
-                 </div>
-                  </div>
-                </div>
+                       <br>
+                       <br>
+                   
+                 
                 </div>
            
 

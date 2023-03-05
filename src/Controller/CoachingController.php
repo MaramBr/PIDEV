@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
+use App\Services\QrcodeService;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -28,15 +29,21 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\Notify;
 use App\Repository\NotifyRepository;//controller
+use Endroid\QrCode\Builder\BuilderInterface;
+use Endroid\QrCodeBundle\Response\QrCodeResponse;
 
 
 class CoachingController extends AbstractController
 {
     #[Route('/coaching', name: 'app_coaching')]
     public function index(): Response
-    {
+    {$result = $customQrCodeBuilder
+        ->size(400)
+        ->margin(20)
+        ->build();
+    $response = new QrCodeResponse($result);
         return $this->render('coaching/coachdetaille.html.twig', [
-            'controller_name' => 'CoachingController',
+            'controller_name' => 'CoachingController','qr'=>$response->getContent()
         ]);
     }
     
@@ -173,13 +180,21 @@ class CoachingController extends AbstractController
     }
 
     #[Route('/detaille/{id}', name: 'detaille')]
-    public function detaille($id,ManagerRegistry $mg,NormalizerInterface $normalizer, LoggerInterface $logger): Response
+    public function detaille($id,ManagerRegistry $mg,NormalizerInterface $normalizer, LoggerInterface $logger,BuilderInterface $customQrCodeBuilder): Response
     {
         $repo=$mg->getRepository(Coaching::class);
         $resultat = $repo ->find($id);
         $logger->info("The array is: " . json_encode($resultat));
+
+       $result = $customQrCodeBuilder
+            ->size(400)
+            ->margin(20)
+            ->build();
+            $response = new QrCodeResponse($result);
+            
         return $this->render('coaching/coachdetaille.html.twig', [
             'Coaching' => $resultat,
+            'qr'=>$response->getContent()
         ]);
     }
 
@@ -383,5 +398,6 @@ public function dislikeCoaching(Request $request, Coaching $Coaching): Response
         //trie selon Date normal
 
     }
+    
    
 }

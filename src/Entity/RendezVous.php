@@ -28,6 +28,9 @@ class RendezVous
     #[ORM\OneToMany(mappedBy: 'rendezvous', targetEntity: Notify::class)]
     private Collection $notifies;
 
+    #[ORM\Column]
+    private ?bool $etatrdv = false;
+
     public function __construct()
     {
         $this->notifies = new ArrayCollection();
@@ -89,6 +92,18 @@ class RendezVous
                 $notify->setRendezvous(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isEtatrdv(): ?bool
+    {
+        return $this->etatrdv;
+    }
+
+    public function setEtatrdv(bool $etatrdv): self
+    {
+        $this->etatrdv = $etatrdv;
 
         return $this;
     }

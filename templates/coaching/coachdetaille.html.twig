@@ -29,6 +29,7 @@
 							
 						</div>
 					</div>
+					
 					<!-- /Product thumb imgs -->
 
 					<!-- Product details -->
@@ -45,6 +46,7 @@
                                     <i class="las la-star fa-2x"  data-index="3"></i>
                                     <i class="las la-star fa-2x"  data-index="4"></i>
                             </div>
+							
                          
                             <script
   src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -83,9 +85,12 @@ function resetStarsColors(){
 </script>
                             
                         </div>
+						
 							<div>
 								<h3 class="product-price">{{Coaching.Cours}}</h3>
+								
                                <h4 class="order-total">Disponibilite : {{Coaching.dispoCoach}}</h4>
+							   
 
 							</div>
 {{Coaching.descCoach}}
@@ -102,14 +107,33 @@ function resetStarsColors(){
 									<form method="POST" action="{{ path('dislike', {'id': Coaching.id}) }}">
         <button type="submit" name="dislike" class="btn btn-danger">Je n'aime pas ({{ Coaching.DislikeButton }})</button></form>
 								</label>
+</div>
+									<div class="add-to-cart">
+								
+						<a href="{{ path('addrdv2', {id:Coaching.id}) }}" class="primary-btn order-submit">Réserver votre Coach</a>
+							</div>
+							<div>	
+								{% set Coaching_id = Coaching.id %}
+								{% set Coaching_cours = Coaching.cours %}
+							{% set Coaching_desc = Coaching.descCoach %}
+						{% set Coaching_img = asset('uploads/coach' ~ Coaching.imgCoach) %}
+
+
+
+
+{% set qrData = 'Nom du Coaching: ' ~ Coaching_cours ~ ' - Description: ' ~ Coaching_desc ~ ' - Image: ' ~ Coaching_img %}
+                        
+{% set url_detaille = path('detaille', {'id': Coaching_id}) %}
+
+
+<td class="invert">
+    <img style="width: 100px" class="rounded mx-auto d-block" src="{{ qr_code_data_uri(qrData) }}" />
+</td>
 							</div>
 
 							
 
-							<div class="add-to-cart">
-								
-						<a href="{{ path('addrdv2', {id:Coaching.id}) }}" class="primary-btn order-submit">Réserver votre Coach</a>
-							</div>
+						
 
 						
 						

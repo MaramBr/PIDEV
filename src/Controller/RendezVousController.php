@@ -20,6 +20,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 use MercurySeries\FlashyBundle\FlashyNotifier;
+use App\Entity\Notify;
 
 
 
@@ -49,10 +50,13 @@ class RendezVousController extends AbstractController
     public function afficherrdvback(ManagerRegistry $mg): Response
     {
         $repo=$mg->getRepository(RendezVous::class);
+        $notify=$mg->getRepository(Notify::class);
+
         $resultat = $repo ->FindAll();
-        return $this->render('rendez_vous/afficherback.html.twig', [
-            'rdv' => $resultat,
-        ]);
+        $notif=$notify->FindAll();
+        return $this->render ('rendez_vous/afficherback.html.twig',['rdv'=>$resultat
+                                                                ,'notif'=>$notif
+]);
     }
 
     #[Route('/addrdv', name: 'addrdv')]
@@ -109,8 +113,8 @@ class RendezVousController extends AbstractController
             throw $this->createNotFoundException('Coaching not found for cours: '.$cours);
         }
 
-        return $this->render('rendez_vous/liste.html.twig', [
-            'coaching' => $coaching,
+        return $this->render('coaching/coachdetaille.html.twig', [
+            'Coaching' => $coaching,
         ]);
     }
 
@@ -168,21 +172,38 @@ class RendezVousController extends AbstractController
         ]);
     }
 
-    #[Route('/email', name: 'email')]
-    public function email(MailerInterface $mailer): Response
+    #[Route('/email/{id}', name: 'emailcoach')]
+    public function email(MailerInterface $mailer,ManagerRegistry $mg,RendezVousRepository $X,$id): Response
     {
+
+        
+        $RendezVous=$X->find($id);
+        $RendezVous->setEtatrdv('true');
+
+
+
         $content='<p>HTML body</p>';
+
         $email = (new Email())
             ->from('maram.brinsi@esprit.tn')
             ->to('maram.brinsi@esprit.tn')
             ->text('Body')
-            ->subject('Test email')
-            ->html('<p>Hello !</p>');
+            ->subject('Séance de Coaching')
+            ->html('Votre réservation a été confirmer');
+            $repo=$mg->getRepository(RendezVous::class);
+            $resultat = $repo ->FindAll();
 
     
         $mailer->send($email);
 
-        return $this->render('basefront.html.twig');
+        $em=$mg->getManager();
+        $em->persist($RendezVous);
+         $em->flush();
+        return $this->render('rendez_vous/afficherback.html.twig', [
+            'rdv' => $resultat,
+        ]);
+
+      //  return $this->render('rendez_vous/afficherback.html.twig');
     }
 
 
@@ -234,31 +255,7 @@ public function notify(FlashyNotifier $flashy): Response
 
     
 }
-/*
-#[Route('/calendar', name: 'calendar')]
 
-public function onCalendarSetData(RendezVous $calendar)
-    {
-        $start = $calendar->getStart();
-        $end = $calendar->getEnd();
-        $filters = $calendar->getFilters();
-
-        // You may want to make a custom query from your database to fill the calendar
-
-        $calendar->addRendezVous(new RendezVous(
-            'RendezVous 1',
-            new \DateTime('Tuesday this week'),
-            new \DateTime('Wednesdays this week')
-        ));
-
-        // If the end date is null or not defined, it creates a all day RendezVous
-        $calendar->addRendezVous(new RendezVous(
-            'All day RendezVous',
-            new \DateTime('Friday this week')
-        ));
-    }
-
-*/
 #[Route('/listerdv/{id}', name: 'listerdv')]
 
     public function listerdv(Coaching $coaching): Response
@@ -347,6 +344,38 @@ public function onCalendarSetData(RendezVous $calendar)
          //trie selon Date normal
  
      }
- 
+
+     #[Route('/statistics', name: 'RendezVous_statistics')]
+public function statistics(ManagerRegistry $doctrine): Response {
+    $em = $doctrine->getManager();
+    $RendezVousRepository = $em->getRepository(RendezVous::class);
+    $notify=$doctrine->getRepository(Notify::class);
+    $notif=$notify->FindAll();
+
+
+    // Get the total number of RendezVouss
+    $totalRendezVouss = $RendezVousRepository->createQueryBuilder('u')
+        ->select('COUNT(u.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+
+    // Get the number of RendezVouss per role
+    $RendezVousCoachings = $RendezVousRepository->createQueryBuilder('r')
+    ->join('r.Coachings', 'c')
+    ->select('c.cours', 'COUNT(r.id) AS RendezVousCount')
+    ->groupBy('c.cours')
+    ->getQuery()
+    ->getResult();
+
+    // ...rest of the code
+
+    return $this->render('rendez_vous/stats.html.twig', [
+        'totalRendezVouss' => $totalRendezVouss,
+        'RendezVousCoachings' => $RendezVousCoachings,
+        'notif'=>$notif
+    ]);
 }
 
+
+
+}

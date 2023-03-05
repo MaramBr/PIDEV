@@ -62,7 +62,7 @@
                        <p class="card-description">  <code> <a href="{{ path('addcoach') }}" class="btn btn-warning" >Ajouter une séance</a></code>
                     </p>
                     
-              <p class="card-description">  <code> <a href="{{ path('stat') }}" class="btn btn-warning" >Statistique</a></code>
+              <p class="card-description">  <code> <a href="{{ path('RendezVous_statistics') }}" class="btn btn-warning" >Statistique</a></code>
 
                 
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
@@ -83,34 +83,6 @@ $(document).ready(function(){
                 
 
 
- {# <script>
-        // Fonction de recherche Ajax
-        function search() {
-            // Récupérer le terme de recherche à partir du champ de recherche
-            var term = $('#search_term').val();
-
-            // Envoyer une requête Ajax à la route de recherche
-            $.ajax({
-                url: "/ajax",
-                method: "GET",
-                data: { term: term },
-                success: function(results) {
-                    // Effacer les résultats précédents
-                    $('#search-results').empty();
-
-                    // Ajouter les résultats à la liste de résultats
-                    for (var i = 0; i < results.length; i++) {
-                        $('#search-results').append('<li>' + results[i].title + '</li>');
-                    }
-                }
-            });
-        }
-
-        // Lancer la recherche lorsqu'une touche est tapée dans le champ de recherche
-        $('#search_term').on('keyup', function() {
-            search();
-        });
-    </script> #}
 {% endblock %}
 
 
@@ -123,18 +95,18 @@ $(document).ready(function(){
 
                   <a class="dropdown-item preview-item">
                     <div class="preview-thumbnail">
-                      <div class="preview-icon bg-dark rounded-circle">
-                        <i class="mdi mdi-calendar text-success"></i>
+                      <div class="preview-icon bg-dark rounded-circle" >
+                        <i class="mdi mdi-calendar text-success" ></i>
                       </div>
                     </div>
                     <div class="preview-item-content">
                     
                       <p class="preview-subject mb-1">{{i.message}}</p>
-                      <p class="text-muted ellipsis mb-0"> un Rendez_Vous a été ajouter </p>
+                      <p class="text-muted ellipsis mb-0" > un Rendez_Vous a été ajouter </p>
                     </div>
                   </a>
                  {% endfor %}
-                  <p class="p-3 mb-0 text-center">voir tous les notifications</p>
+                  <p class="p-3 mb-0 text-center" f r>voir tous les notifications</p>
                 </div>
 
 {% endblock %}

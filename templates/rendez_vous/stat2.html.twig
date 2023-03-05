@@ -23,14 +23,14 @@
 
         function drawPieChart() {
             var data = google.visualization.arrayToDataTable([
-                ['cours', 'Nombre d\'Coaching'],
-                {% for cours, count in counts %}
-                    ['{{ cours }}', {{ count }}],
+                ['RendezVousCoachings', 'Nombre d\'Coaching'],
+                {% for RendezVousCoachings, count in RendezVousCoachings %}
+                    ['{{ RendezVousCoachings }}', {{ RendezVousCoachings }}],
                 {% endfor %}
             ]);
 
             var options = {
-                title: 'Répartition des séance de Coaching par cours',
+                title: 'Répartition des séance de Coaching par RendezVousCoachings',
                 is3D: true,
                 width: 500,
                 height: 300
@@ -42,14 +42,14 @@
 
         function drawBarChart() {
             var data = google.visualization.arrayToDataTable([
-                ['cours', 'Nombre d\'Coaching'],
-                {% for cours, count in counts %}
-                    ['{{ cours }}', {{ count }}],
+                ['RendezVousCoachings', 'Nombre d\'Coaching'],
+                {% for RendezVousCoachings, count in RendezVousCoachings %}
+                    ['{{ RendezVousCoachings }}', {{ RendezVousCoachings }}],
                 {% endfor %}
             ]);
 
             var options = {
-                title: 'Nombre des séance de Coaching par cours',
+                title: 'Nombre des séance de Coaching par RendezVousCoachings',
                 legend: { position: 'none' },
                 bars: 'vertical',
                 vAxis: { format: 'decimal' },
@@ -62,4 +62,28 @@
             chart.draw(data, options);
         }
     </script>
+{% endblock %}
+{% block notify %}
+   
+<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                                    {% for i in notif %}
+
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle" >
+                        <i class="mdi mdi-calendar text-success" ></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                    
+                      <p class="preview-subject mb-1">{{i.message}}</p>
+                      <p class="text-muted ellipsis mb-0" > un Rendez_Vous a été ajouter </p>
+                    </div>
+                  </a>
+                 {% endfor %}
+                  <p class="p-3 mb-0 text-center" f r>voir tous les notifications</p>
+                </div>
+
 {% endblock %}

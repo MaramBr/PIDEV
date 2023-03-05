@@ -16,4 +16,5 @@ if (is_file(dirname(__DIR__).'/vendor/phpunit/phpunit/phpunit')) {
     }
 
     require dirname(__DIR__).'/vendor/symfony/phpunit-bridge/bin/simple-phpunit.php';
+    
 }

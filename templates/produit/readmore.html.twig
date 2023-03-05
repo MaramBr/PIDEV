@@ -73,7 +73,32 @@
 							</div>
 
 						
-						
+
+{% set Produit_id = Produit.id %}
+								{% set Produit_nom = Produit.nom %}
+							{% set Produit_description = Produit.description %}
+							{% set Produit_quantite = Produit.quantite %}
+							{% set Produit_prix = Produit.prix %}
+						{% set Produit_imgage = asset('uploads/produits/' ~ Produit.Image) %}
+
+
+
+
+{% set qrData = 'Nom du Produit: ' ~ Produit_nom ~ ' - Description: ' ~ Produit_description ~ 'Quantite du Produit: ' ~ Produit_quantite ~ ' - Image: ' ~ Produit_imgage %}
+                        
+{% set url_detaille = path('detaille', {'id': Produit_id}) %}
+
+
+<td class="invert">
+    <img style="width: 100px" class="rounded mx-auto d-block" src="{{ qr_code_data_uri(qrData) }}" />
+</td>
+							</div>
+
+
+
+
+
+
 
 						
 

@@ -22,6 +22,13 @@ use App\Form\CommentsType;
 use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
 
+use Symfony\Component\Serializer\Normalizer\Normalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Services\QrcodeService;
+use Endroid\QrCode\Builder\BuilderInterface;
+use Endroid\QrCodeBundle\Response\QrCodeResponse;
  
 class ProduitController extends AbstractController
 {
@@ -64,18 +71,104 @@ class ProduitController extends AbstractController
         return new Response ($json);
     }
 
+    #[Route('/ajoutjson', name: 'ajoutjson')]
+    public function ajoutjson(ManagerRegistry $doctrine,Request $request,NormalizerInterface $normalizer): Response
+    {
+        $Produit =new Produit();
+        $nom=$request->query->get('nom');
+        $description=$request->query->get('description');
+        $quantite=$request->query->get('quantite');
+        $prix=$request->query->get('prix');
+        $image=$request->query->get('image');
+        $em=$doctrine->getManager();
 
+        $Produit->setNom($nom);
+        $Produit->setDescription($description);
+        $Produit->setQuantite(intval($quantite));
+        $Produit->setPrix(floatval($prix));
+        $Produit->setImage('image');
+
+        $em->persist($Produit);
+        $em->flush();
+
+        $serializer =new Serializer([new ObjectNormalizer()]);
+        $formatted=$serializer->normalize($Produit);
+
+        return new JsonResponse ($formatted);
+    }
+
+    #[Route('/updatejson/{id}', name: 'updatejson')]
+public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
+{
+    $em = $this->getDoctrine()->getManager();
+    $Produit = $em->getRepository(Produit::class)->find($id);
+    
+    $nom = $req->get('nom');
+    $description = $req->get('description');
+    $quantite = $req->get('quantite');
+    $prix = $req->get('prix');
+    $image = $req->get('image');
+
+    // Set the updated values in the entity
+    if ($nom) {
+        $Produit->setNom($nom);
+    }
+    if ($description) {
+        $Produit->setDescription($description);
+    }
+    if ($quantite) {
+        $Produit->setQuantite(intval($quantite));
+    }
+    if ($prix) {
+        $Produit->setPrix(floatval($prix));
+    }
+    if ($image) {
+        $Produit->setImage($image);
+    }
+
+    $em->persist($Produit);
+    $em->flush();
+
+    $jsonContent = $Normalizer->normalize($Produit, 'json', ['groups' => 'Produits']);
+    return new Response("Produit updated successfully" . json_encode($jsonContent));
+}
+    #[Route('/deletejson/{id}', name: 'deletejson')]
+    public function deletejson(Request $request, $id, NormalizerInterface $normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $produit = $em->getRepository(Produit::class)->find($id);
+    
+        if ($produit !== null) {
+            $em->remove($produit);
+            $em->flush();
+    
+            $jsonContent = $normalizer->normalize($produit, 'json', ['groups' => 'Produits']);
+            return new Response("Produit deleted successfully: " . json_encode($jsonContent));
+        } else {
+            return new Response("Produit not found.");
+        }
+    }
 
 
 
 
 
     #[Route('/detaille/{id}', name: 'detaille')]
-    public function detaille($id,ManagerRegistry $mg, Produit $Produit, LoggerInterface $logger, Request $request): Response
+    public function detaille($id,ManagerRegistry $mg, Produit $Produit, LoggerInterface $logger, Request $request,BuilderInterface $customQrCodeBuilder): Response
     {
         $repo=$mg->getRepository(Produit::class);
         $resultat = $repo ->find($id);
         $logger->info("The array is: " . json_encode($resultat));
+
+
+        $result = $customQrCodeBuilder
+            ->size(400)
+            ->margin(20)
+            ->build();
+        $response = new QrCodeResponse($result);
+
+
+
          // Partie commentaires
         // On crée le commentaire "vierge"
         $comment = new Comments;
@@ -110,7 +203,8 @@ class ProduitController extends AbstractController
  
         return $this->render('produit/readmore.html.twig', [
             'Produit' => $resultat,
-            'commentForm' => $commentForm->createView()
+            'commentForm' => $commentForm->createView(),
+            'qr'=>$response->getContent()
         ]);
 
            
@@ -314,7 +408,7 @@ public function like(Request $request, Produit $Produit, $type)
 
 
 
-#[Route('/stat', name: 'stat', methods: ['GET'])]
+/*#[Route('/stat', name: 'stat', methods: ['GET'])]
     public function Produitstats(): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
@@ -326,7 +420,7 @@ public function like(Request $request, Produit $Produit, $type)
             ->getQuery()
             ->getSingleScalarResult();
     
-        // Query for all RendezVouss and group them by Produit
+        // Query for all Produits and group them by Produit
         $query = $repository->createQueryBuilder('c')
             ->select('c.quantite as quantite, COUNT(c.id) as count, COUNT(c.id) / :total * 100 as percentage')
             ->setParameter('total', $totalProduits)
@@ -349,45 +443,72 @@ public function like(Request $request, Produit $Produit, $type)
         ]);
     }
 
+*/
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-   /* #[Route('/filtreP', name: 'app_filtre')]
+    #[Route('/filtreP', name: 'app_filtre')]
       public function filtre(ProduitRepository $productRepository ,Request $request, ManagerRegistry $em,PaginatorInterface $paginator)
     {
-        $repo=$em->getRepository(Produit::class);
-        
-        $data= $paginator->paginate(
-            $resulta,
-            $request->query->getInt('page',1),//num page
-            1
-        );
-
-
+       
+       
 
 
         $minPrice = $request->query->get('min_price');
         $maxPrice = $request->query->get('max_price');
 
         $Produit = $productRepository->findByPriceRange($minPrice, $maxPrice);
-
+        $data= $paginator->paginate(
+            $Produit,
+            $request->query->getInt('page',1),//num page
+            3
+        );
         return $this->render('Produit/affich.html.twig', [
             'Produit' => $Produit,'data'=>$data
            
         ]);
-    }*/
+    }
+
+
+    #[Route('/statistics', name: 'Produit_statistics')]
+    public function statistics(ManagerRegistry $doctrine): Response {
+        $em = $doctrine->getManager();
+        $ProduitRepository = $em->getRepository(Produit::class);
+       
+    
+    
+        // Get the total number of Produits
+        $totalProduits = $ProduitRepository->createQueryBuilder('u')
+            ->select('COUNT(u.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    
+        // Get the number of Produits per role
+        $ProduitCategorys = $ProduitRepository->createQueryBuilder('r')
+        ->join('r.Categorys', 'c')
+        ->select('c.libelle', 'COUNT(r.id) AS ProduitCount')
+        ->groupBy('c.libelle')
+        ->getQuery()
+        ->getResult();
+    
+        // ...rest of the code
+    
+        return $this->render('produit/stats.html.twig', [
+            'totalProduits' => $totalProduits,
+            'ProduitCategorys' => $ProduitCategorys,
+            
+        ]);
+    }
+
+
+
+
+
+
+
+
+
+
 
 }

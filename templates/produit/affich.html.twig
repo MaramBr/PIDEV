@@ -5,7 +5,7 @@
 {% block body %}
 <!-- SECTION -->
 
-<form method="get" action="{{ path('app') }}">
+<form method="get" action="{{ path('app_filtre') }}">
         <label for="min_price">Minimum Price:</label>
         <input type="number" name="min_price" id="min_price" value="{{ app.request.query.get('min_price') }}">
         <br>
@@ -14,7 +14,7 @@
         <input type="number" name="max_price" id="max_price" value="{{ app.request.query.get('max_price') }}">
         <br>
 
-        <button type="submit">Filter</button>
+        <button type="c-btn">Filter</button>
     </form>
 
 
@@ -78,42 +78,30 @@
 
 					
 
-
-
-
-
-
-
-
-
-
-					</div>
-					</div>
-							<!-- store bottom filter -->
-						<div class="store-filter clearfix">
+		<!-- store bottom filter -->
+						 <div class="store-filter clearfix">
 						
 							<ul class="store-pagination">
 								
 								<li><a href="{{ knp_pagination_render(data) }}"></a></li>
-							
+							<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
 							</ul>
 						</div>
-
-
-
-
-
-      <div style="right: 0">{{ knp_pagination_render(data) }}</div>
-										<!-- /product -->
-									</div>
-									<div id="slick-nav-1" class="products-slick-nav"></div>
-								</div>
-
-							
 						
 
 
 
+					</div>
+					</div> 
+
+
+
+
+
+
+
+					
+					
 
 
 								<!-- /tab -->

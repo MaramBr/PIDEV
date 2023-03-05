@@ -1,65 +1,64 @@
 {% extends 'baseback.html.twig' %}
 
 {% block body %}
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <tbody>
+                <tr>
+                    <h1>Produit Statistics</h1>
+                    <p>Total number of Produit: {{ totalProduits }}</p>
 
-<style>
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin-top: 100px;
-    }
-</style>
-<div id="piechart" style="width: 500px; height: 300px; margin-bottom: 20px;"></div>
-    <div id="barchart" style="width: 500px; height: 300px; margin-bottom: 20px;"></div>
-  
+                    <h2>Nombre des Produit par Categorys</h2>
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawPieChart);
-        google.charts.setOnLoadCallback(drawBarChart);
+                    <canvas id="ProduitPerRoleChart" style="width: 200px; height: 75px;"></canvas>
 
-        function drawPieChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['quantite', 'Nombre des produits'],
-                {% for quantite, count in counts %}
-                    ['{{ quantite }}', {{ count }}],
-                {% endfor %}
-            ]);
-
-            var options = {
-                title: 'Répartition des produits par quantite',
-                is3D: true,
-                width: 500,
-                height: 300
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-            chart.draw(data, options);
-        }
-
-        function drawBarChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['quantite', 'Nombre d\'Coaching'],
-                {% for quantite, count in counts %}
-                    ['{{ quantite }}', {{ count }}],
-                {% endfor %}
-            ]);
-
-            var options = {
-                title: 'Nombre des produits par quantite',
-                legend: { position: 'none' },
-                bars: 'vertical',
-                vAxis: { format: 'decimal' },
-                height: 300,
-                width: 500,
-                colors: ['#1b9e77']
-            };
-
-            var chart = new google.visualization.ColumnChart(document.getElementById('barchart'));
-            chart.draw(data, options);
-        }
-    </script>
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        var libelles = [];
+                        var ProduitCounts = [];
+                        {% for row in ProduitCategorys %}
+                        var libelle = '{{ row['libelle'] }}';
+                        var ProduitCount = '{{ row["ProduitCount"] }}';
+                        // map role names to display names
+                        if (libelle == 'vêtement') {
+                            libelle = 'vêtement';
+                        } else if (libelle =='Appareils') {
+                            libelle == 'Appareils';
+                        } else if (libelle =='Accessoires') {
+                            libelle = 'Accessoires';
+                        }
+                        libelles.push(libelle);
+                        ProduitCounts.push(ProduitCount);
+                        {% endfor %}
+                        var chartData = {
+                            labels: libelles,
+                            datasets: [{
+                                label: 'Nombre des Produit',
+                                data: ProduitCounts,
+                                backgroundColor: 'rgba(54, 122, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        };
+                        var chartOptions = {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        };
+                        var chart = new Chart('ProduitPerRoleChart', {
+                            type: 'bar',
+                            data: chartData,
+                            options: chartOptions
+                        });
+                    </script>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,153 @@
+{% extends 'basefront.html.twig' %}
+{% block title %} Votre panier{% endblock %}
+{% set prod = {} %}
+{% for i in data %}
+
+    {%  set prod = prod|merge([i.id]) %}
+{% endfor %}
+{% set count=0 %}
+{% block cart %}
+
+								<div class="dropdown">
+									<a   class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-shopping-cart" ></i>
+										
+										<a href="{{ path('panier',) }}" >Mon panier</a>	
+                                        
+									</a>
+
+								</div>
+
+{% endblock %}
+
+{% block wishlist%}
+								<div>
+									<a href="#">
+										<i class="fa fa-heart-o"></i>
+										<span>Mes Favoris</span>
+										<div class="qty">{{data.getTotalItemCount}}</div>
+									</a>
+								</div>
+								{% endblock %}
+
+
+   {% block NAV %}
+					<ul class="main-nav nav navbar-nav">
+						<li class=><a href="#">Home</a></li>
+						<li><a href="/Produit/afficher">Produit</a></li>
+						<li><a href="#">Categories</a></li>
+						<li><a href="#">Evénement</a></li>
+						<li><a href="#">Coaching</a></li>
+						<li><a href="/commande">Commande</a></li>
+						<li><a href="#">Réclamation</a></li>
+					</ul>  {% endblock  %}
+
+
+
+{% block body %}
+    <div class="bg-light p-3">
+        <h3>Vous disposer de : <span>{{data.getTotalItemCount}}  Produit(s) Favorie(s)</span></h3>
+    </div>
+
+        <table  class="table ">
+           
+                   <thead>
+                           <tr class="bg-info">
+                               <th class="bg-info">SL No.</th>
+                               <th>Produit</th>
+                               <th >Description</th>
+                               <th>Nom Produit</th>
+                               <th>prix</th>
+                               <th>Retirer</th>
+                               <th>Acheter</th>
+                           </tr>
+                           </thead>
+                          
+						    {%  for message in app.flashes('delP')  %}
+                               <div class="alert alert-danger" role="alert">
+                                   {{message}}                               </div>
+                           {% endfor %}
+						  
+						   {%  for message in app.flashes('addProduit')  %}
+                               <div class="alert alert-success" role="alert">
+                                   {{message}}                               </div>
+                           {% endfor %}
+
+            <tbody>
+            {% for i in data %}
+                               {% set count=count+1 %}
+							   
+                            <tr >
+                            
+                               <td >{{ count }}</td>
+                               <td ><a href="#"><img src={{asset('/uploads/produits/'~i.image)}} alt="" width="10%" /></a></td>
+
+                       
+                                 <td >
+                                       {{ i.description }}
+                               </td>
+                                      
+                        <td >
+                                       {{ i.nom}}
+                               </td >
+                        
+                               <td >
+                                       {{ i.prix }}DT
+                               </td>
+                               <td >
+                                  <a href="{{ path('removePF',{id : i.id}) }}">
+                                  <div class="btn btn-sm btn-danger"> Retirer </div>
+                                  </a>
+                               </td>
+                                 <td >
+                                  <a href="{{ path('ajoutProduit1',{id:i.id}) }}">
+                                  <div class="btn btn-sm btn-info"> Acheter </div>
+                                  </a>
+                               </td>
+                           </tr>
+                           {% endfor %}
+             
+               <tr class="bg-info">
+                               <th class="bg-info">SL No.</th>
+                               <th>Produit</th>
+                               <th >Description</th>
+                               <th>Nom Produit</th>
+                               <th>prix</th>
+                               <th>Retirer</th>
+                               <th>Acheter</th>
+                           </tr>
+                                      <tr>   
+                <th colspan="6" class="text-right"> 
+                  <a href="{{ path('app') }}" class="primary-btn order-submit">Continuer votre shopping</a>
+                </th>
+                </tr>
+                       </table>
+					      <div style="right: 0">{{ knp_pagination_render(data) }}</div>
+                 
+					   
+           <!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+                    	</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+       
+                       
+
+                       <div class="clearfix"> </div>
+                   </div>
+
+               </div>
+           </div>
+
+       
+
+{% endblock %}

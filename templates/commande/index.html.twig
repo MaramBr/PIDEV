@@ -1,0 +1,135 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}E-FIT!{% endblock %}
+{% block cart %}
+
+
+
+
+								<div class="dropdown">
+									<a   class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+										<i class="fa fa-shopping-cart" ></i>
+										
+										<a href="{{ path('panier',) }}" >Mon panier</a>	
+                                        
+									</a>
+									
+
+                                  
+
+								</div>
+                             
+  
+{% endblock %}
+
+{% block wishlist%}
+								<div>
+									<a href="{{ path('app_favorie',) }}">
+										<i class="fa fa-heart-o"></i>
+										<span>Mes Favoris</span>
+										
+									</a>
+								</div>
+								{% endblock %}
+
+  {% block NAV %}
+					<ul class="main-nav nav navbar-nav">
+						<li ><a href="#">Home</a></li>
+						<li><a href="/Produit/afficher">Produit</a></li>
+						<li><a href="#">Categories</a></li>
+						<li><a href="#">Evénement</a></li>
+						<li><a href="#">Coaching</a></li>
+						<li class='active'><a href="/commande">Commande</a></li>
+						<li><a href="#">Réclamation</a></li>
+					</ul>  {% endblock  %}
+
+ {% block body %}
+
+
+ <div class="bg-light p-3">
+       <h3>Vos commandes : <span> {{data.getTotalItemCount}} Commande(s)</span></h3>
+    </div>
+
+    
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>REFERENCE</th>
+                    <th>LISTE PRODUIT</th>
+                    <th>MONTANT</th>
+                    <th>DATE</th>
+                    <th></th>
+                    <th>Status</th>
+                    <th>ANNULER COMMANDE</th>
+                     <th>QR Code</th>
+                    
+                     
+                     
+                        
+                </tr>
+            </thead>
+              {%  for message in app.flashes('addCommande')  %}
+                               <div class="alert alert-success" role="alert">
+                                   {{message}}                               </div>
+                           {% endfor %}
+                             {%  for message in app.flashes('delC')  %}
+                               <div class="alert alert-info" role="alert">
+                                   {{message}}                               </div>
+                           {% endfor %}
+            <tbody>
+                {% for i in data %}
+                 {% set listP = "" %}
+                    <tr>
+                        <td>{{i.Reference}}</td>
+                        <td>
+                        {% for a in  i.getCommandeProduits().toArray() %}
+                        <b>Nom</b> : {{ a.getProduit().nom}} | <b>Quantite </b> : {{ a.quantiteProduit }} | <b>Prix</b> : {{ a.getProduit().prix}}DT <br> 
+                         {% set produits = "Nom du Produit = "~a.getProduit().nom~" => { Quantite = "~a.quantiteProduit~" , Prix = "~a.getProduit().prix~"DT"~"  }" %}
+                         {% set listP = listP~produits %}
+                        {% endfor %}
+                         {% set arrayP = " , Vos Produits : [ "~listP~" ] " %}
+                        {% set qrData="Reference du commande = "~i.Reference~" , Montant Total = "~i.montant~"DT"~arrayP %}
+                         
+
+
+                        </td>
+                        <td> {{ i.montant }}DT</td>
+                         <td class="invert"> {{ i.getDateCreation().format('j-m-y') }}</td>
+                        <td> {% if i.status == "En attente" %}
+  <td class="warning">{{ i.status }}</td>
+ {% elseif i.status == "Confirmée" %}
+    <td class="success">{{ i.status }}</td>
+ {% elseif i.status == "Annulée" %}
+    <td class="danger">{{ i.status }}</td>
+ {% elseif i.status == "En cours de preparation" %}
+    <td class="info">{{ i.status }}</td>
+ {% elseif i.status == "Livraison en cours" %}
+    <td class="info">{{ i.status }}</td>
+ {% elseif i.status == "Livrée" %}
+    <td class="success">{{ i.status }}</td>
+
+ {% endif %}</td>
+                        <td> 
+                     <a href="{{ path('commandeDelete',{'id':i.id}) }}">
+                        <div class="btn btn-sm btn-info"> ANNULER </div>
+                    </a>
+                        </td>
+                         <td class="invert"><img style="width: 100px" class="rounded mx-auto d-block" src="{{ qr_code_data_uri(qrData) }}" /></td>
+                   
+                    </tr>
+                {% endfor %}
+            </tbody>
+        
+             
+        </table>
+      
+           <div style="right: 0">{{ knp_pagination_render(data) }}</div>
+      
+       
+      
+   
+
+{% endblock %}
+
+
+        

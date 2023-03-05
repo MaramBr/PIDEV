@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 class Produit
@@ -14,32 +16,58 @@ class Produit
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("produit")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"is empty")]
+    #[Groups("produit")]
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message:"is empty")]
+    #[Groups("produit")]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"is empty")]
+    #[Groups("produit")]
     private ?int $quantite = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message:"is empty")]
+    #[Groups("produit")]
     private ?float $prix = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("produit")]
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'produits')]
+    #[Groups("produit")]
     private ?Category $Categorys = null;
 
-    #[ORM\OneToMany(mappedBy: 'Produit', targetEntity: CommandeProduit::class)]
+  
+    #[ORM\OneToMany(mappedBy: 'Produit', cascade: ['persist', 'remove'], targetEntity: CommandeProduit::class)]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Groups("produit")]
     private Collection $Commande;
+
+   
+    #[ORM\ManyToMany(inversedBy: 'produits',targetEntity: Panier::class)]
+    #[ORM\JoinTable(name:'panierproduit')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[Groups("produit")]
+    private Collection $panier;
+
+    #[ORM\ManyToMany(targetEntity: Favorie::class, mappedBy: 'produit')]
+    private Collection $favories;
 
     public function __construct()
     {
         $this->Commande = new ArrayCollection();
+        $this->panier = new ArrayCollection();
+        $this->favories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -119,6 +147,16 @@ class Produit
         return $this;
     }
 
+    public function __toString()
+    {
+        return (string) $this->getNom();
+        $this->getDescription();
+        $this->getQuantite();
+        $this->getPrix();
+        $this->getImage();
+        $this->getCategorys();
+    }
+
     /**
      * @return Collection<int, CommandeProduit>
      */
@@ -126,7 +164,6 @@ class Produit
     {
         return $this->Commande;
     }
-
     public function addCommande(CommandeProduit $commande): self
     {
         if (!$this->Commande->contains($commande)) {
@@ -148,4 +185,59 @@ class Produit
 
         return $this;
     }
+
+    /**
+     * @return Collection|Panier[]
+     */
+    public function getPanier(): Collection
+    {
+        return $this->panier;
+    }
+
+    public function addPanier(Panier $panier): self
+    {
+        if (!$this->panier->contains($panier)) {
+            $this->panier->add($panier);
+            $panier->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removePanier(Panier $panier): self
+    {
+        if ($this->panier->removeElement($panier)) {
+            $panier->removeProduit($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favorie>
+     */
+    public function getFavories(): Collection
+    {
+        return $this->favories;
+    }
+
+    public function addFavory(Favorie $favory): self
+    {
+        if (!$this->favories->contains($favory)) {
+            $this->favories->add($favory);
+            $favory->addProduit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavory(Favorie $favory): self
+    {
+        if ($this->favories->removeElement($favory)) {
+            $favory->removeProduit($this);
+        }
+
+        return $this;
+    }
+
 }

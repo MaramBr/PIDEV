@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -15,34 +16,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("utilisateur")]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups("utilisateur")]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups("utilisateur")]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups("utilisateur")]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("utilisateur")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("utilisateur")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups("utilisateur")]
     private ?string $image = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reclamation::class)]
+    #[Groups("utilisateur")]
     private Collection $Reclamations;
 
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Commande::class)]
+    #[Groups("utilisateur")]
     private Collection $commandes;
+
+
+    #[ORM\OneToOne(mappedBy: 'utilisateur',cascade:['persist','remove'], targetEntity: Panier::class)]
+    #[Groups("utilisateur")]
+    private $panier;
 
     public function __construct()
     {
@@ -233,5 +248,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getPanier(): ?Panier
+    {
+        return $this->panier;
+    }
+
+   /* public function setPanier(?Panier $panier): self
+    {
+        $this->panier = $panier;
+
+        return $this;
+    }*/
+    public function setPanier(?Panier $panier): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($panier === null && $this->panier !== null) {
+            $this->panier->setUtilisateur(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($panier !== null && $panier->getUtilisateur() !== $this) {
+            $panier->setUtilisateur($this);
+        }
+
+        $this->panier = $panier;
+
+        return $this;
+    }
+    public function __toString()
+    {
+        return sprintf('%s: %s ', $this->nom, $this->prenom);
     }
 }

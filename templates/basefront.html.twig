@@ -15,7 +15,7 @@
 		<link type="text/css" rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}"/>
 
 		<!-- Slick -->
-		<link type="text/css" rel="stylesheet" href="{{asset('css/slick.')}}"/>
+		<link type="text/css" rel="stylesheet" href="{{asset('css/slick.css')}}"/>
 		<link type="text/css" rel="stylesheet" href="{{asset('css/slick-theme.css')}}"/>
 
 		<!-- nouislider -->
@@ -84,7 +84,7 @@
 						<!-- ACCOUNT -->
 						<div class="col-md-3 clearfix">
 							<div class="header-ctn">
-								<!-- Wishlist -->
+								<!-- Wishlist --> {% block wishlist%}
 								<div>
 									<a href="#">
 										<i class="fa fa-heart-o"></i>
@@ -92,9 +92,10 @@
 										<div class="qty">2</div>
 									</a>
 								</div>
+								{% endblock %}
 								<!-- /Wishlist -->
 
-								<!-- Cart -->
+								<!-- Cart --> {% block cart%}
 								<div class="dropdown">
 									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 										<i class="fa fa-shopping-cart"></i>
@@ -134,7 +135,7 @@
 											<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
 										</div>
 									</div>
-								</div>
+								</div> {% endblock %}
 								<!-- /Cart -->
 
 								<!-- Menu Toogle -->
@@ -163,16 +164,16 @@
 			<div class="container">
 				<!-- responsive-nav -->
 				<div id="responsive-nav">
-					<!-- NAV -->
+					<!-- NAV --> {% block NAV %}
 					<ul class="main-nav nav navbar-nav">
 						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Produit</a></li>
+						<li><a href="/Produit/afficher">Produit</a></li>
 						<li><a href="#">Categories</a></li>
 						<li><a href="#">Evénement</a></li>
 						<li><a href="#">Coaching</a></li>
 						<li><a href="#">Commande</a></li>
 						<li><a href="#">Réclamation</a></li>
-					</ul>
+					</ul>  {% endblock  %}
 					<!-- /NAV -->
 				</div>
 				<!-- /responsive-nav -->

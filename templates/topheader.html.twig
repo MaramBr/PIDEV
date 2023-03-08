@@ -1,0 +1,192 @@
+{% extends 'basefront.html.twig' %}
+
+{% block title %}{% endblock%}
+{% block topheader %}
+				
+			<!-- TOP HEADER -->
+			<div id="top-header">
+				<div class="container">
+					<ul class="header-links pull-left">
+						<li><a href="#"><i class="fa fa-phone"></i>29 757 417</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i> E-FIT@gmail.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i>La petite ariana </a></li>
+					</ul>
+                        {% if app.user %}
+						<ul class="header-links pull-right">
+
+                                             <font color="white" style="position:absolute;font-size: 20px; font-weight: bold; text-transform: uppercase; margin: 0; padding: 10px; top: 10; left: 79%; transform: translateX(-50%); right: 0px;"> Bonjour {{ app.user.prenom }} {{ app.user.nom }} </font>
+                                                                </ul>
+
+<ul class="header-links pull-right">
+                                {# <a class="btn btn-outline-info" href="{{ path('membre') }}">Page membre</a> #}
+                                                       {% if is_granted('ROLE_ADMIN') and is_granted('ROLE_Coach') %}
+																
+                      				
+							<ul class="header-links pull-right">
+<div class="container1">
+<input type="checkbox" name="" id="checkbox-1" style="display: none;"  >
+<label for="checkbox-1">
+<img src="/uploads/{{ app.user.Image }}"  width="100" height="100" alt="Avatar" class="avatar" style="top: 100px; right: 400px;"> 
+</label> 
+
+{# <input type="checkbox" name="" id="" class="btn1" > #}
+<div class="list" >
+<a href="{{ path('showprofile') }}"><i class="fas fa-user-alt"></i>&nbspProfile</a>
+{# <a href="{{ path('membre') }}"><i class="fas fa-envelope"></i>&nbspMembre</a> #}
+<a href="{{ path('listing') }}"><i class='fas fa-user-edit' ></i>&nbspAdmin</a>
+<a href="afficherback"><i class='fas fa-dumbbell'></i>&nbspCoach</a>
+<a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i>&nbspLog Out</a>
+</div>
+</div>
+</ul>
+
+{% elseif is_granted('ROLE_Coach') %}
+
+
+							<ul class="header-links pull-right">
+<div class="container1">
+<input type="checkbox" name="" id="checkbox-1" style="display: none;"  >
+<label for="checkbox-1">
+<img src="/uploads/{{ app.user.Image }}"  width="100" height="100" alt="Avatar" class="avatar" style="top: 100px; right: 400px;"> 
+</label> 
+
+{# <input type="checkbox" name="" id="" class="btn1" > #}
+<div class="list" >
+<a href="{{ path('showprofile') }}"><i class="fas fa-user-alt"></i>&nbspProfile</a>
+{# <a href="{{ path('membre') }}"><i class="fas fa-envelope"></i>&nbspMembre</a> #}
+<a href="{{ path('coach') }}"><i class='fas fa-dumbbell'></i>&nbspCoach</a>
+<a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i>&nbspLog Out</a>
+</div>
+</div>
+</ul>
+                       {% elseif is_granted('ROLE_ADMIN')  %}
+																
+                      				
+							<ul class="header-links pull-right">
+<div class="container1">
+<input type="checkbox" name="" id="checkbox-1" style="display: none;"  >
+<label for="checkbox-1">
+<img src="/uploads/{{ app.user.Image }}"  width="100" height="100" alt="Avatar" class="avatar" style="top: 100px; right: 400px;"> 
+</label> 
+
+{# <input type="checkbox" name="" id="" class="btn1" > #}
+<div class="list" >
+<a href="{{ path('showprofile') }}"><i class="fas fa-user-alt"></i>&nbspProfile</a>
+{# <a href="{{ path('membre') }}"><i class="fas fa-envelope"></i>&nbspMembre</a> #}
+<a href="{{ path('listing') }}"><i class='fas fa-heart' style='font-size:24px'></i>&nbspAdmin</a>
+<a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i>&nbspLog Out</a>
+</div>
+</div>
+</ul>
+
+
+
+
+
+
+					
+                                {% endif %}
+							
+									{# <a class="btn btn-sm btn-danger" href="{{ path('app_logout') }}">Déconnexion</a> #}
+						     {# <td> <img src="/uploads/{{ app.user.Image }}"  width="100" height="100" alt="Avatar" class="avatar"> </td> #}
+
+
+                      				
+							 {# <ul class="header-links pull-right"> #}
+<div class="container1">
+<input type="checkbox" name="" id="checkbox-1" style="display: none;"  >
+<label for="checkbox-1">
+<img src="/uploads/{{ app.user.Image }}"  width="100" height="100" alt="Avatar" class="avatar" style="top: 100px; right: 400px;"> 
+</label> 
+
+<div class="list" >
+<a href="{{ path('showprofile') }}"><i class="fas fa-user-alt"></i>&nbspProfile</a>
+{# <a href="#"><i class="fas fa-envelope"></i>&nbspMessages</a>
+<a href="#"><i class="fas fa-cog"></i>&nbspSettings</a> #}
+<a href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i>&nbspLog Out</a>
+</div>
+</div>
+{# </ul>  #}
+ 
+							
+							
+                        {% else %}
+                                <div>
+								<ul class="header-links pull-right">
+                                        <a class="btn btn-sm btn-primary" href="{{ path('app_register') }}">S'inscrire</a>
+                                        <a class="btn btn-sm btn-success" href="{{ path('app_login') }}">Se connecter</a>
+										</ul>
+                                </div>
+                        {% endif %}
+{# 
+<ul class="header-links pull-right">
+ <div class="action">
+      <div class="profile" onclick="menuToggle();">
+        <img src="./assets/avatar.jpg" />
+      </div>
+      <div class="menu">
+        <h3>Someone Famous<br /><span>Website Designer</span></h3>
+        <ul>
+          <li>
+            <img src="./assets/icons/user.png" /><a href="#">My profile</a>
+          </li>
+          <li>
+            <img src="./assets/icons/edit.png" /><a href="#">Edit profile</a>
+          </li>
+          <li>
+            <img src="./assets/icons/envelope.png" /><a href="#">Inbox</a>
+          </li>
+          <li>
+            <img src="./assets/icons/settings.png" /><a href="#">Setting</a>
+          </li>
+          <li><img src="./assets/icons/question.png" /><a href="#">Help</a></li>
+          <li>
+            <img src="./assets/icons/log-out.png" /><a href="#">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+</ul> #}
+
+
+
+
+
+
+
+<!-- Template layout -->
+
+
+
+ {# <ul class="header-links pull-right">
+
+
+						<li><a href="login"><i class="fa fa-user-o"></i>Mon compte</a></li>
+</ul>  #}
+{# 
+						<li><a href="login"><i class="fa fa-user-o"></i>Mon compte</a></li>
+						<select class="input-select">
+										<option <a href="login"><i class="fa fa-user-o"></i>Mon compte</a></option>
+										<option value="login">Category 01</option>
+										<option value="1">Category 02</option>
+									</select>
+									<select name="Taille" onChange="location.href=''+this.options[this.selectedIndex].value+'';">
+           <option value="login">S</option>
+           <option value="logout">M</option>
+       </select>  #}
+					{# </ul> #}
+				 </div>
+			</div>
+
+
+
+
+						
+			
+{% endblock %}
+{% block wishlist %}{% endblock%}
+{% block cart %}{% endblock%}
+{% block nav %}{% endblock%}
+{% block body %}{% endblock%}
+{% block footer %}{% endblock%}
+

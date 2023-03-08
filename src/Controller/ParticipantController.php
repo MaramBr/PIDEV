@@ -119,7 +119,7 @@ public function add(MailerInterface $mailer, ManagerRegistry $doctrine, Request 
         //////////////////////SMS////////////////////////////////
           
  $accountSid = 'AC92f7e404547cf2736427dd218cd01a28';
-            $authToken = 'aa5eff3ac65bb9325e475404c37f303f';
+            $authToken = '6a04339c5caf500fb20fe60528a1b772';
             $client = new Client($accountSid, $authToken);
     
             $message = $client->messages->create(
@@ -139,8 +139,8 @@ public function add(MailerInterface $mailer, ManagerRegistry $doctrine, Request 
     $mailer->Host = 'smtp.gmail.com';
     $mailer->Port = 587;
     $mailer->SMTPAuth = true;
-    $mailer->Username = 'emna.abbessi@esprit.tn';
-    $mailer->Password = '12715163';
+    $mailer->Username = 'rayan.lahmar@esprit.tn';
+    $mailer->Password = '201JMT3276';
     $mailer->setFrom('E-Fit');
     $mailer->addAddress($participant->getEmail());
    

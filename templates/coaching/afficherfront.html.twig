@@ -1,4 +1,4 @@
-{% extends 'basefront.html.twig' %}
+{% extends 'baseEmna.html.twig' %}
 
 {% block title %}Coaching{% endblock %}
 
@@ -23,7 +23,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>{{i.Cours}}</h3>
-								<a href="{{ path('detaille', {id:i.id}) }}" class="cta-btn"> Détailles <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="{{ path('detailcoach', {id:i.id}) }}" class="cta-btn"> Détailles <i class="fa fa-arrow-circle-right"></i></a>
 
 							</div>
 
@@ -46,9 +46,6 @@
 
 {% endblock %}
 
-{% block footer %}
-
-{% endblock %}
 
 
 

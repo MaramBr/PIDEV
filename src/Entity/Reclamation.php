@@ -26,7 +26,7 @@ class Reclamation
     #[Groups("Reclamations")]
     private ?string $TitreR = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message:" le champ est vide")]
     #[Assert\Length(min:5,maxMessage:"Votre numero est invalide")]
     #[Groups("Reclamations")]
@@ -84,7 +84,7 @@ class Reclamation
 
     public function setDescriptionR(string $DescriptionR): self
     {
-        $this->DescriptionR = $DescriptionR;
+        $this->DescriptionR = $DescriptionR ;
 
         return $this;
     }

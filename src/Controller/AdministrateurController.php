@@ -41,16 +41,24 @@ class AdministrateurController extends AbstractController
      */
     public function listCommande(CommandeRepository $repository): Response
     {
-        $data = $repository->findBy(['utilisateur'=>1]);
+        if ($this->isGranted('ROLE_ADMIN')) {
+        $utilisateur = $this->getUser();
+$data = $repository->findBy(['user'=>$utilisateur->getId()]);
+        // $data = $repository->findBy(['utilisateur'=>1]);
         return $this->render('administrateur/commande.html.twig', [
             'data' => $data,
         ]);
+    }
+    else
+        {
+            return $this->render('/403.html.twig');
+        }
     }
      /**
      * @Route("/administrateur/updateCommande{idP}", name="updateCommande")
      */
     public function updateCommande($idP,CommandeRepository $repository , Request $request): Response
-    {
+    { if ($this->isGranted('ROLE_ADMIN')) {
         $comm = $repository->find($idP);
         $form = $this->createFormBuilder($comm)
             ->add('status',ChoiceType::class,[
@@ -77,17 +85,25 @@ class AdministrateurController extends AbstractController
             'formU' => $form->createView(),
         ]);
     }
+    else{
+        return $this->render('/403.html.twig');
+    }
+    }
           /**
      * @Route ("/commandeDelete2/{id}", name="commandeDelete2")
      */
     public function delete2(CommandeRepository $repository , $id): Response
-    {
+    {    if ($this->isGranted('ROLE_ADMIN')) {
         $comm =$repository->find($id) ;
         $manager = $this->getDoctrine()->getManager();
         $manager->remove($comm);
         $manager->flush();
         //return new Response('suppression avec succes');
         return $this->redirectToRoute('listcommande');
+    }
+    else{
+        return $this->render('/403.html.twig');
+    }
     }
     #[Route('/Dashboard', name: 'Dashboard')]
     public function dashboard(): Response

@@ -44,10 +44,15 @@ class FavorieController extends AbstractController
         $sum=0;
         
         // $this->addFlash();
-        $d = $repository->findBy(['utilisateur'=>1])[0];
+        // $d = $repository->findBy(['utilisateur'=>1])[0];
+        $utilisateur = $this->getUser();
+$d = $repository->findBy(['user'=>$utilisateur->getId()])[0];
+
         $sum = $d->getProduits()->count();
 
-        $produit = $this->getDoctrine()->getRepository(Favorie::class)->findBy(['utilisateur'=>1])[0];
+        // $produit = $this->getDoctrine()->getRepository(Favorie::class)->findBy(['utilisateur'=>1])[0];
+        $produit = $this->getDoctrine()->getRepository(Favorie::class)->findBy(['user'=>$utilisateur->getId()])[0];
+
         $data = $produit->getProduit();
         $produits = $paginator->paginate(
             $data,
@@ -68,8 +73,9 @@ class FavorieController extends AbstractController
     public function removeP( $id,FavorieRepository $repository , Request $request): Response
     {
        
-        $d = $repository->findBy(['utilisateur'=>1])[0];
-        $em = $this->getDoctrine()->getManager();
+        $utilisateur = $this->getUser();
+        $d = $repository->findBy(['user'=>$utilisateur->getId()])[0];
+    $em = $this->getDoctrine()->getManager();
         $produit = $this->getDoctrine()->getRepository(Produit::class)->find($id);
         $d->removeProduit($produit);
         $em->flush();
@@ -93,8 +99,9 @@ class FavorieController extends AbstractController
     public function ajoutProduit( ProduitRepository $produitRepository,$id,FavorieRepository $repository , Request $request): Response
     {
       
-        $d = $repository->findBy(['utilisateur'=>1])[0];
-        $em = $this->getDoctrine()->getManager();
+        $utilisateur = $this->getUser();
+        $d = $repository->findBy(['user'=>$utilisateur->getId()])[0];
+    $em = $this->getDoctrine()->getManager();
         $produit = $produitRepository->find($id);
         $d->addProduit($produit);
         $em->flush();

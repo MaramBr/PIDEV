@@ -15,36 +15,54 @@
                     {{ message }}
                 </div>
             {% endfor %}
-            <p class="card-description"> table<code>des types</code></p>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
+         <div class="panel-header panel-header-sm">
+            </div>
+            <div class="content">
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                                                                                            
+
+                        <div class="card">
+                            <div class="card-header">
+
+                                <h4 class="card-title"> Simple Table</h4>
+                            </div>
+                            <div class="card-body">
+
+                                <div class="table-responsive">
+
+                                    <table class="table table-hover" >
+
+                                        <thead class=" text-primary">
                         <tr>
-                            <th>Identifiant</th>
-                            <th>Nom Event</th>
-                            <th>Date debut</th>
-                            <th>Date fin</th>
-                            <th>Image</th>
-                            <th>Lieu</th>
-                            <th>Description</th>
-                            <th>Type</th>
-                            <th>Nombre Participant</th>
-                            <th>Sponsor</th>
-                            <th>Liste Participants</th>
+                            <th class="border border-primary">Identifiant</th>
+                            <th class="border border-secondary">Nom Event</th>
+                            <th  class="border border-success">Date debut</th>
+                            <th class="border border-danger">Date fin</th>
+                            <th class="border border-warning">Image</th>
+                            <th class="border border-info">Lieu</th>
+                            <th  class="border border-light">Description</th>
+                            <th class="border border-primary" >Type</th>
+                            <th  class="border border-white">Prix</th>
+                            <th class="border border-primary" >Nombre Participant</th>
+                            <th class="border border-danger">Sponsor</th>
+                            <th class="border border-primary" >Liste Participants</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for i in Evenement %}
                             <tr>
-                                <td>{{ i.ID }}</td>
-                                <td>{{ i.Nom }}</td>
+                                <td  >{{ i.ID }}</td>
+                                <td >{{ i.Nom }}</td>
                                 <td>{{ i.DateDebut|date('Y-m-d ') }}</td>
                                 <td>{{ i.DateFin|date('Y-m-d ') }}</td>
                                 <td><img src="{{ asset('/uploads/brochures/' ~ i.Image) }}?t={{ date().getTimestamp() }}" alt="image" width="10%"></td>
                                 <td>{{ i.Lieu }}</td>
                                 <td>{{ i.Description }}</td>
                                 <td>{{ i.Type }}</td>
-                                
+                                <td >{{ i.Prix }}</td>
                                  <td>{{ i.nbParticipant}}</td>
                                  <td>{{ i.Sponsors }}</td>
                                 <td>
@@ -62,23 +80,23 @@
                         {% endfor %}
                               </tbody>
                 
-                           <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/add1">Ajouter evenement </a></td>
-                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Participant/add"> ajouter Participant </a> </td>
-                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/afficher"> Routour</a> </td>
+                           <td> <a class="btn btn-outline-success" href="/Evenement/add1">Ajouter evenement </a></td>
+                          <td> <a class="btn btn-outline-success"  href="/Participant/add"> ajouter Sponsor </a> </td>
+                          <td> <a class="btn btn-outline-success"  href="/Evenement/afficher"> Retour</a> </td>
                        
                  </table>
-                
-                    <button type="button" class="btn btn-outline-danger">Trie</button>
+              
+              
                     <ul>
-                        <li><a href="{{ path('order_By_Nom')}}">Trie par Nom</a></li>
-                        <li><a href="{{ path('order_By_type')}}">Trie par type</a></li>
+                   <i class="mdi mdi-playlist-play"><a href="{{ path('order_By_Nom')}}">Trie par Nom</a></i>   
+                   <i class="mdi mdi-playlist-play"><a href="{{ path('order_By_type')}}">Trie par type</a></i>   
                         
                     </ul>
                 </li>
             </div>
         </div>
     </div>
-</div>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>

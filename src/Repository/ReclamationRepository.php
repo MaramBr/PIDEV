@@ -38,6 +38,52 @@ class ReclamationRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    public function findEvenementByNom($titre)
+    {
+        return $this->createQueryBuilder('reclamation')
+            ->where('reclamation.titre LIKE  :titre')
+            ->setParameter('titre', '%'.$titre. '%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findNewCommande()
+{
+    $date = new \DateTime();
+    return $this->createQueryBuilder('c')
+        ->select('count(c.DateR)')
+        ->andWhere('c.DateR < :val')
+        ->setParameter('val', $date->format('y-m-j'))
+        ->getQuery()->getSingleScalarResult()
+
+    ;
+}
+
+public function findCommandesTritée()
+{
+    $date = new \DateTime();
+    return $this->createQueryBuilder('c')
+        ->select('count(c.StatusR)')
+        ->andWhere('c.StatusR != :val')
+        ->andWhere('c.DateR < :val1')
+        ->setParameter('val', 'Confirmée' )
+        ->setParameter('val1', $date->format('y-m-j'))
+        ->getQuery()->getSingleScalarResult()
+        ;
+}
+
+public function findCommandesNonTritée()
+{
+    $date = new \DateTime();
+    return $this->createQueryBuilder('c')
+        ->select('count(c.StatusR)')
+        ->andWhere('c.StatusR = :val')
+        ->andWhere('c.DateR < :val1')
+        ->setParameter('val', 'En attente' )
+        ->setParameter('val1', $date->format('y-m-j'))
+        ->getQuery()->getSingleScalarResult()
+        ;
+}
 
 //    /**
 //     * @return Reclamation[] Returns an array of Reclamation objects

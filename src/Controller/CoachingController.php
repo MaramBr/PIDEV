@@ -28,6 +28,9 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\Notify;
 use App\Repository\NotifyRepository;//controller
+use App\Services\QrcodeService;
+use Endroid\QrCode\Builder\BuilderInterface;
+use Endroid\QrCodeBundle\Response\QrCodeResponse;
 
 
 class CoachingController extends AbstractController
@@ -172,14 +175,22 @@ class CoachingController extends AbstractController
         return $this->redirectToRoute('afficherback');
     }
 
-    #[Route('/detaille/{id}', name: 'detaille')]
-    public function detaille($id,ManagerRegistry $mg,NormalizerInterface $normalizer, LoggerInterface $logger): Response
+    #[Route('/detailecoach/{id}', name: 'detailcoach')]
+    public function detaille($id,ManagerRegistry $mg,NormalizerInterface $normalizer, BuilderInterface $customQrCodeBuilder,LoggerInterface $logger): Response
     {
         $repo=$mg->getRepository(Coaching::class);
         $resultat = $repo ->find($id);
         $logger->info("The array is: " . json_encode($resultat));
+
+       $result = $customQrCodeBuilder
+            ->size(400)
+            ->margin(20)
+            ->build();
+            $response = new QrCodeResponse($result);
+            
         return $this->render('coaching/coachdetaille.html.twig', [
             'Coaching' => $resultat,
+            'qr'=>$response->getContent()
         ]);
     }
 
@@ -334,9 +345,16 @@ return new Response("Coaching deleted successfully" .json_encode ($jsonContent))
     }
 
 
-    #[Route('/like/{id}', name: 'like', methods: ['POST'])]
+    #[Route('/like/{id}', name: 'like1', methods: ['POST'])]
 public function likeCoaching(Request $request, Coaching $Coaching): Response
+{         $utilisateur = $this->getUser();
+    // dd($utilisateur);
+    if(!$utilisateur)
 {
+return $this->redirectToRoute('app_login');
+
+}
+else{
     $entityManager = $this->getDoctrine()->getManager();
     $Coaching->setLikeButton($Coaching->getLikeButton() + 1);
     if ( $Coaching->setLikeButton($Coaching->getLikeButton() == 1) )
@@ -346,16 +364,24 @@ public function likeCoaching(Request $request, Coaching $Coaching): Response
     $entityManager->persist($Coaching);
     $entityManager->flush();
 
-    return $this->redirectToRoute('detaille', ['id' => $Coaching->getId()]);
+    return $this->redirectToRoute('detailcoach', ['id' => $Coaching->getId()]);
+}
 }
 
 
     
 
-#[Route('/dislike/{id}', name: 'dislike', methods: ['POST'])]
+#[Route('/dislike/{id}', name: 'dislike1', methods: ['POST'])]
 
 public function dislikeCoaching(Request $request, Coaching $Coaching): Response
+{    $utilisateur = $this->getUser();
+    // dd($utilisateur);
+    if(!$utilisateur)
 {
+return $this->redirectToRoute('app_login');
+
+}
+else{
     $entityManager = $this->getDoctrine()->getManager();
     $Coaching->setDislikeButton($Coaching->getDislikeButton() + 1);
 
@@ -364,7 +390,8 @@ public function dislikeCoaching(Request $request, Coaching $Coaching): Response
     $entityManager->persist($Coaching);
     $entityManager->flush();
 
-    return $this->redirectToRoute('detaille', ['id' => $Coaching->getId()]);
+    return $this->redirectToRoute('detailcoach', ['id' => $Coaching->getId()]);
+}
 }
 
 
@@ -383,5 +410,6 @@ public function dislikeCoaching(Request $request, Coaching $Coaching): Response
         //trie selon Date normal
 
     }
+    
    
 }

@@ -60,15 +60,18 @@
 
                          <a href="{{ path('app_registerback') }}" class="btn btn-success" >
                                 +Add
+         
+                             <a href="/stat2" class="btn btn-success" >
+                                Stat
                             </a>  
-                                        {# <a  id="createbuttonDropdown" data-toggle="dropdown" aria-expanded="false" href="#">+ Create New Project</a> #}
+                                        <a  id="createbuttonDropdown" data-toggle="dropdown" aria-expanded="false" href="#">+ Create New Project</a>
 
                       </table>
 
                       <nav aria-label="Page navigation example">
                               <ul class="pagination">
 								
-								        <li class="page-item"><a href="{{ knp_pagination_render(user) }}"></a></li>
+								        <li class="page-item"><a href={{ knp_pagination_render(user) }}</a></li>
 						
 						                    	</ul>
 						                    </nav> 

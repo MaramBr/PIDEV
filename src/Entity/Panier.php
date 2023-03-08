@@ -26,7 +26,7 @@ class Panier
 
     #[ORM\OneToOne(inversedBy: 'panier',cascade:['persist','remove'], targetEntity: User::class)]
     #[Groups("panier")]
-    private ?User $utilisateur = null;
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -64,13 +64,13 @@ class Panier
 
         return $this;
     }
-    public function getUtilisateur():User 
+    public function getuser():User 
     {
-        return $this->utilisateur;
+        return $this->user;
     }
-    public function setUtilisateur(?User $utilisateur): self
+    public function setuser(?User $user): self
     {
-        $this->utilisateur = $utilisateur;
+        $this->user = $user;
 
         return $this;
     }
@@ -79,33 +79,33 @@ class Panier
     /*
      * @return Collection<int, User>
     
-    public function getUtilisateur():User 
+    public function getuser():User 
     {
-        return $this->utilisateur;
+        return $this->user;
     }
-    public function setUlisateur(?User $utilisateur): self
+    public function setUlisateur(?User $user): self
     {
-        $this->utilisateur = $utilisateur;
+        $this->user = $user;
 
         return $this;
     }
 
-   public function addUtilisateur(User $utilisateur): self
+   public function adduser(User $user): self
     {
-        if (!$this->utilisateur->contains($utilisateur)) {
-            $this->utilisateur->add($utilisateur);
-            $utilisateur->setPanier($this);
+        if (!$this->user->contains($user)) {
+            $this->user->add($user);
+            $user->setPanier($this);
         }
 
         return $this;
     }
 
-    public function removeUtilisateur(User $utilisateur): self
+    public function removeuser(User $user): self
     {
-        if ($this->utilisateur->removeElement($utilisateur)) {
+        if ($this->user->removeElement($user)) {
             // set the owning side to null (unless already changed)
-            if ($utilisateur->getPanier() === $this) {
-                $utilisateur->setPanier(null);
+            if ($user->getPanier() === $this) {
+                $user->setPanier(null);
             }
         }
 

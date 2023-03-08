@@ -1,4 +1,4 @@
-{% extends 'basefront.html.twig' %}
+{% extends 'test.html.twig' %}
 
 {% block title %}result{% endblock %}
 
@@ -15,6 +15,9 @@
 				<!-- row -->
 
 				<div class="row">
+				<ul>
+						<li><a href="/calendar1"><i class="fa fa-eye"></i>   Voir Calendrier   </a></li>
+				</ul>
 					<!-- shop -->
 			 {% for i in result %}		
 					<div class="col-md-4 col-xs-6">
@@ -25,7 +28,7 @@
 							<div class="shop-body">
 								<h3>{{i.nom}}</h3>
 								nombre Participant Restant:<h5> {{i.nbParticipant}}</h5>
-								<a href="{{ path('detaille', {id:i.id}) }}" class="cta-btn"> Plus Détailles <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="{{ path('detail1', {id:i.id}) }}" class="cta-btn"> Plus Détailles <i class="fa fa-arrow-circle-right"></i></a>
 
 							</div>
 
@@ -55,7 +58,7 @@
 							
                   <button class="newsletter-btn"><a href="/Participant/add" >  Participer Maintenant</a></button>
 
-                  <input type="text" class="input" id="search"  placeholder="chercher">
+                 
 
 							</form>
 							

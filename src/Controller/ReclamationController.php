@@ -18,6 +18,8 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Twilio\Rest\Client;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 
 
 class ReclamationController extends AbstractController
@@ -35,6 +37,14 @@ class ReclamationController extends AbstractController
      #[Route('/addreclamation', name: 'addrecl')]
      public function addrec(ManagerRegistry $doctrine, Request $request): Response
      {
+        $utilisateur = $this->getUser();
+        // dd($utilisateur);
+        if(!$utilisateur)
+    {
+    return $this->redirectToRoute('app_login');
+    
+    }
+    else{
          $reclamation = new Reclamation();
          $reclamation->setDateR(new \DateTime('now'));
          $user=$this->getUser();
@@ -46,9 +56,9 @@ class ReclamationController extends AbstractController
              $em = $doctrine->getManager();
              $em->persist($reclamation);
              $em->flush();
-     /*
+     
              $accountSid = 'AC099883ea0f07c67cd19e55b497fceb12';
-             $authToken = '2bfd114d146f1c1ee34a507fe8e5edac';
+             $authToken = '0dd561ef29a8f933acf0a98205b376c0';
              $client = new Client($accountSid, $authToken);
      
              $message = $client->messages->create(
@@ -57,12 +67,13 @@ class ReclamationController extends AbstractController
                      'from' => '+12766336884', // replace with your Twilio phone number
                      'body' => 'New réclamation par ' . $user,
                  ]
-             );*/
+             );
      
              return $this->redirectToRoute('app_affrecfront');
          }
      
          return $this->renderForm('reclamation/index.html.twig', ['form2' => $form]);
+        }
      }
  //////////////////////////affiche fil back ////////////////////////
      #[Route('/affichreclamation1', name: 'app_affrec')]
@@ -79,10 +90,63 @@ class ReclamationController extends AbstractController
              'rec' => $data,
          ]);
      } 
+     #[Route('/search1', name: 'search1')]
+public function searchEvenementx(Request $request, NormalizerInterface $Normalizer,UserRepository $sr)
+{
+    $repository = $this->getDoctrine()->getRepository(User::class);
+    $requestString = $request->get('searchValue');
+    $Evenements = $repository->findEvenementByNom($requestString);
+    $jsonContent = $Normalizer->normalize($Evenements, 'json', ['groups' => 'User']);
+    $retour = json_encode($jsonContent);
+    return new Response($retour);
+}
+
+
+/**
+     * @Route("/stat1" , name="stat1")
+     */
+    public function stat(ReclamationRepository $repository )
+    {
+        //**************************** Iheb ***************************
+        $newCommandeCount =$repository->findNewCommande();
+        $commandeTrite = $repository->findCommandesTritée();
+        $commandeNonTrite = $repository->findCommandesNonTritée();
+        $IhebChart1 = new PieChart();
+        $IhebChart1->getData()->setArrayToDataTable(
+            [['Task', 'Hours per Day'],
+                ['Reclamation Confirmées',((int) $commandeTrite)],
+                ['Reclamation En attente',((int) $commandeNonTrite)],
+            ]
+        );
+        $IhebChart1->getOptions()->setTitle("L'ETAT DES Reclamations D'AUJOURD'HUIT");
+        $IhebChart1->getOptions()->setHeight(400);
+        $IhebChart1->getOptions()->setIs3D(2);
+        $IhebChart1->getOptions()->setWidth(550);
+        $IhebChart1->getOptions()->getTitleTextStyle()->setBold(true);
+        $IhebChart1->getOptions()->getTitleTextStyle()->setColor('#009900');
+        $IhebChart1->getOptions()->getTitleTextStyle()->setItalic(true);
+        $IhebChart1->getOptions()->getTitleTextStyle()->setFontName('Arial');
+        $IhebChart1->getOptions()->getTitleTextStyle()->setFontSize(15);
+
+        return $this->render('reclamation/stat1.html.twig', array(
+            'IhebChart1' => $IhebChart1 ,
+          ));
+    
+
+
+
+    }
   //////////////////////////l'affiche fil front ////////////////////////
   #[Route('/affichreclamation2', name: 'app_affrecfront')]
   public function liste2 (ManagerRegistry $mg,PaginatorInterface $paginator ,Request $request): Response
-  {  
+  {       $utilisateur = $this->getUser();
+    // dd($utilisateur);
+    if(!$utilisateur)
+{
+return $this->redirectToRoute('app_login');
+
+}
+else{
      $repo=$mg->getRepository(Reclamation::class);
       $resultat = $repo ->FindAll();
       $data= $paginator->paginate(
@@ -93,6 +157,7 @@ class ReclamationController extends AbstractController
       return $this->render('reclamation/afficherfront.html.twig', [
           'recl' => $data,
       ]);
+    }
   } 
  
  //////////////////////////modifier fil front ////////////////////////

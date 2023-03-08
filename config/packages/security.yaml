@@ -42,7 +42,8 @@ security:
        
        
     # - { path: ^/admin, roles: [ROLE_ADMIN, ROLE_Coach]  }   
-    # - { path: ^/admin, roles: ROLE_ADMIN}         
+    # - { path: ^/admin, roles: ROLE_ADMIN}  
+    - { path: /favicon.ico, roles: IS_AUTHENTICATED_ANONYMOUSLY }       
     - { path: ^/home, roles: ROLE_USER }
     - { path: ^/logout, roles: ROLE_USER }
     - { path: ^/membre, roles:  ROLE_USER }

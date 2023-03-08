@@ -35,11 +35,11 @@ class ProduitType extends AbstractType
                 'constraints' => [
                     new File([
                         
-                      'mimeTypes' => [
-                           //'image/jpg',
-                           'image/png',
-                           'image/gif',
-                        ],
+                    //   'mimeTypes' => [
+                    //        //'image/jpg',
+                    //        'image/png',
+                    //        'image/gif',
+                    //     ],
                         'mimeTypesMessage' => 'Veuillez télécharger une image valide',
                     ])
                 ],

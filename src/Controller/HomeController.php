@@ -13,6 +13,8 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 
 use Knp\Component\Pager\PaginatorInterface;
 
@@ -157,9 +159,11 @@ class HomeController extends AbstractController
        $data= $paginator->paginate(
         $user,
         $request->query->getInt('page',1),//num page
-        1
+        3
     );
-    
+        
+ 
+
       
        return $this->render('user/userback.html.twig',[
         'user' => $data,
@@ -170,6 +174,74 @@ class HomeController extends AbstractController
             return $this->render('/403.html.twig');
         }
 }
+
+
+// #[Route('/listing', name: 'listing')]
+// public function listing1(UserRepository $repo,Request $request)
+// { 
+    
+//     if ($this->isGranted('ROLE_ADMIN')) {
+//    $user=$repo->FindAll();
+   
+
+  
+//    return $this->render('user/userback.html.twig',array("user"=>$user));
+//     }
+//     else
+//     {
+//         return $this->render('/403.html.twig');
+//     }
+// }
+    
+    
+#[Route('/search1', name: 'search1')]
+public function searchEvenementx(Request $request, NormalizerInterface $Normalizer,UserRepository $sr)
+{
+    $repository = $this->getDoctrine()->getRepository(User::class);
+    $requestString = $request->get('searchValue');
+    $Evenements = $repository->findEvenementByNom($requestString);
+    $jsonContent = $Normalizer->normalize($Evenements, 'json', ['groups' => 'User']);
+    $retour = json_encode($jsonContent);
+    return new Response($retour);
+}
+  /**
+     * @Route("/stat2" , name="stat2")
+     */
+    public function stat(UserRepository $repository)
+    {
+        //**************************** Iheb ***************************
+        $roleuser = $repository->roleuser();
+        $roleadmin = $repository->roleadmin();
+        $rolecoach = $repository->rolecoach();
+        // dd($roleuser);
+
+        $IhebChart1 = new PieChart();
+        $IhebChart1->getData()->setArrayToDataTable(
+            [['Task', 'Hours per Day'],
+                ['roleuser',(int)( $roleuser)],
+                ['roleadmin',(int)($roleadmin)],
+                ['rolecoach',(int)($rolecoach)],
+            ]
+        );
+        $IhebChart1->getOptions()->setTitle("LES UTLISATEURS DE E-FIT");
+        $IhebChart1->getOptions()->setHeight(400);
+        $IhebChart1->getOptions()->setIs3D(2);
+        $IhebChart1->getOptions()->setWidth(550);
+        $IhebChart1->getOptions()->getTitleTextStyle()->setBold(true);
+        $IhebChart1->getOptions()->getTitleTextStyle()->setColor('#009900');
+        $IhebChart1->getOptions()->getTitleTextStyle()->setItalic(true);
+        $IhebChart1->getOptions()->getTitleTextStyle()->setFontName('Arial');
+        $IhebChart1->getOptions()->getTitleTextStyle()->setFontSize(15);
+
+        return $this->render('user/stats.html.twig', array(
+            'IhebChart1' => $IhebChart1 ,
+          ));
+    
+
+
+
+    }
+
 #[Route('/monprofile/{id}', name: 'monprofile')]
 public function listing2(UserRepository $repo,Request $request,$id)
 { 

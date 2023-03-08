@@ -1,4 +1,4 @@
-{% extends 'basefront.html.twig' %}
+{% extends 'test.html.twig' %}
 
 {% block title %}Produit{% endblock %}
 
@@ -61,19 +61,39 @@
                                <h4 class="order-total">Catégorie : {{Produit.Categorys}}</h4>
 
 							</div>
+
 {{Produit.Description}}
 							<div class="product-options">
 								
 								
 							</div>
 
+						
+						
 							<div class="add-to-cart">
 								
-						<a href="#" class="primary-btn order-submit">Acheter</a>
+						<a href="{{ path('ajoutProduit1',{id:Produit.id}) }}" class="primary-btn order-submit">Acheter</a>
 							</div>
+							<div class="add-to-cart">
+								
+						<a href="{{ path('ajoutProduitF',{id:Produit.id}) }}" class="primary-btn order-submit">Ajout favorie</a>
+							</div>
+							{% set Produit_id = Produit.id %}
+								{% set Produit_nom = Produit.nom %}
+							{% set Produit_description = Produit.description %}
+							{% set Produit_quantite = Produit.quantite %}
+							{% set Produit_prix = Produit.prix %}
+						{% set Produit_imgage = asset('uploads/produits/' ~ Produit.Image) %}
 
-						
-						
+
+{% set qrData = 'Nom du Produit: ' ~ Produit_nom ~ ' - Description: ' ~ Produit_description ~ 'Quantite du Produit: ' ~ Produit_quantite ~ ' - Image: ' ~ Produit_imgage %}
+                        
+{% set url_detaille = path('detailP', {'id': Produit_id}) %}
+
+<td class="invert">
+    <img style="width: 100px" class="rounded mx-auto d-block" src="{{ qr_code_data_uri(qrData) }}" />
+</td>
+
 
 						
 
@@ -125,7 +145,7 @@
 				<h2>Ajouter un commentaire</h2>
 {{form_start(commentForm, {'attr': {'novalidate':'novalidate'}})}}
 		
-				    {{ form_row(commentForm.email) }}
+				    {# {{ form_row(commentForm.email) }} #}
 				    {{ form_row(commentForm.nickname) }}
 				
 					 {{ form_row(commentForm.content) }} 

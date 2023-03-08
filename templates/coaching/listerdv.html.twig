@@ -1,4 +1,4 @@
-{% extends 'baseBack.html.twig' %}
+{% extends 'test.html.twig' %}
 {% block body %}
 <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
@@ -22,7 +22,12 @@
                             <td>{{a.id }}</td>
                             <td> {{a.coachings}} </td>
                             <td> {{a.DateRdv.format('j-m-y') }} </td>
-                            <td><a href="{{ path('updaterdv', {id:a.id}) }}" class="btn btn-primary" >Traiter</a></td>
+                            <td>
+                    {% if a.etatrdv != 1 %}
+                    <a href="{{ path('emailcoach', {id:a.id}) }}" class="btn btn-primary" id="myButton">Traiter</a>
+                    {% endif %}
+
+                    </td>
 
                           </tr>
                           {% endfor %}

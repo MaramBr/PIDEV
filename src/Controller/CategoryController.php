@@ -16,6 +16,9 @@ use App\Repository\CategoryRepository;
  
 class CategoryController extends AbstractController
 {
+
+    
+
     #[Route('/Category', name: 'app_Category')]
     public function index(): Response
     {
@@ -23,7 +26,7 @@ class CategoryController extends AbstractController
             'controller_name' => 'CategoryController',
         ]);
     }
-    #[Route('/Category/afficher2', name: 'appfront2')]
+    #[Route('/Category/afficher2', name: 'affichercat')]
     public function affichefront2(ManagerRegistry $em): Response
     {
         $repo=$em->getRepository(Category::class);
@@ -47,7 +50,7 @@ class CategoryController extends AbstractController
 
 
 
-    #[Route('/Category/add2', name: 'add2')]
+    #[Route('/Category/add2', name: 'addc2')]
     public function add2(ManagerRegistry $doctrine,Request $request): Response
     {
         $Category=new Category() ;
@@ -96,5 +99,16 @@ class CategoryController extends AbstractController
         $em->flush() ;
         return $this->redirectToRoute('appback2');
     }
+
+    #[Route('/Category/afficher2', name: 'affichercat')]
+    public function affichefrontcat(ManagerRegistry $em): Response
+    {
+        $repo=$em->getRepository(Category::class);
+        $result=$repo->findAll();
+        return $this->render ('Category/affich.html.twig',['Category'=>$result]);
+   
+       
+    }
+
  
 }

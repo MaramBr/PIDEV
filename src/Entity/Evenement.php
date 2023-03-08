@@ -82,6 +82,17 @@ class Evenement
 
      
     private ?string $nbParticipant = null;
+
+    #[ORM\Column]
+    private ?int $dislikeButton = 0;
+
+    #[ORM\Column]
+    private ?int $likeButton = 0;
+
+    #[ORM\Column]
+     #[Assert\NotBlank(message:"Prix evenement doit etre non vide")]
+     
+    private ?float $Prix = null;
     
 
     
@@ -204,6 +215,7 @@ class Evenement
         $this->getDescription();
         $this->getLieu();
         $this->getNbParticipant();
+         $this->getPrix();
         $this->getSponsors();
       
        
@@ -245,6 +257,42 @@ class Evenement
      public function setNbParticipant(string $nbParticipant): self
      {
          $this->nbParticipant = $nbParticipant;
+
+         return $this;
+     }
+
+     public function getLikeButton(): ?int
+     {
+         return $this->likeButton;
+     }
+
+     public function setLikeButton(int $likeButton): self
+     {
+         $this->likeButton = $likeButton;
+
+         return $this;
+     }
+
+     public function getDislikeButton(): ?int
+     {
+         return $this->dislikeButton;
+     }
+
+     public function setDislikeButton(int $dislikeButton): self
+     {
+         $this->dislikeButton = $dislikeButton;
+
+         return $this;
+     }
+
+     public function getPrix(): ?float
+     {
+         return $this->Prix;
+     }
+
+     public function setPrix(float $Prix): self
+     {
+         $this->Prix = $Prix;
 
          return $this;
      }

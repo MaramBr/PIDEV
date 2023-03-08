@@ -1,183 +1,6 @@
 <?php
 
 namespace App\Controller;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Produit;//controller
-use Doctrine\Persistence\ManagerRegistry;//controller
-use App\RepositoryProduitRepository;//controller
-use App\Form\ProduitType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\String\Slugger\SluggerInterface;
-
-use App\Repository\PanierRepository;
-use App\Entity\Panier;
-use App\Entity\User;
-use App\Entity\Commande;
-use App\Entity\CommandeProduit;
-use App\Repository\CommandeProduitRepository;
-use App\Repository\UserRepository;
-use App\Repository\CommandeRepository;
-
-
-
-
- 
-class ProduitController extends AbstractController
-{
-    #[Route('/Produit', name: 'app_Produit')]
-    public function index(): Response
-    {
-        return $this->render('Produit/index.html.twig', [
-            'controller_name' => 'ProduitController',
-        ]);
-    }
-
-   
-    #[Route('/Produit/afficher', name: 'app')]
-    public function affiche1(ManagerRegistry $em): Response
-    {
-        $repo=$em->getRepository(Produit::class);
-        $result=$repo->findAll();
-        return $this->render ('Produit/affich.html.twig',['Produit'=>$result]);
-   
-       
-    }
-    #[Route('/Produit/afficherback', name: 'appback')]
-    public function afficheback(ManagerRegistry $em): Response
-    {
-        $repo=$em->getRepository(Produit::class);
-        $result=$repo->findAll();
-        return $this->render ('Produit/back.html.twig',['Produit'=>$result]);
-   
-       
-    }
-
-
-
-
-    #[Route('/Produit/add', name: 'add')]
-    public function add(ManagerRegistry $doctrine,Request $request, SluggerInterface $slugger): Response
-    {
-        $Produit=new Produit() ;
-        $form=$this->createForm(ProduitType::class,$Produit); //sna3na objet essmo form aamlena bih appel lel Produittype
-        $form->handleRequest($request);
-        if( $form->isSubmitted() && $form->isValid() )   //amaalna verification esq taadet willa le aadna prob fi code ou nn
-       {
-        $image = $form->get('image')->getData();
-
-        // this condition is needed because the 'brochure' field is not required
-        // so the PDF file must be processed only when a file is uploaded
-        if ($image) {
-            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // this is needed to safely include the file name as part of the URL
-            $safeFilename = $slugger->slug($originalFilename);
-            $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
-
-            // Move the file to the directory where brochures are stored
-            try {
-                $image->move(
-                    $this->getParameter('produit_directory'),
-                    $newFilename
-                );
-            } catch (FileException $e) {
-                // ... handle exception if something happens during file upload
-            }
-
-            // updates the 'brochureFilename' property to store the PDF file name
-            // instead of its contents
-            $Produit->setImage($newFilename);
-        }
-        $em=$doctrine->getManager(); //appel lel manager
-        $em->persist($Produit); //elli tzid
-        $em->flush(); //besh ysob fi base de donnee
-        return $this->redirectToRoute('appback');
-        }
-        return $this->render('Produit/add.html.twig', array("formProduit"=>$form->createView()));
-       // return $this->render('Produit/add.html.twig', array("formProduit"=>$form->createView));
-
-    }
-    #[Route('/Produit/add1', name: 'add1')]
-    public function add1(ManagerRegistry $doctrine,Request $request, SluggerInterface $slugger): Response
-    {
-        $Produit=new Produit() ;
-        $form=$this->createForm(ProduitType::class,$Produit); //sna3na objet essmo form aamlena bih appel lel Produittype
-        $form->handleRequest($request);
-        if( $form->isSubmitted() && $form->isValid() )   //amaalna verification esq taadet willa le aadna prob fi code ou nn
-       {
-        $image = $form->get('image')->getData();
-
-        // this condition is needed because the 'brochure' field is not required
-        // so the PDF file must be processed only when a file is uploaded
-        if ($image) {
-            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-            // this is needed to safely include the file name as part of the URL
-            $safeFilename = $slugger->slug($originalFilename);
-            $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
-
-            // Move the file to the directory where brochures are stored
-            try {
-                $image->move(
-                    $this->getParameter('produit_directory'),
-                    $newFilename
-                );
-            } catch (FileException $e) {
-                // ... handle exception if something happens during file upload
-            }
-
-            // updates the 'brochureFilename' property to store the PDF file name
-            // instead of its contents
-            $Produit->setImage($newFilename);
-        }
-        $em=$doctrine->getManager(); //appel lel manager
-        $em->persist($Produit); //elli tzid
-        $em->flush(); //besh ysob fi base de donnee
-        return $this->redirectToRoute('app');
-        }
-        return $this->render('Produit/add1.html.twig', array("formProduit"=>$form->createView()));
-       // return $this->render('Produit/add.html.twig', array("formProduit"=>$form->createView));
-
-    }
-
-    #[Route('/Produit/update/{id}', name: 'update')]
-
-    public function  updateProduit (ManagerRegistry $doctrine,$id,  Request  $request) : Response
-    { $Produit = $doctrine
-        ->getRepository(Produit::class)
-        ->find($id);
-        $form = $this->createForm(ProduitType::class, $Produit);
-        $form->add('update', SubmitType::class) ;
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid() )
-        { $em = $doctrine->getManager();
-            $em->flush();
-            return $this->redirectToRoute('appback');
-        }
-        return $this->renderForm("Produit/update.html.twig",
-            ["Produit"=>$form]) ;
-
-
-    } 
-
-    #[Route('/Produit/delete/{id}', name: 'delete')]
-
-    public function delete($id, ManagerRegistry $doctrine)
-    {$c = $doctrine
-        ->getRepository(Produit::class)
-        ->find($id);
-        $em = $doctrine->getManager();
-        $em->remove($c);
-        $em->flush() ;
-        return $this->redirectToRoute('appback');
-    }
- 
-}
-<?php
-
-namespace App\Controller;
 use App\Entity\Category;
 use App\Repository\ProduitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -188,7 +11,6 @@ use Doctrine\Persistence\ManagerRegistry;//controller
 use App\RepositoryProduitRepository;//controller
 use App\Form\ProduitType;
 use App\Form\SearchProduitType;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -198,12 +20,13 @@ use App\Entity\Comments;
 use App\Form\CommentsType;
 use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
-
 use Symfony\Component\Serializer\Normalizer\Normalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Services\QrcodeService;
+use Endroid\QrCode\Builder\BuilderInterface;
+use Endroid\QrCodeBundle\Response\QrCodeResponse;
  
 class ProduitController extends AbstractController
 {
@@ -226,7 +49,7 @@ class ProduitController extends AbstractController
             $Produit= $paginator->paginate(
                 $data,
                 $request->query->getInt('page',1),//num page
-                3
+                2
             );
             return $this->render ('produit/affich.html.twig',['data'=>$Produit]);
        
@@ -328,12 +151,77 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
 
 
 
-    #[Route('/detaille/{id}', name: 'detaille')]
-    public function detaille($id,ManagerRegistry $mg, Produit $Produit, LoggerInterface $logger, Request $request): Response
+//     #[Route('/detailP/{id}', name: 'detailP')]
+//     public function detaille($id,ManagerRegistry $mg, Produit $Produit, LoggerInterface $logger, Request $request): Response
+//     {    
+//         $repo=$mg->getRepository(Produit::class);
+//         $resultat = $repo ->find($id);
+//         $logger->info("The array is: " . json_encode($resultat));
+//          // Partie commentaires
+//         // On crée le commentaire "vierge"
+//         $comment = new Comments;
+
+//         // On génère le formulaire
+//         $commentForm = $this->createForm(CommentsType::class, $comment);
+
+//         $commentForm->handleRequest($request);
+//  // Traitement du formulaire
+//  if($commentForm->isSubmitted() && $commentForm->isValid()){
+//     $utilisateur = $this->getUser();
+//         // dd($utilisateur);
+//         $mail=$this->getUser()->getEmail();
+//         $comment->setEmail($mail);
+
+//     $comment->setCreatedAt(new DateTime());
+//     $comment->setProduits($Produit);
+
+//      // On récupère le contenu du champ parentid
+//      $parentid = $commentForm->get("parentid")->getData();
+//      //$parentid = $commentForm->getParent().id->getData();
+//          // On va chercher le commentaire correspondant
+//          $em = $this->getDoctrine()->getManager();
+//          if($parentid != null){
+//             $parent = $em->getRepository(Comments::class)->find($parentid);
+//         }
+
+//         // On définit le parent
+//         $comment->setParent($parent ?? null );
+//          $em->persist($comment);
+//          $em->flush();
+//          $this->addFlash('message', 'Votre commentaire a été bien envoyé');
+//             return $this->redirectToRoute('detailP', ['id' => $id]);
+
+
+//  }
+ 
+//         return $this->render('produit/readmore.html.twig', [
+//             'Produit' => $resultat,
+//             'commentForm' => $commentForm->createView()
+//         ]);
+
+           
+
+
+
+
+        
+//     }
+
+
+#[Route('/detailP/{id}', name: 'detailP')]
+    public function detaille($id,ManagerRegistry $mg, Produit $Produit, LoggerInterface $logger, Request $request,BuilderInterface $customQrCodeBuilder): Response
     {
         $repo=$mg->getRepository(Produit::class);
         $resultat = $repo ->find($id);
         $logger->info("The array is: " . json_encode($resultat));
+
+
+        $result = $customQrCodeBuilder
+            ->size(400)
+            ->margin(20)
+            ->build();
+        $response = new QrCodeResponse($result);
+
          // Partie commentaires
         // On crée le commentaire "vierge"
         $comment = new Comments;
@@ -344,6 +232,10 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
         $commentForm->handleRequest($request);
  // Traitement du formulaire
  if($commentForm->isSubmitted() && $commentForm->isValid()){
+    $utilisateur = $this->getUser();
+         // dd($utilisateur);
+           $mail=$this->getUser()->getEmail();
+           $comment->setEmail($mail);
     $comment->setCreatedAt(new DateTime());
     $comment->setProduits($Produit);
 
@@ -368,23 +260,19 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
  
         return $this->render('produit/readmore.html.twig', [
             'Produit' => $resultat,
-            'commentForm' => $commentForm->createView()
+            'commentForm' => $commentForm->createView(),
+            'qr'=>$response->getContent()
         ]);
 
-           
+}
 
-
-
-
-        
-    }
-
-    #[Route('/Produit/afficherback', name: 'appback')]
+    #[Route('/Produit/afficher1', name: 'appback1')]
     public function afficheback(ManagerRegistry $em): Response
     {
         $repo=$em->getRepository(Produit::class);
         $result=$repo->findAll();
         return $this->render ('Produit/back.html.twig',['Produit'=>$result]);
+
    
        
     }
@@ -392,7 +280,7 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
 
 
 
-    #[Route('/Produit/add', name: 'add')]
+    #[Route('/addProduit2', name: 'addp2')]
     public function add(ManagerRegistry $doctrine,Request $request, SluggerInterface $slugger): Response
     {
         $Produit=new Produit() ;
@@ -427,7 +315,7 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
         $em=$doctrine->getManager(); //appel lel manager
         $em->persist($Produit); //elli tzid
         $em->flush(); //besh ysob fi base de donnee
-        return $this->redirectToRoute('appback');
+        return $this->redirectToRoute('appback1');
         }
         return $this->render('Produit/add.html.twig', array("formProduit"=>$form->createView()));
        // return $this->render('Produit/add.html.twig', array("formProduit"=>$form->createView));
@@ -487,7 +375,7 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
         if ($form->isSubmitted() && $form->isValid() )
         { $em = $doctrine->getManager();
             $em->flush();
-            return $this->redirectToRoute('appback');
+            return $this->redirectToRoute('appback1');
         }
         return $this->renderForm("Produit/update.html.twig",
             ["Produit"=>$form]) ;
@@ -504,7 +392,7 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
         $em = $doctrine->getManager();
         $em->remove($c);
         $em->flush() ;
-        return $this->redirectToRoute('appback');
+        return $this->redirectToRoute('appback1');
     }
     //////
     
@@ -558,7 +446,7 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
     #[Route("/like/{id}/{type}", name:"app_testfront_like")]
  
 public function like(Request $request, Produit $Produit, $type)
-{
+{ 
     if ($type == 'like') {
         $Produit->setLikes($Produit->getLikes() + 1);
     } else {
@@ -567,7 +455,7 @@ public function like(Request $request, Produit $Produit, $type)
 
     $this->getDoctrine()->getManager()->flush();
 
-    return $this->redirectToRoute('detaille', ['id' => $Produit->getId()]);
+    return $this->redirectToRoute('detailP', ['id' => $Produit->getId()]);
 }
 
 
@@ -633,5 +521,219 @@ public function like(Request $request, Produit $Produit, $type)
            
         ]);
     }
+   
+    // #[Route('/Produit/add1', name: 'add1')]
+    // public function add1(ManagerRegistry $doctrine,Request $request, SluggerInterface $slugger): Response
+    // {
+    //     $Produit=new Produit() ;
+    //     $form=$this->createForm(ProduitType::class,$Produit); //sna3na objet essmo form aamlena bih appel lel Produittype
+    //     $form->handleRequest($request);
+    //     if( $form->isSubmitted() && $form->isValid() )   //amaalna verification esq taadet willa le aadna prob fi code ou nn
+    //    {
+    //     $image = $form->get('image')->getData();
+
+    //     // this condition is needed because the 'brochure' field is not required
+    //     // so the PDF file must be processed only when a file is uploaded
+    //     if ($image) {
+    //         $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+    //         // this is needed to safely include the file name as part of the URL
+    //         $safeFilename = $slugger->slug($originalFilename);
+    //         $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+    //         // Move the file to the directory where brochures are stored
+    //         try {
+    //             $image->move(
+    //                 $this->getParameter('produit_directory'),
+    //                 $newFilename
+    //             );
+    //         } catch (FileException $e) {
+    //             // ... handle exception if something happens during file upload
+    //         }
+
+    //         // updates the 'brochureFilename' property to store the PDF file name
+    //         // instead of its contents
+    //         $Produit->setImage($newFilename);
+    //     }
+    //     $em=$doctrine->getManager(); //appel lel manager
+    //     $em->persist($Produit); //elli tzid
+    //     $em->flush(); //besh ysob fi base de donnee
+    //     return $this->redirectToRoute('app');
+    //     }
+    //     return $this->render('Produit/add1.html.twig', array("formProduit"=>$form->createView()));
+    //    // return $this->render('Produit/add.html.twig', array("formProduit"=>$form->createView));
+
+    // }
+
+
+    // #[Route('/Produit/update/{id}', name: 'update')]
+
+    // public function  updateProduit (ManagerRegistry $doctrine,$id,  Request  $request) : Response
+    // { $Produit = $doctrine
+    //     ->getRepository(Produit::class)
+    //     ->find($id);
+    //     $form = $this->createForm(ProduitType::class, $Produit);
+    //     $form->add('update', SubmitType::class) ;
+    //     $form->handleRequest($request);
+    //     if ($form->isSubmitted() && $form->isValid() )
+    //     { $em = $doctrine->getManager();
+    //         $em->flush();
+    //         return $this->redirectToRoute('appback1');
+    //     }
+    //     return $this->renderForm("Produit/update.html.twig",
+    //         ["Produit"=>$form]) ;
+
+
+    // } 
+
+    // #[Route('/Produit/delete/{id}', name: 'delete')]
+
+    // public function delete($id, ManagerRegistry $doctrine)
+    // {$c = $doctrine
+    //     ->getRepository(Produit::class)
+    //     ->find($id);
+    //     $em = $doctrine->getManager();
+    //     $em->remove($c);
+    //     $em->flush() ;
+    //     return $this->redirectToRoute('appback1');
+    // }
+
+
+/* #[Route('/Produit/afficher', name: 'app')]
+    public function affiche1(ManagerRegistry $em): Response
+    {
+        $repo=$em->getRepository(Produit::class);
+        $result=$repo->findAll();
+        return $this->render ('Produit/affich.html.twig',['Produit'=>$result]);
+   
+       
+    }
+    #[Route('/Produit/afficherback', name: 'appback1')]
+    public function afficheback(ManagerRegistry $em): Response
+    {
+        $repo=$em->getRepository(Produit::class);
+        $result=$repo->findAll();
+        return $this->render ('Produit/back.html.twig',['Produit'=>$result]);
+   
+       
+    }
+
+
+
+
+    #[Route('/Produit/add', name: 'add')]
+    public function add(ManagerRegistry $doctrine,Request $request, SluggerInterface $slugger): Response
+    {
+        $Produit=new Produit() ;
+        $form=$this->createForm(ProduitType::class,$Produit); //sna3na objet essmo form aamlena bih appel lel Produittype
+        $form->handleRequest($request);
+        if( $form->isSubmitted() && $form->isValid() )   //amaalna verification esq taadet willa le aadna prob fi code ou nn
+       {
+        $image = $form->get('image')->getData();
+
+        // this condition is needed because the 'brochure' field is not required
+        // so the PDF file must be processed only when a file is uploaded
+        if ($image) {
+            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            // this is needed to safely include the file name as part of the URL
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+            // Move the file to the directory where brochures are stored
+            try {
+                $image->move(
+                    $this->getParameter('produit_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                // ... handle exception if something happens during file upload
+            }
+
+            // updates the 'brochureFilename' property to store the PDF file name
+            // instead of its contents
+            $Produit->setImage($newFilename);
+        }
+        $em=$doctrine->getManager(); //appel lel manager
+        $em->persist($Produit); //elli tzid
+        $em->flush(); //besh ysob fi base de donnee
+        return $this->redirectToRoute('appback1');
+        }
+        return $this->render('Produit/add.html.twig', array("formProduit"=>$form->createView()));
+       // return $this->render('Produit/add.html.twig', array("formProduit"=>$form->createView));
+
+    }
+    #[Route('/Produit/add1', name: 'add1')]
+    public function add1(ManagerRegistry $doctrine,Request $request, SluggerInterface $slugger): Response
+    {
+        $Produit=new Produit() ;
+        $form=$this->createForm(ProduitType::class,$Produit); //sna3na objet essmo form aamlena bih appel lel Produittype
+        $form->handleRequest($request);
+        if( $form->isSubmitted() && $form->isValid() )   //amaalna verification esq taadet willa le aadna prob fi code ou nn
+       {
+        $image = $form->get('image')->getData();
+
+        // this condition is needed because the 'brochure' field is not required
+        // so the PDF file must be processed only when a file is uploaded
+        if ($image) {
+            $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+            // this is needed to safely include the file name as part of the URL
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$image->guessExtension();
+
+            // Move the file to the directory where brochures are stored
+            try {
+                $image->move(
+                    $this->getParameter('produit_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                // ... handle exception if something happens during file upload
+            }
+
+            // updates the 'brochureFilename' property to store the PDF file name
+            // instead of its contents
+            $Produit->setImage($newFilename);
+        }
+        $em=$doctrine->getManager(); //appel lel manager
+        $em->persist($Produit); //elli tzid
+        $em->flush(); //besh ysob fi base de donnee
+        return $this->redirectToRoute('app');
+        }
+        return $this->render('Produit/add1.html.twig', array("formProduit"=>$form->createView()));
+       // return $this->render('Produit/add.html.twig', array("formProduit"=>$form->createView));
+
+    }
+
+    #[Route('/Produit/update/{id}', name: 'update')]
+
+    public function  updateProduit (ManagerRegistry $doctrine,$id,  Request  $request) : Response
+    { $Produit = $doctrine
+        ->getRepository(Produit::class)
+        ->find($id);
+        $form = $this->createForm(ProduitType::class, $Produit);
+        $form->add('update', SubmitType::class) ;
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid() )
+        { $em = $doctrine->getManager();
+            $em->flush();
+            return $this->redirectToRoute('appback1');
+        }
+        return $this->renderForm("Produit/update.html.twig",
+            ["Produit"=>$form]) ;
+
+
+    } 
+
+    #[Route('/Produit/delete/{id}', name: 'delete')]
+
+    public function delete($id, ManagerRegistry $doctrine)
+    {$c = $doctrine
+        ->getRepository(Produit::class)
+        ->find($id);
+        $em = $doctrine->getManager();
+        $em->remove($c);
+        $em->flush() ;
+        return $this->redirectToRoute('appback1');
+    }*/
+
 
 }

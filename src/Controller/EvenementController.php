@@ -214,8 +214,8 @@ public function deleteEvenement($id, ManagerRegistry $doctrine, MailerInterface 
     $mailer->Host = 'smtp.gmail.com';
     $mailer->Port = 587;
     $mailer->SMTPAuth = true;
-    $mailer->Username = 'emna.abbessi@esprit.tn';
-    $mailer->Password = '12715163';
+    $mailer->Username = 'rayan.lahmar@esprit.tn';
+    $mailer->Password = '201JMT3276';
     $mailer->setFrom('E-Fit');
     
     foreach ($participants as $participant) {
@@ -302,7 +302,7 @@ public function calendar(ManagerRegistry $doctrine): Response
     }
     
     
-#[Route('/detaille/{id}', name: 'detaille')]
+#[Route('/detail1/{id}', name: 'detail1')]
     public function detaille($id,ManagerRegistry $mg): Response
     {
         $repo=$mg->getRepository(Evenement::class);

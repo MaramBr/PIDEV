@@ -47,7 +47,7 @@
  <td> {% for a in  i.getCommandeProduits().toArray() %}
     <div>{{ a.getProduit().quantite}} x {{ a.getProduit().nom}} | {{ a.getProduit().prix}}.00DT</div>
      {% endfor %} </td>
-<td>{{ i.utilisateur.id}}</td>
+<td>{{ i.user.id}}</td>
  <td>{{ i.montant }}.00DT</td>
 <td>{{ i.getDateCreation().format('j-m-y') }}</td>
   <td>{{ i.status }}</td>

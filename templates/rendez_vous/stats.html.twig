@@ -1,65 +1,88 @@
 {% extends 'baseback.html.twig' %}
 
 {% block body %}
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <tbody>
+                <tr>
+                    <h1>RendezVous Statistics</h1>
+                    <p>Total number of RendezVouss: {{ totalRendezVouss }}</p>
 
-<style>
-    body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin-top: 100px;
-    }
-</style>
-<div id="piechart" style="width: 500px; height: 300px; margin-bottom: 20px;"></div>
-    <div id="barchart" style="width: 500px; height: 300px; margin-bottom: 20px;"></div>
-  
+                    <h2>Nombre des RendezVous par cours</h2>
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawPieChart);
-        google.charts.setOnLoadCallback(drawBarChart);
+                    <canvas id="RendezVoussPerRoleChart" style="width: 200px; height: 75px;"></canvas>
 
-        function drawPieChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Coachings', 'Nombre d\'Coaching'],
-                {% for Coachings, count in counts %}
-                    ['{{ Coachings }}', {{ count }}],
-                {% endfor %}
-            ]);
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        var courss = [];
+                        var RendezVousCounts = [];
+                        {% for row in RendezVousCoachings %}
+                        var cours = '{{ row['cours'] }}';
+                        var RendezVousCount = '{{ row["RendezVousCount"] }}';
+                        // map role names to display names
+                        if (cours == 'Fitness') {
+                            cours = 'Fitness';
+                        } else if (cours =='Yoga') {
+                            cours == 'Yoga';
+                        } else if (cours =='Boxing') {
+                            cours = 'Boxing';
+                        }
+                        courss.push(cours);
+                        RendezVousCounts.push(RendezVousCount);
+                        {% endfor %}
+                        var chartData = {
+                            labels: courss,
+                            datasets: [{
+                                label: 'Nombre des RendezVouss',
+                                data: RendezVousCounts,
+                                backgroundColor: 'rgba(54, 122, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        };
+                        var chartOptions = {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        };
+                        var chart = new Chart('RendezVoussPerRoleChart', {
+                            type: 'bar',
+                            data: chartData,
+                            options: chartOptions
+                        });
+                    </script>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block notify %}
+   
+<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+                  <h6 class="p-3 mb-0">Notifications</h6>
+                  <div class="dropdown-divider"></div>
+                                    {% for i in notif %}
 
-            var options = {
-                title: 'Répartition des séance de Coaching par Coachings',
-                is3D: true,
-                width: 500,
-                height: 300
-            };
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle" >
+                        <i class="mdi mdi-calendar text-success" ></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                    
+                      <p class="preview-subject mb-1">{{i.message}}</p>
+                      <p class="text-muted ellipsis mb-0" > un Rendez_Vous a été ajouter </p>
+                    </div>
+                  </a>
+                 {% endfor %}
+                  <p class="p-3 mb-0 text-center" f r>voir tous les notifications</p>
+                </div>
 
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-            chart.draw(data, options);
-        }
-
-        function drawBarChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Coachings', 'Nombre d\'Coaching'],
-                {% for Coachings, count in counts %}
-                    ['{{ Coachings }}', {{ count }}],
-                {% endfor %}
-            ]);
-
-            var options = {
-                title: 'Nombre des séance de Coaching par Coachings',
-                legend: { position: 'none' },
-                bars: 'vertical',
-                vAxis: { format: 'decimal' },
-                height: 300,
-                width: 500,
-                colors: ['#1b9e77']
-            };
-
-            var chart = new google.visualization.ColumnChart(document.getElementById('barchart'));
-            chart.draw(data, options);
-        }
-    </script>
 {% endblock %}

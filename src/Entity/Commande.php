@@ -24,7 +24,7 @@ class Commande
 
     #[ORM\Column(length: 255)]
     #[Groups("commande")]
-    private ?string $status = null;
+    private ?string $status = 'En attente';
 
     #[ORM\Column]
     #[Groups("commande")]
@@ -40,8 +40,8 @@ class Commande
 
     #[ORM\ManyToOne(inversedBy: 'commandes')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[Groups("commande","utilisateur")]
-    private ?User $utilisateur = null;
+    #[Groups("commande","user")]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -135,14 +135,14 @@ class Commande
         return $this;
     }
 
-    public function getUtilisateur(): ?User
+    public function getuser(): ?User
     {
-        return $this->utilisateur;
+        return $this->user;
     }
 
-    public function setUtilisateur(?User $utilisateur): self
+    public function setuser(?User $user): self
     {
-        $this->utilisateur = $utilisateur;
+        $this->user = $user;
 
         return $this;
     }

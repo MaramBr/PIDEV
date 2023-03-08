@@ -55,6 +55,47 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         $this->save($user, true);
     }
+    public function findEvenementByNom($nom)
+    {
+        return $this->createQueryBuilder('user')
+            ->where('user.nom LIKE  :nom')
+            ->setParameter('nom', '%'.$nom. '%')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
+
+public function roleuser()
+{
+    return $this->createQueryBuilder('user')
+    ->select('COUNT(user.id)')
+    ->where('user.roles LIKE :role')
+    ->setParameter('role', '%ROLE_USER%')
+    ->getQuery()
+    ->getSingleScalarResult();
+}
+public function roleadmin()
+{
+    return $this->createQueryBuilder('user')
+    ->select('COUNT(user.id)')
+    ->where('user.roles LIKE :role')
+    ->setParameter('role', '%ROLE_ADMIN%')
+    ->getQuery()
+    ->getSingleScalarResult();
+}
+  
+public function rolecoach()
+{
+    return $this->createQueryBuilder('user')
+    ->select('COUNT(user.id)')
+    ->where('user.roles LIKE :role')
+    ->setParameter('role', '%ROLE_Coach%')
+    ->getQuery()
+    ->getSingleScalarResult();
+
+}
 
 //    /**
 //     * @return User[] Returns an array of User objects

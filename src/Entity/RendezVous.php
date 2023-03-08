@@ -19,7 +19,8 @@ class RendezVous
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-   #[Assert\GreaterThan('today')]
+   #[Assert\GreaterThan('today',message:"La date saisie doit etre superier de la date d'aujourd'hui")]
+   #[Assert\LessThanOrEqual('now +3 months',message:"La date saisie ne doit pas dépasser 3 mois à partir de la date actuelle")]
    private ?\DateTimeInterface $daterdv = null;
 
     #[ORM\ManyToOne(inversedBy: 'rendezVouses')]
@@ -27,6 +28,9 @@ class RendezVous
 
     #[ORM\OneToMany(mappedBy: 'rendezvous', targetEntity: Notify::class)]
     private Collection $notifies;
+
+    #[ORM\Column]
+    private ?bool $etatrdv = false;
 
     public function __construct()
     {
@@ -89,6 +93,18 @@ class RendezVous
                 $notify->setRendezvous(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isEtatrdv(): ?bool
+    {
+        return $this->etatrdv;
+    }
+
+    public function setEtatrdv(bool $etatrdv): self
+    {
+        $this->etatrdv = $etatrdv;
 
         return $this;
     }

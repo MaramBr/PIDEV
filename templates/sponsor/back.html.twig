@@ -22,15 +22,15 @@
 
                                 <div class="table-responsive">
 
-                                    <table class="table">
+                                    <table class="table table-hover" >
 
                                         <thead class=" text-primary">
 
-                                        <th><button type="button" class="btn btn-outline-warning">  identifiant</button></th>
+                                        <th class="border border-success">  identifiant </th>
                           
-                            <th><button type="button" class="btn btn-outline-danger">Nom Sponsor</button></th>
-                            <th><button type="button" class="btn btn-outline-success">Email Sponor</button></th>
-                            <th><button type="button" class="btn btn-outline-warning">  Investissement</button></th>
+                            <th  class="border border-primary" >Nom Sponsor </th>
+                            <th class="border border-success">Email Sponor</th>
+                            <th class="border border-primary">  Investissement</th>
                                             
                                             
                                              
@@ -64,9 +64,19 @@
                                            
                                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/add1">Ajouter evenement </a></td>
                           <td> <a class="nav-link btn btn-success create-new-button"  href="/Sponsor/add"> ajouter Sponsor </a> </td>
-                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/afficher"> front</a> </td>
+                          <td> <a class="nav-link btn btn-success create-new-button"  href="/Evenement/afficher"> retour</a> </td>
                         </tbody>
                                     </table>
+                                    <ul>
+                   <i class="mdi mdi-playlist-play"><a href="{{ path('order_By_Nom')}}">Trie par Nom</a></i>   
+                       
+                        
+                    </ul>
+                                    <ul>
+                   <i class="mdi mdi-playlist-play"><a href="/stat2">Stat BIAT</a></i>   
+                       
+                        
+                    </ul>
                                 </div>
                             </div>
                         </div>

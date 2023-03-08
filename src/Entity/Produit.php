@@ -110,10 +110,10 @@ class Produit
     #[ORM\JoinTable(name:'panierproduit')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[Groups("produit")]
-    private Collection $panier;
+    // private Collection $panier;
 
-    #[ORM\ManyToMany(targetEntity: Favorie::class, mappedBy: 'produit')]
-    private Collection $favories;
+    // #[ORM\ManyToMany(targetEntity: Favorie::class, mappedBy: 'produit')]
+    // private Collection $favories;
 
     public function __construct()
     {
@@ -197,15 +197,15 @@ class Produit
         return $this;
     }
 
-    public function __toString()
-    {
-        return (string) $this->getNom();
-        $this->getDescription();
-        $this->getQuantite();
-        $this->getPrix();
-        $this->getImage();
-        $this->getCategorys();
-    }
+    // public function __toString()
+    // {
+    //     return (string) $this->getNom();
+    //     $this->getDescription();
+    //     $this->getQuantite();
+    //     $this->getPrix();
+    //     $this->getImage();
+    //     $this->getCategorys();
+    // }
 
     /**
      * @return Collection<int, CommandeProduit>

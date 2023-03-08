@@ -16,7 +16,7 @@ class Favorie
     private ?int $id = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?User $utilisateur = null;
+    private ?User $user = null;
 
     #[ORM\ManyToMany(targetEntity: Produit::class, inversedBy: 'favories')]
     private Collection $produit;
@@ -31,14 +31,14 @@ class Favorie
         return $this->id;
     }
 
-    public function getUtilisateur(): ?User
+    public function getuser(): ?User
     {
-        return $this->utilisateur;
+        return $this->user;
     }
 
-    public function setUtilisateur(?User $utilisateur): self
+    public function setuser(?User $user): self
     {
-        $this->utilisateur = $utilisateur;
+        $this->user = $user;
 
         return $this;
     }

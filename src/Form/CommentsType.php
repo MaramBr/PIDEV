@@ -24,12 +24,12 @@ class CommentsType extends AbstractType
         $builder
            
            
-            ->add('email',EmailType::class, [
-                'label' => 'Votre e-mail',
-                'attr' => [
-                    'class' => 'form-control'
-                ]
-            ])
+            // ->add('email',EmailType::class, [
+            //     'label' => 'Votre e-mail',
+            //     'attr' => [
+            //         'class' => 'form-control'
+            //     ]
+            // ])
             ->add('nickname', TextType::class, [
                 'label' => 'Votre pseudo',
                 'attr' => [
@@ -37,14 +37,7 @@ class CommentsType extends AbstractType
                 ]
             ])
             ->add('content')
-            ->add('rgpd', CheckboxType::class, [
-                'label' => 'Voulez vous vraiment publier ce comentaire ?',
-              
-                'constraints' => [
-                    new NotBlank()
-                   
-                ]
-            ])
+            
             
             ->add('parentid', HiddenType::class, [
                 'mapped' => false

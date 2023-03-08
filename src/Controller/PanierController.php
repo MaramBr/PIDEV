@@ -52,7 +52,22 @@ class PanierController extends AbstractController
      */
     public function index(PanierRepository $repository , Request $request , PaginatorInterface $paginator,): Response
     {
-        $d = $repository->findBy(['utilisateur'=>1])[0];
+        
+         //$d = $repository->findBy(['user'=>1])[0];
+        //$d=$this->getUser();
+        $utilisateur = $this->getUser();
+        //  dd($utilisateur);
+if(!$utilisateur)
+{
+    return $this->redirectToRoute('app_login');
+
+}
+else{
+        $idu=$this->getUser()->getId();
+        //dd($idu);
+$d = $repository->findBy(['user'=>$idu])[0];
+
+
         $sum = $d->getProduits()->count();
         $data = $d->getProduits()->toArray();
         $total=0.0;
@@ -68,20 +83,24 @@ class PanierController extends AbstractController
         }
 
         return $this->render('panier/index.html.twig', [
-             'sumP'=>$sum , 'total'=>$total , 'data' => $produits ,
+             'sumP'=>$sum , 'total'=>$total , 'data' => $produits ,'user'=> $utilisateur
         ]);
     }
+    }
+   
+    
 
    /**
-     * @Route("/panierToCommande{idUtilisateur}", name="panierToCommande")
+     * @Route("/panierToCommande{iduser}", name="panierToCommande")
      */
 
-     public function panierToCommande(CommandeProduitRepository $commandeProduitRepository,ProduitRepository $produitRepository,UserRepository $utilisateurRepository,$idUtilisateur ,PanierRepository $repository, Request $request): Response
+     public function panierToCommande(CommandeProduitRepository $commandeProduitRepository,ProduitRepository $produitRepository,UserRepository $userRepository,$iduser ,PanierRepository $repository, Request $request): Response
      {
- 
+        $utilisateur = $this->getUser();
+        $panier = $repository->findBy(['user' => $utilisateur->getId()])[0];
          $newCommande = new Commande();
          $prixTot=0;
-         $panier = $repository->findBy(['utilisateur' => $idUtilisateur])[0];
+         //$panier = $repository->findBy(['user' => $iduser])[0];
 
  if ($panier->getProduits()->toArray() == []) {
     // $session->set('empty', 'Remplir votre panier avant de passer une commande !');
@@ -96,7 +115,8 @@ class PanierController extends AbstractController
      $pr = $produitRepository->find($p->getId());
      $prixTot =$prixTot+ $pr->getPrix();
  }
- $newCommande->setUtilisateur($utilisateurRepository->find($idUtilisateur));
+ $newCommande->setUser($userRepository->find($utilisateur->getId()));
+//  $newCommande->setuser($userRepository->find($iduser));
  $newCommande->setStatus("En Attente");
  $newCommande->setReference(random_int(90000,9999999) );
  $newCommande->setMontant($prixTot+7);
@@ -129,7 +149,7 @@ return $this->redirectToRoute('commande');
       */
      public function removeP( $id,PanierRepository $repository , Request $request): Response
      {
-         $d = $repository->findBy(['utilisateur'=>1])[0];
+         $d = $repository->findBy(['user'=>1])[0];
              $em = $this->getDoctrine()->getManager();
                  $produit = $this->getDoctrine()->getRepository(Produit::class)->find($id);
                  $d->removeProduit($produit);
@@ -152,8 +172,20 @@ return $this->redirectToRoute('commande');
     public function ajoutProduit( ProduitRepository $produitRepository,$id,PanierRepository $repository , Request $request): Response
     {
         
-    
-        $d = $repository->findBy(['utilisateur'=>1])[0];
+        //$d=$this->getUser();
+        $utilisateur = $this->getUser();
+        // dd($utilisateur);
+        if(!$utilisateur)
+{
+    return $this->redirectToRoute('app_login');
+
+}
+else{
+        $idu=$this->getUser()->getId();
+        //dd($idu);
+$d = $repository->findBy(['user'=>$idu])[0];
+
+        // $d = $repository->findBy(['user'=>1])[0];
         $em = $this->getDoctrine()->getManager();
         $produit = $produitRepository->find($id);
         $d->addProduit($produit);
@@ -164,6 +196,7 @@ return $this->redirectToRoute('commande');
             'Produit ajouter avec success !'
         );
         return $this->redirectToRoute('panier');
+    }
     }
     //****************************MOBILE************************************** */
 
@@ -198,7 +231,7 @@ return $this->redirectToRoute('commande');
     /**
      * @Route("/newCommande", name="newCommande")
      */
-    public function newCommande(ProduitRepository $produitRepository,UserRepository $utilisateurRepository,EntityManager $manager,Request $request,PanierRepository $panierRepository , SerializerInterface $serializer)
+    public function newCommande(ProduitRepository $produitRepository,UserRepository $userRepository,EntityManager $manager,Request $request,PanierRepository $panierRepository , SerializerInterface $serializer)
     {
         $panier = $panierRepository->find($request->get('id_panier'));
         foreach ($panier->getProduits()->toArray() as $p) {
@@ -208,8 +241,8 @@ return $this->redirectToRoute('commande');
         }
         $commande = new Commande();
 
-        $user = $utilisateurRepository->find($request->query->get('id_utilisateur')[1]);
-        $commande->setUtilisateur($user);
+        $user = $userRepository->find($request->query->get('id_user')[1]);
+        $commande->setuser($user);
         $commande->setStatus("En Attente");
         $commande->setReference(random_int(90000,9999999) );
         $commande->setMontant($prixTot+7);

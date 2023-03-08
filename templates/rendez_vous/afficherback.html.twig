@@ -10,10 +10,13 @@
                       <table class="table">
                         <thead>
                           <tr>
-                            
-                            <th>Coaching</th>
-                            <th>Date</th>                          
-                            
+                           <th>ID</th>
+
+                            <th>Cours</th>
+                            <th>Date</th>     
+                            <th>Accepter</th>        
+   
+                                                      
                           </tr>
                         </thead>
                         <tbody>
@@ -22,7 +25,15 @@
                             <td>{{a.id }}</td>
                             <td> {{a.coachings}} </td>
                             <td> {{a.DateRdv.format('j-m-y') }} </td>
-                            <td><a href="{{ path('updaterdv', {id:a.id}) }}" class="btn btn-primary" >Traiter</a></td>
+                              
+
+                            
+                    <td>
+                    {% if a.etatrdv != 1 %}
+                    <a href="{{ path('emailcoach', {id:a.id}) }}" class="btn btn-primary" id="myButton">Traiter</a>
+                    {% endif %}
+
+                    </td>
 
                           </tr>
                           {% endfor %}

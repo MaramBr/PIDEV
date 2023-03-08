@@ -1,4 +1,4 @@
-{% extends 'basefront.html.twig' %}
+{% extends 'baseEmna.html.twig' %}
 {% block title %}Participant{% endblock %}
 
 {% block body %}
@@ -39,6 +39,7 @@
 					<div class="form-group">
                         {{ form_row(formParticipant.evenement, {'label':'Les evenements disponibles :' ,'attr':{'placeholder': 'tel...', 'class':'form-control'}}) }}</div>
 					
+          {{form_widget(formParticipant.captcha) }}
                       <button type="click here" class="btn btn-primary mr-2" >Participer</button>
                        {{form_end(formParticipant)}}
                     </form>

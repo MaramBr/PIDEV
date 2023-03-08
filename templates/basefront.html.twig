@@ -25,6 +25,8 @@
 		<!-- Slick -->
 
 		<!-- nouislider -->
+				<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+
 <link type="text/css" rel="stylesheet" href="{{asset('css/nouislider.min.css')}}"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.2.1/dist/axentix.min.css">
 		<!-- Font Awesome Icon -->
@@ -174,7 +176,7 @@
 			<!-- /MAIN HEADER -->
 		</header>
 		<!-- /HEADER -->
-{% block header %}
+
 		<!-- NAVIGATION -->
 		<nav id="navigation">
 			<!-- container -->
@@ -183,20 +185,22 @@
 				<div id="responsive-nav">
 					<!-- NAV --> {% block NAV %}
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
-						<li><a href="#">Produit</a></li>
-						<li><a href="#">Categories</a></li>
-						<li><a href="#">Evénement</a></li>
-						<li><a href="#">Coaching</a></li>
-						<li><a href="#">Commande</a></li>
-						<li><a href="#">Réclamation</a></li>
+						<li><a href="/">Home</a></li>
+						<li><a href="/Produit/afficher">Produit</a></li>
+						<li><a href="/Category/afficher2">Categories</a></li>
+						<li><a href="/Evenement/afficher">Evénement</a></li>
+						<li><a href="/affichercoach">Coaching</a></li>
+						<li><a href="/commande">Commande</a></li>
+						<li><a href="/affichreclamation2">Réclamation</a></li>
 					</ul>
+					
 					<!-- /NAV -->
 				</div>
 				<!-- /responsive-nav -->
 			</div>
 			<!-- /container -->
 		</nav>
+	
 	{% endblock%}
 		<!-- /NAVIGATION -->
   {% block body %}
@@ -1015,6 +1019,7 @@
 		</div>
 		<!-- /NEWSLETTER -->
 {% endblock %}
+
 {% block footer %}
 		<!-- FOOTER -->
 		<footer id="footer">
@@ -1103,8 +1108,11 @@ version d'eux-mêmes.</p> #}
 		</footer>
 		<!-- /FOOTER -->
 {% endblock %}
+
+
 {% block js%}
 		<!-- jQuery Plugins -->
+		<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js" integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
 		<script src="{{asset('js/jquery.min.js')}}"></script>
 		<script src="{{asset('js/bootstrap.min.js')}}"></script>
 		<script src="{{asset('js/slick.min.js')}}"></script>
@@ -1113,5 +1121,6 @@ version d'eux-mêmes.</p> #}
 		<script src="{{asset('js/main.js')}}"></script>
 		<script src="{{asset('https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js')}}"></script>
 {% endblock %}
+
 	</body>
 </html>

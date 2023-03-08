@@ -42,8 +42,11 @@ class CommandeController extends AbstractController
      */
     public function index(PaginatorInterface $paginator,BuilderInterface $customQrCodeBuilder,Request $req ,PanierRepository $panierRepository, CommandeRepository $repository): Response
     {
-        $data = $repository->findBy(['utilisateur'=>1]);
-        $d = $panierRepository->findBy(['utilisateur'=>1])[0];
+        $utilisateur = $this->getUser();
+$data = $repository->findBy(['user'=>$utilisateur->getId()]);
+$d = $panierRepository->findBy(['user'=>$utilisateur->getId()])[0];
+        // $data = $repository->findBy(['utilisateur'=>1]);
+        // $d = $panierRepository->findBy(['utilisateur'=>1])[0];
         $sum = $d->getProduits()->count();
         $dataTarray = $d->getProduits()->toArray();
         $total=0.0;

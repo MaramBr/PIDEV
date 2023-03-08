@@ -211,10 +211,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface,TwoFacto
         return $this;
     }
 
-    public function __toString()
-    {
-        return (string) $this->getPrenom();
-    }
+    // public function __toString()
+    // {
+    //     return (string) $this->getPrenom();
+    // }
 
     public function getImage(): ?string
     {

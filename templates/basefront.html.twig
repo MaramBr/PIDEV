@@ -8,6 +8,8 @@
 		 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 		<title>{% block title %}E-FIT - HTML Ecommerce Template {% endblock %}</title>
+		    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+
 {% block css%}
 		<link  href="{{asset('https://fonts.googleapis.com/css?family=Montserrat:400,500,700')}}" rel="stylesheet">
 
@@ -991,7 +993,11 @@
 			<!-- /container -->
 		</div>
 		<!-- /NEWSLETTER -->
+
+
 {% endblock %}
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js" integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
+
 		<!-- FOOTER -->
 		<footer id="footer">
 			<!-- top footer -->

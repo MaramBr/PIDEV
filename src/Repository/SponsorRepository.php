@@ -68,8 +68,56 @@ class SponsorRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('sponsorSponsor')
             ->where('sponsorSponsor.nom LIKE  :nom')
-            ->setParameter('nom', '%'.$nom. '%')
+            ->setParameter('nomSponsor', '%'.$nom. '%')
             ->getQuery()
             ->getResult();
     }
+
+
+   public function orderByNomS()
+    {
+        return $this->createQueryBuilder('s')
+            ->orderBy('s.nomSponsor', 'ASC')
+            ->getQuery()->getResult();
+    }
+
+
+     public function findNewSponsor()
+{
+    
+    return $this->createQueryBuilder('c')
+        ->select('count(c.nomSponsor)')
+        ->andWhere('c.invest = :val')
+        ->setParameter('val', 'biat')
+        ->getQuery()->getSingleScalarResult()
+
+    ;
+}
+
+public function findSponsorsTritée()
+{
+    $date = new \DateTime();
+    return $this->createQueryBuilder('c')
+        ->select('count(c.invest)')
+        ->andWhere('c.invest != :val')
+       ->andWhere('c.nomSponsor = :val1')
+        ->setParameter('val', 'Financier' )
+        ->setParameter('val1', 'biat')
+        ->getQuery()->getSingleScalarResult()
+        ;
+}
+
+public function findSponsorsNonTritée()
+{
+    
+    return $this->createQueryBuilder('c')
+        ->select('count(c.invest)')
+        ->andWhere('c.invest = :val')
+        ->andWhere('c.nomSponsor = :val1')
+        ->setParameter('val', 'Financier' )
+        ->setParameter('val1','biat')
+        ->getQuery()->getSingleScalarResult()
+        ;
+}
+ 
 }

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MainController extends AbstractController
 {
     /**
-     * @Route("/clnd/{id}", name="main")
+     * @Route("/clnd", name="main")
      */
     public function index(CalendarRepository $calendar)
 {
@@ -37,6 +37,7 @@ class MainController extends AbstractController
 
     return $this->render('main/index.html.twig', ['data'=> $data]);
 }
+
 
 
 }

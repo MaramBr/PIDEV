@@ -7,10 +7,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Sponsor;//controller
 use Doctrine\Persistence\ManagerRegistry;//controller
-use App\RepositorySponsorRepository;//controller
+use App\Repository\SponsorRepository;//controller
 use App\Form\SponsorType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
+
 //use Symfony\Component\Validator\Constraints as Assert;
 
  
@@ -104,4 +106,56 @@ public function searchSponsorx(Request $request, NormalizerInterface $Normalizer
     return new Response($retour);
 }
  
+
+/**
+     * @Route("/order_By_Nom", name="order_By_Nom" ,methods={"GET"})
+     */
+    public function order_By_Nom2(Request $request,SponsorRepository $SponsorRepository): Response
+    {
+//list of students order By Nom
+        $Sponsor = $SponsorRepository->orderByNomS();
+
+        return $this->render('Sponsor/back.html.twig', [
+            'Sponsor' => $Sponsor,
+        ]);
+
+        //trie selon Nom
+
+
+}
+
+ #[Route('/stat' , name:'stat')]
+  
+    public function stat( SponsorRepository $repository)
+    {
+        
+        $newSponsorCount =$repository->findNewSponsor();
+        $SponsorTrite = $repository->findSponsorsTritée();
+        $SponsorNonTrite = $repository->findSponsorsNonTritée();
+        $EmnaChart1 = new PieChart();
+        $EmnaChart1->getData()->setArrayToDataTable(
+            [['Task', 'Hours per Day'],
+                ['Sponsor Financier',((int) $SponsorTrite)],
+                ['Sponsor Autre',((int) $SponsorNonTrite)],
+            ]
+        );
+        $EmnaChart1->getOptions()->setTitle("L'ETAT DES Sponsor D'AUJOURD'HUIT");
+        $EmnaChart1->getOptions()->setHeight(400);
+        $EmnaChart1->getOptions()->setIs3D(2);
+        $EmnaChart1->getOptions()->setWidth(550);
+        $EmnaChart1->getOptions()->getTitleTextStyle()->setBold(true);
+        $EmnaChart1->getOptions()->getTitleTextStyle()->setColor('#009900');
+        $EmnaChart1->getOptions()->getTitleTextStyle()->setItalic(true);
+        $EmnaChart1->getOptions()->getTitleTextStyle()->setFontName('Arial');
+        $EmnaChart1->getOptions()->getTitleTextStyle()->setFontSize(15);
+
+        return $this->render('Sponsor/statistique.html.twig', array(
+            'EmnaChart1' => $EmnaChart1 ,
+          ));
+    
+
+
+
+    }
+
 }

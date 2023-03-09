@@ -48,8 +48,8 @@ class Evenement
     #[ORM\Column(length: 255)]
     #[Groups("Evenement")]
     #[Assert\NotBlank(message:"Description evenement doit etre non vide")]
-     #[Assert\Length(min:7,max:100, minMessage:"Doit etre > 7.", maxMessage:"Doit etre <=100")]
-    private ?string $description = null;
+     #[Assert\Length(min:7,max:10000, minMessage:"Doit etre > 7.", maxMessage:"Doit etre <=10000")]
+    private ?string $description = null ;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups("Evenement")]
@@ -81,7 +81,18 @@ class Evenement
     #[Assert\Length(min:0,max:1000, minMessage:"Doit etre > =0.", maxMessage:"Doit etre <=1000")]
 
      
-    private ?string $nbParticipant = null;
+    private ?int $nbParticipant = null;
+
+    #[ORM\Column]
+    private ?int $dislikeButton = 0;
+
+    #[ORM\Column]
+    private ?int $likeButton = 0;
+
+    #[ORM\Column]
+     #[Assert\NotBlank(message:"Prix evenement doit etre non vide")]
+     
+    private ?float $Prix = null;
     
 
     
@@ -204,6 +215,7 @@ class Evenement
         $this->getDescription();
         $this->getLieu();
         $this->getNbParticipant();
+         $this->getPrix();
         $this->getSponsors();
       
        
@@ -237,14 +249,50 @@ class Evenement
          return $this;
      }
 
-     public function getNbParticipant(): ?string
+     public function getNbParticipant(): ?int
      {
          return $this->nbParticipant;
      }
 
-     public function setNbParticipant(string $nbParticipant): self
+     public function setNbParticipant(int $nbParticipant): self
      {
          $this->nbParticipant = $nbParticipant;
+
+         return $this;
+     }
+
+     public function getLikeButton(): ?int
+     {
+         return $this->likeButton;
+     }
+
+     public function setLikeButton(int $likeButton): self
+     {
+         $this->likeButton = $likeButton;
+
+         return $this;
+     }
+
+     public function getDislikeButton(): ?int
+     {
+         return $this->dislikeButton;
+     }
+
+     public function setDislikeButton(int $dislikeButton): self
+     {
+         $this->dislikeButton = $dislikeButton;
+
+         return $this;
+     }
+
+     public function getPrix(): ?float
+     {
+         return $this->Prix;
+     }
+
+     public function setPrix(float $Prix): self
+     {
+         $this->Prix = $Prix;
 
          return $this;
      }

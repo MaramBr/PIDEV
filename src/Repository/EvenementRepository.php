@@ -79,16 +79,18 @@ class EvenementRepository extends ServiceEntityRepository
             ->orderBy('s.type', 'ASC')
             ->getQuery()->getResult();
     }
+
     
-   
-  public function EvenementAdmin()
+    
+   public function orderByDate()
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.id = :val')
-            ->setParameter('val', false)
-            ->getQuery()
-            ->getResult()
-        ;
-    } 
+        return $this->createQueryBuilder('s')
+        ->orderBy('s.date_debut','DESC')
+            ->getQuery()->getResult();
+    }
   
+  
+   
+
+
 }

@@ -39,6 +39,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use Twilio\Rest\Client;
 
 
+
+
  
 class ParticipantController extends AbstractController
 {
@@ -118,6 +120,7 @@ public function add(MailerInterface $mailer, ManagerRegistry $doctrine, Request 
 
         //////////////////////SMS////////////////////////////////
           
+ 
 
 
   /////////////////////////Notifier Participant/////////////////////////////     
@@ -312,5 +315,22 @@ public function searchParticipantx(Request $request, NormalizerInterface $Normal
     $retour = json_encode($jsonContent);
     return new Response($retour);
 }
+
+
+/**
+     * @Route("/order_By_Nom", name="order_ByNom" ,methods={"GET"})
+     */
+    public function order_By_Nom1(Request $request,ParticipantRepository $ParticipantRepository): Response
+    {
+//list of students order By Nom
+        $Participant = $ParticipantRepository->orderByNomP();
+
+        return $this->render('Participant/back3.html.twig', [
+            'Participant' => $Participant,
+        ]);
+
+        //trie selon Nom
+
+    }
 
 }

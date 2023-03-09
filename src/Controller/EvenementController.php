@@ -27,8 +27,14 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use PHPMailer\PHPMailer\PHPMailer;
 
-
+use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 use Knp\Component\Pager\PaginatorInterface;
+
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\Normalizer;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+
 
  
 class EvenementController extends AbstractController
@@ -54,7 +60,7 @@ class EvenementController extends AbstractController
             $request->query->getInt('page',1),//num page
             3
         );
-        return $this->render ('Evenement/affich.html.twig',['result'=>$Evenement]);
+        return $this->render ('Evenement/afficherfront.html.twig',['result'=>$Evenement]);
    
        
     }
@@ -244,9 +250,29 @@ public function searchEvenementx(Request $request, NormalizerInterface $Normaliz
     return new Response($retour);
 }
 
+ #[Route('/calendar1', name: 'calendar1')]
+public function calendar(ManagerRegistry $doctrine): Response
+{
+    $evenements = $doctrine->getRepository(Evenement::class)->findAll();
+    $rdvs = [];
+
+    foreach ($evenements as $evenement) {
+        $rdvs[] = [
+            'id' => $evenement->getId(),
+            'title' => $evenement->getNom(),
+            'start' => $evenement->getDatedebut()->format('Y-m-d'),
+            'end' => $evenement->getDatefin()->format('Y-m-d'),
+        ];
+    }
+
+    $data = json_encode($rdvs);
+
+    return $this->render('Evenement/calendar.html.twig', compact('data'));
+}
+    
 
 /**
-     * @Route("/order_By_Nom", name="order_By_Nom" ,methods={"GET"})
+     * @Route("/order_By_Nom", name="order_By_nom" ,methods={"GET"})
      */
     public function order_By_Nom(Request $request,EvenementRepository $EvenementRepository): Response
     {
@@ -261,9 +287,24 @@ public function searchEvenementx(Request $request, NormalizerInterface $Normaliz
 
     }
 
+ 
     /**
-     * @Route("/order_By_type", name="order_By_type" ,methods={"GET"})
+     * @Route("/order_By_Nom1", name="order_By_name" ,methods={"GET"})
      */
+    public function order_By_Nom2(Request $request,EvenementRepository $EvenementRepository): Response
+    {
+
+        $result= $EvenementRepository->orderByNom();
+
+        return $this->render('Evenement/afficherfront.html.twig', [
+            'result'=>$result,
+        ]);
+
+
+    }
+
+        #[Route ('/order_By_type', name:'order_By_type' ,methods:['GET'])]
+
     public function order_By_type(Request $request,EvenementRepository $EvenementRepository): Response
     {
 //list of students order By type
@@ -276,13 +317,255 @@ public function searchEvenementx(Request $request, NormalizerInterface $Normaliz
         //trie selon type
 
     }
+
+    /**
+     * @Route("/order_By_date", name="order_By_date" ,methods={"GET"})
+     */
+    public function order_By_date(Request $request,EvenementRepository $EvenementRepository): Response
+    {
+        $Evenement = $EvenementRepository->orderByDate();
+
+        return $this->render('Evenement/back.html.twig', [
+            'Evenement' => $Evenement,
+
+        ]);
+
+    }
     
     
+#[Route('/detaille/{id}', name: 'detaille')]
+    public function detaille($id,ManagerRegistry $mg): Response
+    {
+        $repo=$mg->getRepository(Evenement::class);
+        $resultat = $repo ->find($id);
+       
+        return $this->render('Evenement/affichdetaille.html.twig', [
+            'Evenement' => $resultat,
+        ]);
+    }
+
+
+
+
+
+#[Route('/like/{id}', name: 'like', methods: ['POST'])]
+public function likeEvenement(Request $request, Evenement $Evenement): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+
+    $Evenement->setLikeButton($Evenement->getLikeButton() + 1);
+    $Evenement->setDislikeButton(0);
+
+    $entityManager->persist($Evenement);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('detaille', ['id' => $Evenement->getId()]);
+}
+
+
+#[Route('/dislike/{id}', name: 'dislike', methods: ['POST'])]
+public function dislikeEvenement(Request $request, Evenement $Evenement): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+
+    $Evenement->setDislikeButton($Evenement->getDislikeButton() + 1);
+    $Evenement->setLikeButton(0);
+
+    $entityManager->persist($Evenement);
+    $entityManager->flush();
+
+    return $this->redirectToRoute('detaille', ['id' => $Evenement->getId()]);
+}
+
+
+
+ 
+
+
+
+    
+//////////////////////////////JSON////////////////////////////////////////////////////////
+
+
+#[Route('/afficherjson', name: 'json')]
+
+    public function affichercoachjson(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
+    {
+        $repo=$mg->getRepository(Evenement::class);
+        $resultat = $repo ->FindAll();
+        $EvenementNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Evenement"]);
+        $json=json_encode($EvenementNormalises);
+        return new Response ($json);
+    }
+
+
+
+
+
+ 
+ #[Route('/ajoutjson', name: 'ajoutjson')]
+public function ajoutjson1(ManagerRegistry $doctrine, Request $request, NormalizerInterface $normalizer): Response
+{
+    $nom = $request->query->get('nom');
+    $description = $request->query->get('description');
+    $nbParticipant = $request->query->get('nbParticipant');
+    $prix = $request->query->get('prix');
+    $lieu = $request->query->get('lieu');
+    $type = $request->query->get('type');
+    $date_debut = $request->query->get('date_debut');
+    $date_fin = $request->query->get('date_fin');
+  
+    $image = $request->query->get('image');
+
+    $em = $doctrine->getManager();
+    $Evenement = new Evenement();
+
+    if ($nom !== null) {
+        $Evenement->setNom($nom);
+    } else {
+        $Evenement->setNom('');
+    }
+
+    if ($description !== null) {
+        $Evenement->setDescription($description);
+    } else {
+        $Evenement->setDescription('');
+    }
+
+    $Evenement->setNbParticipant(intval($nbParticipant));
+    $Evenement->setPrix(floatval($prix));
+
+    if ($lieu !== null) {
+        $Evenement->setLieu($lieu);
+    } else {
+        $Evenement->setLieu('');
+    }
+
+    if ($date_debut !== null) {
+        $Evenement->setDateDebut(new \DateTime($date_debut));
+    } else {
+        $Evenement->setDateDebut(new \DateTime());
+    }
+
+    if ($date_fin !== null) {
+        $Evenement->setDateFin(new \DateTime($date_fin));
+    } else {
+        $Evenement->setDateFin(new \DateTime());
+    }
+
+    if ($image !== null) {
+        $Evenement->setImage($image);
+    } else {
+        $Evenement->setImage('');
+    }
+    if ($type !== null) {
+    $Evenement->setType($type);
+} else {
+    $Evenement->setType('');
+}
+
+
+    $em->persist($Evenement);
+    $em->flush();
+
+    $serializer = new Serializer([new ObjectNormalizer()]);
+    $formatted = $serializer->normalize($Evenement);
+
+    return new JsonResponse($formatted);
+}
+
+
+
+#[Route('/updatejson/{id}', name: 'updatejson')]
+public function updatejson(Request $request, $id, NormalizerInterface $Normalizer, ManagerRegistry $doctrine)
+{
+    $em = $doctrine->getManager();
+    $Evenement = $em->getRepository(Evenement::class)->find($id);
+    
+    $nom = $request->query->get('nom');
+    $description = $request->query->get('description');
+    $nbParticipant = $request->query->get('nbParticipant');
+    $prix = $request->query->get('prix');
+    $lieu = $request->query->get('lieu');
+    $type = $request->query->get('type');
+    $date_debut = $request->query->get('date_debut');
+    $date_fin = $request->query->get('date_fin');
+
+    $image = $request->query->get('image');
+
+    // Update Evenement object with new values
+    if ($nom !== null) {
+        $Evenement->setNom($nom);
+    } else {
+        $Evenement->setNom('');
+    }
+
+    if ($description !== null) {
+        $Evenement->setDescription($description);
+    } else {
+        $Evenement->setDescription('');
+    }
+
+    $Evenement->setNbParticipant(intval($nbParticipant));
+    $Evenement->setPrix(floatval($prix));
+
+    if ($lieu !== null) {
+        $Evenement->setLieu($lieu);
+    } else {
+        $Evenement->setLieu('');
+    }
+
+    if ($date_debut !== null) {
+        $Evenement->setDateDebut(new \DateTime($date_debut));
+    } else {
+        $Evenement->setDateDebut(new \DateTime());
+    }
+
+
+    if ($date_fin !== null) {
+        $Evenement->setDateFin(new \DateTime($date_fin));
+    } else {
+        $Evenement->setDateFin(new \DateTime());
+    }
+
+    if ($image !== null) {
+        $Evenement->setImage($image);
+    } else {
+        $Evenement->setImage('');
+    }
+    if ($type !== null) {
+    $Evenement->setType($type);
+} else {
+    $Evenement->setType('');
+}
+
+
+    $em->persist($Evenement);
+    $em->flush();
+       
+        $jsonContent = $Normalizer->normalize($Evenement, 'json', ['groups' => 'Evenements']);
+        return new Response("Evenement updated successfully" . json_encode($jsonContent));
+    }
+
+#[Route('/deletejson/{id}', name: 'deletejson')]
+    public function deletejson(Request $request, $id, NormalizerInterface $normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Evenement = $em->getRepository(Evenement::class)->find($id);
+    
+        if ($Evenement !== null) {
+            $em->remove($Evenement);
+            $em->flush();
+    
+            $jsonContent = $normalizer->normalize($Evenement, 'json', ['groups' => 'Evenements']);
+            return new Response("Evenement deleted successfully: " . json_encode($jsonContent));
+        } else {
+            return new Response("Evenement not found.");
+        }
+    }
+
+
+
 
 
 }
-
-    
-
-
-

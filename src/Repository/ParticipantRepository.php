@@ -73,4 +73,12 @@ class ParticipantRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+   public function orderByNomP()
+    {
+        return $this->createQueryBuilder('s')
+            ->orderBy('s.nom', 'ASC')
+            ->getQuery()->getResult();
+    }
+ 
+
 }

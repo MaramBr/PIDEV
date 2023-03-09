@@ -26,7 +26,7 @@ class Participant
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"nom evenement doit etre non vide")]
+    #[Assert\NotBlank(message:"nom participant doit etre non vide")]
     #[Assert\Regex(
          pattern:"/^[^0-9]+$/",
          message:"Le nom ne doit pas contenir de chiffres"
@@ -36,10 +36,10 @@ class Participant
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"nom evenement doit etre non vide")]
+    #[Assert\NotBlank(message:"Prenom doit etre non vide")]
     #[Assert\Regex(
          pattern:"/^[^0-9]+$/",
-         message:"Le nom ne doit pas contenir de chiffres"
+         message:"Le Prenom ne doit pas contenir de chiffres"
      )]
      #[Groups("Participant")]
     private ?string $prenom = null;

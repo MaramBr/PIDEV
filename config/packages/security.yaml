@@ -48,7 +48,6 @@ security:
     - { path: ^/logout, roles: ROLE_USER }
     - { path: ^/membre, roles:  ROLE_USER }
     - { path: ^/back, roles: ROLE_ADMIN}
-    - { path: ^/coach, roles: ROLE_Coach}
 
     # - { path: ^/admin, roles: ROLE_Coach}
 

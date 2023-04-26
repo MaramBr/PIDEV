@@ -119,26 +119,26 @@ class HomeController extends AbstractController
         }
 
 
-     /**
-         * @Route("/coach", name="coach")
-         */
-        public function coach(Session $session,UserRepository $repo,Request $request)
-        {
+    //  /**
+    //      * @Route("/coach", name="coach")
+    //      */
+    //     public function coach(Session $session,UserRepository $repo,Request $request)
+    //     {
                
-                if ($this->isGranted('ROLE_Coach') ) {
-                $user=$repo->FindAll();
+    //             if ($this->isGranted('ROLE_Coach') ) {
+    //             $user=$repo->FindAll();
        
     
       
-                return $this->render('user/userback.html.twig',array("user"=>$user));
-                }
-                else
-                {
-                    return $this->render('/403.html.twig');
-                }
+    //             return $this->render('user/userback.html.twig',array("user"=>$user));
+    //             }
+    //             else
+    //             {
+    //                 return $this->render('/403.html.twig');
+    //             }
 
     
-        }
+    //     }
 
  
     // #[Route('/backuser', name: 'backuser')]
@@ -205,7 +205,7 @@ public function searchEvenementx(Request $request, NormalizerInterface $Normaliz
     return new Response($retour);
 }
   /**
-     * @Route("/stat2" , name="stat2")
+     * @Route("/stat3" , name="stat3")
      */
     public function stat(UserRepository $repository)
     {

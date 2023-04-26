@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Twilio\Rest\Client;
 
 class ReclamationJsonController extends AbstractController
 {
@@ -66,6 +67,17 @@ class ReclamationJsonController extends AbstractController
         $em->flush();
 
         $jsonContent = $Normalizer->normalize($Reclamation, 'json', ['groups' => 'Reclamations']);
+        $accountSid = 'AC099883ea0f07c67cd19e55b497fceb12';
+             $authToken = '7cd54f265b4727ce40c3c978b0181069';
+             $client = new Client($accountSid, $authToken);
+     
+             $message = $client->messages->create(
+                 '+21692524435', // replace with admin's phone number
+                 [
+                     'from' => '+12766336884', // replace with your Twilio phone number
+                     'body' => 'New réclamation par Melliti Majdi ' ,
+                 ]
+             );
         return new Response(json_encode($jsonContent));
     }
 

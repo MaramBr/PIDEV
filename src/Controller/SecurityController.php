@@ -99,7 +99,7 @@ private $mailer;
             $user = $userRepository->findOneBy(['email'=>$donnees]);
             if(!$user) {
                 $this->addFlash('danger','cette adresse n\'existe pas');
-                return $this->redirectToRoute("forgot");
+                return $this->redirectToRoute("email");
 
             }
             $token = $tokenGenerator->generateToken();

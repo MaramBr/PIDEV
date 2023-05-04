@@ -28,6 +28,9 @@ class Transporteur
     #[ORM\ManyToOne(inversedBy: 'transporteurs')]
     private ?Companie $companies = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $nom = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,18 @@ class Transporteur
     public function setCompanies(?Companie $companies): self
     {
         $this->companies = $companies;
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
 
         return $this;
     }

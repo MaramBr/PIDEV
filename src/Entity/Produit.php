@@ -105,6 +105,15 @@ class Produit
     #[ORM\ManyToMany(targetEntity: Favorie::class, mappedBy: 'produit')]
     private Collection $favories;
 
+    #[ORM\OneToMany(mappedBy: 'produits', targetEntity: Ratings::class)]
+    private Collection $Produit;
+
+    #[ORM\OneToMany(mappedBy: 'produit', targetEntity: ProduitLike::class)]
+    private Collection $produitLikes;
+
+    
+
+
    
     #[ORM\ManyToMany(inversedBy: 'produits',targetEntity: Panier::class)]
     #[ORM\JoinTable(name:'panierproduit')]
@@ -118,6 +127,8 @@ class Produit
     public function __construct()
     {
         $this->Commande = new ArrayCollection();
+        $this->Produit = new ArrayCollection();
+        $this->produitLikes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -354,5 +365,67 @@ class Produit
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Ratings>
+     */
+    public function getIdProduit(): Collection
+    {
+        return $this->Produit;
+    }
+
+    public function addIdProduit(Ratings $Produit): self
+    {
+        if (!$this->Produit->contains($Produit)) {
+            $this->Produit->add($Produit);
+            $Produit->setProduits($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIdProduit(Ratings $Produit): self
+    {
+        if ($this->Produit->removeElement($Produit)) {
+            // set the owning side to null (unless already changed)
+            if ($Produit->getProduits() === $this) {
+                $Produit->setProduits(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProduitLike>
+     */
+    public function getProduitLikes(): Collection
+    {
+        return $this->produitLikes;
+    }
+
+    public function addProduitLike(ProduitLike $produitLike): self
+    {
+        if (!$this->produitLikes->contains($produitLike)) {
+            $this->produitLikes->add($produitLike);
+            $produitLike->setProduitId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduitLike(ProduitLike $produitLike): self
+    {
+        if ($this->produitLikes->removeElement($produitLike)) {
+            // set the owning side to null (unless already changed)
+            if ($produitLike->getProduitId() === $this) {
+                $produitLike->setProduitId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
 
 }

@@ -34,7 +34,7 @@ class Reclamation
 
     #[ORM\Column(length: 255)]
     #[Groups("Reclamations")]
-    private ?string $StatusR = 'En attente';
+    private ?string $StatusR = 'en attente';
 
     #[ORM\ManyToOne(inversedBy: 'Reclamations')]
     #[Assert\NotBlank(message:"attention!!vide!")]

@@ -43,6 +43,12 @@ class Companie
         return $this;
     }
 
+    
+    public function __toString()
+    {
+        return (string) $this->getLibelle();
+    }
+
     /**
      * @return Collection<int, Transporteur>
      */

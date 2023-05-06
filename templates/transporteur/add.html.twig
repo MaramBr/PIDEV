@@ -1,0 +1,36 @@
+{% extends 'baseback.html.twig' %}
+{% block title %}Transporteur{% endblock %}
+
+{% block body %}
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    
+                    <p class="card-description"> Basic form elements </p>
+                    {{ form_start(formTransporteur , {'attr': {'novalidate':'novalidate'}} ) }}
+                    <form class="forms-sample">
+					<div class="form-group">
+                        {{ form_row(formTransporteur.nom, {'label':'nom' ,'attr':{'placeholder': 'Nom...', 'class':'form-control'}}) }}</div>
+                      <div class="form-group">
+                        {{ form_row(formTransporteur.description, {'label':' vehiculeDescription' ,'attr':{'placeholder': 'vehicule description...', 'class':'form-control'}}) }}</div>
+						<div class="form-group">
+                       {{ form_row(formTransporteur.numero, {'label':'numero' ,'attr':{'placeholder': 'numero...', 'class':'form-control'}}) }}</div>
+						<div class="form-group">
+                        {{ form_row(formTransporteur.prix, {'label':'Prix Standard' ,'attr':{'placeholder': 'Prix Standard...', 'class':'form-control'}}) }}</div>
+						<div class="form-group">
+                        {{ form_row(formTransporteur.image, {'label':'image' ,'attr':{'placeholder': 'image...', 'class':'form-control'}}) }}</div>
+					
+						<div class="form-group">
+                        {{ form_row(formTransporteur.Companies, {'label':'companie' ,'attr':{'placeholder': 'companie...', 'class':'form-control'}}) }}
+						</div>
+                      
+					 
+                      <button type="submit" class="btn btn-primary mr-2" >Ajouter Transporteur</button>
+                      {{form_end(formTransporteur)}}
+                      
+                    </form>
+                     
+                    </div>
+                </div>
+            </div>
+			  {%endblock%}

@@ -1,0 +1,35 @@
+{% extends 'baseback.html.twig' %}
+{% block title %}Transporteur{% endblock %}
+
+{% block body %}
+<div class="col-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    
+                    <p class="card-description"> Basic form elements </p>
+                    {{ form_start(Transporteur , {'attr': {'novalidate':'novalidate'}} ) }}
+                    <form class="forms-sample">
+					<div class="form-group">
+                        {{ form_row(Transporteur.nom, {'label':'nom' ,'attr':{'placeholder': 'Nom...', 'class':'form-control'}}) }}</div>
+           <div class="form-group">
+                        {{ form_row(Transporteur.description, {'label':' vehicule Description' ,'attr':{'placeholder': 'vehicule Description...', 'class':'form-control'}}) }}</div>
+						<div class="form-group">
+                        {{ form_row(Transporteur.numero, {'label':' numero' ,'attr':{'placeholder': 'numero...', 'class':'form-control'}}) }}</div>
+						<div class="form-group">
+                        {{ form_row(Transporteur.prix, {'label':'prix' ,'attr':{'placeholder': 'prix...', 'class':'form-control'}}) }}</div>
+						<div class="form-group">
+                        {{ form_row(Transporteur.image, {'label':'image' ,'attr':{'placeholder': 'image...', 'class':'form-control'}}) }}</div>
+					
+						<div class="form-group">
+                        {{ form_row(Transporteur.Companies, {'label':'companie' ,'attr':{'placeholder': 'companie...', 'class':'form-control'}}) }}
+						</div>
+                      
+					 
+                
+                      {{form_end(Transporteur)}}
+                    </form>
+                     
+                    </div>
+                </div>
+            </div>
+			  {%endblock%}

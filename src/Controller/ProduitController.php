@@ -127,7 +127,7 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
     $em->persist($Produit);
     $em->flush();
 
-    $jsonContent = $Normalizer->normalize($Produit, 'json', ['groups' => 'Produits']);
+    $jsonContent = $Normalizer->normalize($Produit, 'json', ['groups' => 'Produit']);
     return new Response("Produit updated successfully" . json_encode($jsonContent));
 }
     #[Route('/deletejson/{id}', name: 'deletejson')]
@@ -140,7 +140,7 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
             $em->remove($produit);
             $em->flush();
     
-            $jsonContent = $normalizer->normalize($produit, 'json', ['groups' => 'Produits']);
+            $jsonContent = $normalizer->normalize($produit, 'json', ['groups' => 'Produit']);
             return new Response("Produit deleted successfully: " . json_encode($jsonContent));
         } else {
             return new Response("Produit not found.");

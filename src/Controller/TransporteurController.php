@@ -173,7 +173,7 @@ class TransporteurController extends AbstractController
     //***************************************MOBILE**************************************************** */
 
 
-    #[Route('/afficherjson', name: 'json')]
+    #[Route('/affichertransporteurjson', name: 'Transporteurjson')]
 
     public function affichercoachjson(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
     {
@@ -184,7 +184,7 @@ class TransporteurController extends AbstractController
         return new Response ($json);
     }
 
-    #[Route('/ajoutjson', name: 'ajoutjson')]
+    #[Route('/ajoutTransporteurjson', name: 'ajoutTransporteurjson')]
     public function ajoutjson(ManagerRegistry $doctrine, Request $request, NormalizerInterface $normalizer): Response
     {
         $nom = $request->query->get('nom');
@@ -229,7 +229,7 @@ class TransporteurController extends AbstractController
 
 
 
-    #[Route('/updatejson/{id}', name: 'updatejson')]
+    #[Route('/updateTransporteurjson/{id}', name: 'updateTransporteurjson')]
     public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
     {
         $em = $this->getDoctrine()->getManager();
@@ -266,7 +266,7 @@ class TransporteurController extends AbstractController
     }
     
 
-    #[Route('/deletejson/{id}', name: 'deletejson')]
+    #[Route('/deleteTransporteurjson/{id}', name: 'deleteTransporteurjson')]
     public function deletejson(Request $request, $id, NormalizerInterface $normalizer)
     {
         $em = $this->getDoctrine()->getManager();

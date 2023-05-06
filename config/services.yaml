@@ -9,6 +9,10 @@ parameters:
     Evenement_directory: "%kernel.project_dir%/public/uploads/brochures"
     Coaching_directory : '%kernel.project_dir%/public/uploads/coach'
 
+
+
+    # ...
+    
 # user_directory: '%kernel.project_dir%/public/uploads/users'
     
 services:
@@ -16,6 +20,7 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+   
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

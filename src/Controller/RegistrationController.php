@@ -76,6 +76,7 @@ class RegistrationController extends AbstractController
                 $newFile
                );
                $user->setImage($newFile);
+     
           
             // encode the plain password
             $user->setPassword(

@@ -37,7 +37,7 @@ class CategoryController extends AbstractController
     }
 
    
-    #[Route('/Category/afficherback2', name: 'appback2')]
+    #[Route('/Category/afficherback2', name: 'appbackcategorie')]
     public function afficheback2(ManagerRegistry $em): Response
     {
         $repo=$em->getRepository(Category::class);
@@ -61,7 +61,7 @@ class CategoryController extends AbstractController
         $em=$doctrine->getManager(); //appel lel manager
         $em->persist($Category); //elli tzid
         $em->flush(); //besh ysob fi base de donnee
-        return $this->redirectToRoute('appback2');
+        return $this->redirectToRoute('appbackcategorie');
         }
         return $this->render('Category/add.html.twig', array("formCategory"=>$form->createView()));
        // return $this->render('Category/add.html.twig', array("formCategory"=>$form->createView));
@@ -80,7 +80,7 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid() )
         { $em = $doctrine->getManager();
             $em->flush();
-            return $this->redirectToRoute('appback2');
+            return $this->redirectToRoute('appbackcategorie');
         }
         return $this->renderForm("Category/update.html.twig",
             ["Category"=>$form]) ;
@@ -97,7 +97,7 @@ class CategoryController extends AbstractController
         $em = $doctrine->getManager();
         $em->remove($c);
         $em->flush() ;
-        return $this->redirectToRoute('appback2');
+        return $this->redirectToRoute('appbackcategorie');
     }
 
     #[Route('/Category/afficher2', name: 'affichercat')]

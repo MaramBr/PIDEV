@@ -1,6 +1,10 @@
-{% extends 'test.html.twig' %}
+{% extends 'basefront.html.twig' %}
 
 {% block title %}Produit{% endblock %}
+{% block topheader %}
+{% include 'test.html.twig' %}
+
+{% endblock %}
 
 {% block body %}
 <!-- SECTION -->
@@ -43,6 +47,10 @@
 							</div>
 							</div>
 					</div>
+			</div>
+		</div>
+		</div>
+
 
 					<!-- /section title -->
 
@@ -88,12 +96,12 @@
 
 
 					</div>
-					</div>
-
-		<br>
+			</div>
+			
+					
+</div>
+		
 {% endblock %}
 
-{% block footer %}
 
-{% endblock %}
 

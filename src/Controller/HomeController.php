@@ -15,7 +15,7 @@ use App\Form\RegistrationFormType;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
-
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
 class HomeController extends AbstractController
@@ -286,7 +286,7 @@ public function listing2(UserRepository $repo,Request $request,$id)
 
         return $this->redirectToRoute('listing');
     }
-
+/*
 #[Route("/ALLUsers", name: "listUser")]
     public function getUsers(UserRepository $repo, NormalizerInterface $normalizer)
     {
@@ -343,6 +343,337 @@ public function listing2(UserRepository $repo,Request $request,$id)
         $jsonContent = $Normalizer->normalize($user, 'json', ['groups' => 'users']);
         return new Response("User deleted successfully " . json_encode($jsonContent));
     }
+*/
+///////////////////////////////////////////////////////////////////////////////////////////
+
+#[Route("/ALLUsers", name: "listUser")]
+    public function getUsers(UserRepository $repo, NormalizerInterface $normalizer)
+    {
+        $users = $repo->findAll();
+        $usersNormalises  = $normalizer->normalize($users, 'json', ['groups' => "users"]);
+        $json = json_encode($usersNormalises);
+        return new Response($json);
+    }
+    #[Route("/Users/{id}", name: "User")]
+    public function UserId($id, UserRepository $repo, NormalizerInterface $normalizer)
+    {
+        $users = $repo->find($id);
+        $usersNormalises  = $normalizer->normalize($users, 'json', ['groups' => "users"]);
+        $json = json_encode($usersNormalises);
+        return new Response($json);
+    }
+    #[Route("/addUserJSON/new", name: "addUserJSON")]
+    public function addUserJSON(Request $req, NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = new User();
+        $user->setNom($req->get('nom'));
+        $user->setPrenom($req->get('prenom'));
+        $user->setEmail($req->get('email'));
+        $hashedPassword = password_hash($req->get('password'), PASSWORD_DEFAULT);
+        $user->setPassword($hashedPassword);
+        //$user->setPassword($req->get('password'));
+        $user->setImage($req->get('image'));
+        $em->persist($user);
+        $em->flush();
+
+        $jsonContent = $Normalizer->normalize($user, 'json', ['groups' => 'users']);
+        return new Response(json_encode($jsonContent));
+    }
+    #[Route("/updateUserJSON/{id}", name: "updateUserJSON")]
+    public function updateUserJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+        $user->setNom($req->get('nom'));
+        $user->setAdresse($req->get('adresse'));
+        $user->setEmail($req->get('email'));
+        $user->setImage($req->get('image'));
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($user, 'json', ['groups' => 'users']);
+        return new Response("User updated successfully " . json_encode($jsonContent));
+    }
+    #[Route("/deleteUserJSON/{id}", name: "deleteUserJSON")]
+    public function deleteUserJSON(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+        $em->remove($user);
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($user, 'json', ['groups' => 'users']);
+        return new Response("User deleted successfully " . json_encode($jsonContent));
+    }
+
+ 
+    // /**
+    //  * @Route("/loginJson" , name="loginn")
+    //  */
+    // public function loginJson(Request $request, NormalizerInterface $normalizer)
+    // {
+    //     $email = $request->query->get("email");
+    //     $password = $request->query->get("password");
+    //     $em = $this->getDoctrine()->getManager();
+    //     $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+    //     if ($user) {
+    //         if (password_verify($password, $user->getPassword())) {
+
+    //             $jsonContent = $normalizer->normalize($user, 'json', ['groups' => 'users']);
+    //             return new Response(json_encode($jsonContent));
+    //         } else {
+    //             return new Response("password not found");
+    //         }
+    //     } else {
+    //         return new Response("user not found");
+    //     }
+    // }
+    /**
+     * @Route("/ediUser",name="app_pro")
+     */
+
+    public function editUser(Request $request)
+    {
+        $id = $request->get("id");
+        $email = $request->query->get("email");
+        $password = $request->query->get("password");
+        $name = $request->query->get("nom");
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+        if ($request->files->get("image") != null) {
+            $file = $request->files->get("image");
+            $fileName = $file->getClientOriginalName();
+            $file->move(
+                $fileName
+            );
+            $user->setImage($fileName);
+        }
+        $user->setNom($name);
+       // $user->setPassword($password);
+        $user->setPassword(
+                 $encoder->encodePassword(
+                   $user,
+                       $password
+        )
+           );
+        $user->setEmail($email);
+        $user->setIsVerified(true);
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            return new JsonResponse("success", 200);
+        } catch (\Exception $ex) {
+            return new Response("fail", $ex->getMessage());
+        }
+    }
+
+    /**
+     * @Route("/getPasswordByEmail", name="password")
+     */
+    public function getPasswordByEmail(Request $request, NormalizerInterface $normalizer,UserPasswordEncoderInterface $passwordEncoder){
+    /*
+        $email = $request->get('email');
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['email' => $email]);
+        if ($user) {
+            $password = $user->getPassword();
+            //$serializer = new Serialiser([new ObjectNormalizer()]);
+            //$formatted =$serializer->normalize($password);
+            //return new JsonResponse($formatted);
+            $jsonContent = $normalizer->normalize($password, 'json', ['groups' => 'users']);
+            return new Response(json_encode($jsonContent));
+        }
+        return new Response("user not found");*/
+        $email = $request->get('email');
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['email' => $email]);
+        if ($user) {
+          
+            $newPassword = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyz', ceil(6/strlen($x)) )),1,6);
+            $encodedPassword = $passwordEncoder->encodePassword($user, $newPassword);
+            $user->setPassword($encodedPassword);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $jsonContent = $normalizer->normalize($newPassword, 'json', ['groups' => 'users']);
+            return new Response(json_encode($jsonContent));
+        }
+        return new Response("user not found");
+    }
+
+    /**
+ * @Route("/uploadUserPic/", name="uploadUserPic")
+ */
+public function uploadUserPic(UserRepository $rep)
+{
+    $allowedExts = array("jpeg", "jpg", "png");
+    $temp = explode(".", $_FILES["file"]["name"]);
+    $extension = end($temp);
+
+    if ((($_FILES["file"]["type"] == "image/jpeg") || ($_FILES["file"]["type"] == "image/jpg") || ($_FILES["file"]["type"] == "image/png")) && ($_FILES["file"]["size"] < 5000000) && in_array($extension, $allowedExts)) {
+        if ($_FILES["file"]["error"] > 0) {
+            $named_array = array("Response" => array(array("Status" => "error")));
+            echo json_encode($named_array);
+        } else {
+            $destination_path = "C:/xampp/htdocs/PIDEV(Finale)/PIDEV/public/uploads/" . $_FILES["file"]["name"];
+            move_uploaded_file($_FILES["file"]["tmp_name"], $destination_path);
+            $named_array = array("Response" => array(array("Status" => "ok")));
+
+           
+            echo json_encode($named_array);
+        }
+    } else {
+        $named_array = array("Response" => array(array("Status" => "invalid")));
+        echo json_encode($named_array);
+    }
+}
+    #[Route("/orderbyadresse", name: "orderbyadresse", methods: ['GET'])]
+
+    public function orderbyadresse(Request $request, UserRepository $repo): Response
+    {
+        $org = $repo->orderbyadresse();
+
+        return $this->render('user/traitement.html.twig', [
+            'test' => $org,
+        ]);
+    }
+
+
+    // /**
+    //  * @Route("/editProfileJson" , name="app_gestion_profile")
+    //  */
+    // public function editUser1(Request $request, UserPasswordEncoderInterface $encoder)
+    // {
+    //     $id = $request->get("id");
+    //     $username = $request->query->get("email");
+    //     $password = $request->query->get("password");
+    //     $nom = $request->query->get("nom");
+    //     $adresse = $request->query->get("adresse");
+
+    //     $em = $this->getDoctrine()->getManager();
+    //     $user = $em->getRepository(User::class)->find($id);
+    //     if ($request->files->get("image") != null) {
+    //         $file = $request->files->get("image");
+    //         $fileName = $file->getClientOriginalName();
+    //         $file->move($fileName);
+    //         $user->setImage($fileName);
+    //     }
+    //     $user->setEmail($username);
+    //     $user->setPassword(
+    //         $encoder->encodePassword(
+    //             $user,
+    //             $password
+    //         )
+    //     );
+    //     $user->setNom($nom);
+    //     $user->setAdresse($adresse);
+
+    //     //$user->setIsVerified(true);
+    //     try {
+    //         $em = $this->getDoctrine()->getManager();
+    //         $em->persist($user);
+    //         $em->flush();
+    //         return new JsonResponse("success", 200); //200 yaani http result ta3 server ok
+    //     } catch (\Exception $ex) {
+    //         return new Response("failed" . $ex->getMessage());
+    //     }
+    // }
+    
+    /**
+     * @Route("/loginJson" , name="loginn")
+     */
+    public function loginJson(Request $request, NormalizerInterface $normalizer)
+    {/*
+        $email = $request->query->get("email");
+        $password = $request->query->get("password");
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+        if ($user) {
+            if ($password  ==  $user->getPassword()) {
+
+                $jsonContent = $normalizer->normalize($user, 'json', ['groups' => 'users']);
+                return new Response(json_encode($jsonContent));
+            } else {
+                return new Response("password not found");
+            }
+        } else {
+            return new Response("user not found");
+        }*/
+        
+        
+            $email = $request->query->get("email");
+            $password = $request->query->get("password");
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+            if ($user) {
+                if (password_verify($password, $user->getPassword())) {
+    
+                    $jsonContent = $normalizer->normalize($user, 'json', ['groups' => 'users']);
+                    return new Response(json_encode($jsonContent));
+                } else {
+                    return new Response("password not found");
+                }
+            } else {
+                return new Response("user not found");
+            }
+        
+    }
+
+  /**
+     * @Route("/editProfileJson" , name="app_gestion_profile")
+     */
+    public function editUser1(Request $request, UserPasswordEncoderInterface $encoder)
+    {
+        $id = $request->get("id");
+        $username = $request->query->get("email");
+        $password = $request->query->get("password");
+        $nom = $request->query->get("nom");
+        $adresse = $request->query->get("prenom");
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+        if ($request->files->get("image") != null) {
+            $file = $request->files->get("image");
+            $fileName = $file->getClientOriginalName();
+            $file->move($fileName);
+            $user->setImage($fileName);
+        }
+        $user->setEmail($username);
+        //$user->setPassword($request->get('password'));
+        $user->setPassword(
+            $encoder->encodePassword(
+                $user,
+                $password
+            )
+        );
+        $user->setNom($nom);
+        $user->setPrenom($adresse);
+
+        //$user->setIsVerified(true);
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            return new JsonResponse("success", 200); //200 yaani http result ta3 server ok
+        } catch (\Exception $ex) {
+            return new Response("failed" . $ex->getMessage());
+        }
+    }
+    /*
+    public function getPasswordByEmail(Request $request, NormalizerInterface $normalizer ,UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $email = $request->get('email');
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)->findOneBy(['email' => $email]);
+        if ($user) {
+          
+            $newPassword = substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyz', ceil(6/strlen($x)) )),1,6);
+            $encodedPassword = $passwordEncoder->encodePassword($user, $newPassword);
+            $user->setPassword($encodedPassword);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $jsonContent = $normalizer->normalize($newPassword, 'json', ['groups' => 'users']);
+            return new Response(json_encode($jsonContent));
+        }
+        return new Response("user not found");
+    }*/
 
 
 

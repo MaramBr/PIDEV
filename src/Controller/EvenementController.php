@@ -352,9 +352,132 @@ public function dislikeEvenement(Request $request, Evenement $Evenement): Respon
 
 
 
+ //*****************************************MOBILE********************************************************* */
+
+
+ #[Route('/afficherjson', name: 'json')]
+
+ public function afficherparticipantjson(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
+ {
+     $repo=$mg->getRepository(Participant::class);
+     $resultat = $repo ->FindAll();
+     $ParticipantNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Participant"]);
+     $json=json_encode($ParticipantNormalises);
+     return new Response ($json);
+ }
+
+
+ #[Route('/ajoutjson', name: 'ajoutjson')]
+ public function ajoutjson(ManagerRegistry $doctrine, Request $request, NormalizerInterface $normalizer): Response
+ {
+     $nom = $request->query->get('nom');
+     $prenom = $request->query->get('prenom');
+     $email = $request->query->get('email');
+     $tel = $request->query->get('tel');
+     $age = $request->query->get('age');
+ 
+     $em = $doctrine->getManager();
+     $Participant = new Participant();
+ 
+     if ($nom !== null) {
+         $Participant->setNom($nom);
+     } else {
+         $Participant->setNom('');
+     }
+     if ($prenom !== null) {
+         $Participant->setPrenom($prenom);
+     } else {
+         $Participant->setPrenom('');
+     }
+     if ($email !== null) {
+         $Participant->setEmail($email);
+     } else {
+         $Participant->setEmail('');
+     }
+     $Participant->setTel(intval($tel));
+     $Participant->setAge(intval($age));
+ 
+    
+ 
+     $em->persist($Participant);
+     $em->flush();
+ 
+     $serializer = new Serializer([new ObjectNormalizer()]);
+     $formatted = $serializer->normalize($Participant);
+ $accountSid = 'AC92f7e404547cf2736427dd218cd01a28';
+         $authToken = '592b08daa6c3bc91cfbc6f994af97d48';
+         $client = new Client($accountSid, $authToken);
+ 
+         $message = $client->messages->create(
+             '+21627085182', // replace with admin's phone number
+             [
+                 'from' => '+12764009477', // replace with your Twilio phone number
+                 'body' => 'un nouveau participant ' ,
+             ]
+         );
+     return new JsonResponse($formatted);
+ }
+
+
+ #[Route('/updatejson/{id}', name: 'updatejson')]
+ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
+ {
+     $em = $this->getDoctrine()->getManager();
+     $Participant = $em->getRepository(Participant::class)->find($id);
+     
+     $nom = $req->get('nom');
+     $prenom = $req->get('prenom');
+     $email = $req->get('email');
+     $tel = $req->get('tel');
+     $age = $req->get('age');
+ 
+     // Set the updated values in the entity
+     if ($nom) {
+         $Participant->setNom($nom);
+     }
+     if ($prenom) {
+         $Participant->setPrenom($prenom);
+     }
+     if ($email) {
+         $Participant->setEmail($email);
+     }
+    
+     if ($tel) {
+         $Participant->setTel(intval($tel));
+     }
+     if ($age) {
+         $Participant->setAge(intval($age));
+     }
+    
+ 
+     $em->persist($Participant);
+     $em->flush();
+ 
+     $jsonContent = $Normalizer->normalize($Participant, 'json', ['groups' => 'Participants']);
+     return new Response("Participant updated successfully" . json_encode($jsonContent));
+ }
  
 
+ #[Route('/deletejson/{id}', name: 'deletejson')]
+ public function deletejson(Request $request, $id, NormalizerInterface $normalizer)
+ {
+     $em = $this->getDoctrine()->getManager();
+     $Participant = $em->getRepository(Participant::class)->find($id);
+ 
+     if ($Participant !== null) {
+         $em->remove($Participant);
+         $em->flush();
+ 
+         $jsonContent = $normalizer->normalize($Participant, 'json', ['groups' => 'Participants']);
+         return new Response("Participant deleted successfully: " . json_encode($jsonContent));
+     } else {
+         return new Response("Participant not found.");
+     }
+ }
 }
+
+
+
 
     
 

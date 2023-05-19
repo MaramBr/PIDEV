@@ -54,7 +54,7 @@ class TransporteurController extends AbstractController
 
 
 
-    #[Route('/Transporteur/add', name: 'add')]
+    #[Route('/Transporteur1/add', name: 'addtrans2')]
     public function add(ManagerRegistry $doctrine,Request $request, SluggerInterface $slugger): Response
     {
         $Transporteur=new Transporteur() ;
@@ -95,7 +95,7 @@ class TransporteurController extends AbstractController
        // return $this->render('Transporteur/add.html.twig', array("formTransporteur"=>$form->createView));
 
     }
-    #[Route('/Transporteur/add1', name: 'add1')]
+    #[Route('/Transporteur/add1', name: 'addtrans')]
     public function add1(ManagerRegistry $doctrine,Request $request, SluggerInterface $slugger): Response
     {
         $Transporteur=new Transporteur() ;
@@ -137,7 +137,7 @@ class TransporteurController extends AbstractController
 
     }
 
-    #[Route('/Transporteur/update/{id}', name: 'update')]
+    #[Route('/Transporteur/updateTrans/{id}', name: 'updateTrans')]
 
     public function  updateTransporteur (ManagerRegistry $doctrine,$id,  Request  $request) : Response
     { $Transporteur = $doctrine
@@ -183,6 +183,12 @@ class TransporteurController extends AbstractController
         $json=json_encode($transporteurNormalises);
         return new Response ($json);
     }
+   
+
+
+
+
+
 
     #[Route('/ajoutTransporteurjson', name: 'ajoutTransporteurjson')]
     public function ajoutjson(ManagerRegistry $doctrine, Request $request, NormalizerInterface $normalizer): Response

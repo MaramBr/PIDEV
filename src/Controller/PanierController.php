@@ -16,6 +16,7 @@ use Symfony\Component\String\ByteString;
 use App\Repository\UserRepository;
 use App\Repository\CommandeRepository;
 use App\Repository\PanierRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\ProduitRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -148,8 +149,9 @@ return $this->redirectToRoute('commande');
       * @Route("/removeP{id}", name="removeP")
       */
      public function removeP( $id,PanierRepository $repository , Request $request): Response
-     {
-         $d = $repository->findBy(['user'=>1])[0];
+     {    $idu = $this->getUser()->getId();
+
+         $d = $repository->findBy(['user'=>$idu])[0];
              $em = $this->getDoctrine()->getManager();
                  $produit = $this->getDoctrine()->getRepository(Produit::class)->find($id);
                  $d->removeProduit($produit);
@@ -166,37 +168,110 @@ return $this->redirectToRoute('commande');
  
              return $this->redirectToRoute('panier');
      }
-     /**
-     * @Route("/ajoutProduit{id}", name="ajoutProduit1")
-     */
-    public function ajoutProduit( ProduitRepository $produitRepository,$id,PanierRepository $repository , Request $request): Response
-    {
+
+//      /**
+//      * @Route("/ajoutProduit{id}", name="ajoutProduit1")
+//      */
+//     public function ajoutProduit( ProduitRepository $produitRepository,$id,PanierRepository $repository , Request $request): Response
+//     {
         
-        //$d=$this->getUser();
-        $utilisateur = $this->getUser();
-        // dd($utilisateur);
-        if(!$utilisateur)
+//        // $d=$this->getUser();
+//         $utilisateur = $this->getUser();
+         
+//         if(!$utilisateur)
+// {
+//     return $this->redirectToRoute('app_login');
+
+// }
+// else{
+//         $idu=$this->getUser()->getId();
+//         //dd($idu);
+// //$d = $repository->findBy(['user'=>$idu]);
+// //$d = $repository->findBy(['user' => $idu]);
+//   //dd($d);
+//          $d = $repository->findBy(['user' => $idu])[0];
+//         $em = $this->getDoctrine()->getManager();
+//         $produit = $produitRepository->find($id);
+//         $d->addProduit($produit);
+
+//         $em->flush();
+//         $this->addFlash(
+//             'addProduit',
+//             'Produit ajouter avec success !'
+//         );
+//         return $this->redirectToRoute('panier');
+//     }
+//     }
+
+
+/**
+ * @Route("/ajoutProduit{id}", name="ajoutProduit1")
+ */
+public function ajoutProduit(ProduitRepository $produitRepository, $id, PanierRepository $repository, Request $request, ManagerRegistry $doctrine): Response
 {
-    return $this->redirectToRoute('app_login');
+    $utilisateur = $this->getUser();
 
-}
-else{
-        $idu=$this->getUser()->getId();
-        //dd($idu);
-$d = $repository->findBy(['user'=>$idu])[0];
+    if (!$utilisateur) {
+        return $this->redirectToRoute('app_login');
+    } else {
+        $idu = $this->getUser()->getId();
 
-        // $d = $repository->findBy(['user'=>1])[0];
-        $em = $this->getDoctrine()->getManager();
+        // Vérifier si l'utilisateur a déjà un panier
+        $panier = $repository->findOneBy(['user' => $idu]);
+
+        // Si l'utilisateur n'a pas de panier, créer un nouveau panier
+        if (!$panier) {
+            $panier = new Panier();
+            $panier->setUser($utilisateur);
+
+            $em = $doctrine->getManager();
+            $em->persist($panier);
+            $em->flush();
+        }
+
+        // Ajouter le produit au panier de l'utilisateur
+        $em = $doctrine->getManager();
         $produit = $produitRepository->find($id);
-        $d->addProduit($produit);
-
+        $panier->addProduit($produit);
         $em->flush();
+
         $this->addFlash(
             'addProduit',
-            'Produit ajouter avec success !'
+            'Produit ajouté avec succès !'
         );
+
         return $this->redirectToRoute('panier');
     }
+}
+
+    #[Route('/addpanier', name: 'addpan')]
+    public function addpan(ManagerRegistry $doctrine, Request $request): Response
+    {
+        // Récupérer l'utilisateur connecté
+        $utilisateur = $this->getUser();
+
+        
+            // Créer une nouvelle instance de Panier avec l'utilisateur connecté
+            $panier = new Panier();
+            $panier->setUser($utilisateur);
+
+            // Créer un formulaire pour la nouvelle instance de Panier
+            $form = $this->createForm(PanierType::class, $panier);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                // Persister le panier dans la base de données
+                $em = $doctrine->getManager();
+                $em->persist($panier);
+                $em->flush();
+
+                return $this->redirectToRoute('panier');
+            }
+
+            return $this->render('panier/index.html.twig', [
+                'form' => $form->createView(),
+            ]);
+        
     }
     //****************************MOBILE************************************** */
 

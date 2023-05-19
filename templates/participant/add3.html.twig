@@ -1,5 +1,9 @@
 {% extends 'baseEmna.html.twig' %}
 {% block title %}Participant{% endblock %}
+{% block topheader %}
+{% include 'test.html.twig' %}
+
+{% endblock %}
 
 {% block body %}
  {%  for message in app.flashes('error')  %}
@@ -22,27 +26,20 @@
 							</div>
                             
 							  {{ form_start(formParticipant , {'attr': {'novalidate':'novalidate'}} ) }}
-                    <form class="forms-sample">
-                      <div class="form-group">
-                        {{ form_row(formParticipant.nom, {'label':'Votre nom' ,'attr':{'placeholder': 'nom...', 'class':'form-control'}}) }}</div>
-                        <div class="form-group">
-                        {{ form_row(formParticipant.prenom, {'label':'Votre prenom' ,'attr':{'placeholder': 'prenom...', 'class':'form-control'}}) }}</div>
+                    
+                        {{ form_row(formParticipant.nom, {'label':'Votre nom' ,'attr':{'placeholder': 'nom...', 'class':'input'}}) }}
+                        {{ form_row(formParticipant.prenom, {'label':'Votre prenom' ,'attr':{'placeholder': 'prenom...', 'class':'input'}}) }}
 					
-						<div class="form-group">
-                        {{ form_row(formParticipant.email, {'label':'Votre email' ,'attr':{'placeholder': 'email...', 'class':'form-control'}}) }}</div>
-						<div class="form-group">
-                        {{ form_row(formParticipant.age, {'label':'Age' ,'attr':{'placeholder': 'age...', 'class':'form-control'}}) }}</div>
+                        {{ form_row(formParticipant.email, {'label':'Votre email' ,'attr':{'placeholder': 'email...', 'class':'input'}}) }}
+                        {{ form_row(formParticipant.age, {'label':'Age' ,'attr':{'placeholder': 'age...', 'class':'input'}}) }}
 
-                        <div class="form-group">
-                        {{ form_row(formParticipant.tel, {'label':'tel' ,'attr':{'placeholder': '+216...', 'class':'form-control'}}) }}</div>
+                        {{ form_row(formParticipant.tel, {'label':'tel' ,'attr':{'placeholder': '+216...', 'class':'input'}}) }}
 					
-					<div class="form-group">
-                        {{ form_row(formParticipant.evenement, {'label':'Les evenements disponibles :' ,'attr':{'placeholder': 'tel...', 'class':'form-control'}}) }}</div>
+                        {{ form_row(formParticipant.evenement, {'label':'Les evenements disponibles :' ,'attr':{'placeholder': 'tel...', 'class':'input'}}) }}
 					
           {{form_widget(formParticipant.captcha) }}
                       <button type="click here" class="btn btn-primary mr-2" >Participer</button>
                        {{form_end(formParticipant)}}
-                    </form>
                      
 							
 					

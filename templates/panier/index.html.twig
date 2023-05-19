@@ -1,4 +1,4 @@
-{% extends 'test.html.twig' %}
+{% extends 'baseEmna.html.twig' %}
 {% block title %} Votre panier{% endblock %}
 {% set prod = {} %}
 {% for i in data %}
@@ -143,7 +143,7 @@
                            </tr>
                                       <tr>   
                 <th colspan="6" class="text-right"> 
-                  <a href="{{ path('app') }}" class="primary-btn order-submit">Continuer votre shopping</a>
+                  <a href="/Produit/afficher" class="primary-btn order-submit">Continuer votre shopping</a>
                 </th>
                 </tr>
                        </table>

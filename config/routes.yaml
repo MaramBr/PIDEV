@@ -3,6 +3,21 @@
 app_products:
     path: /Produit/afficher
     controller: App\Controller\ProduitController::affiche1
+app_sponsors:
+    path: /Sponsor/add1
+    controller: App\Controller\SponsorController::add
+app_sponsors1:
+    path: /Sponsor/afficherback
+    controller: App\Controller\SponsorController::afficheback
+app_sponsors2:
+    path: /Sponsor/update/{id}
+    controller: App\Controller\SponsorController::updateSponsor
+app_sponsors3:   
+    path: /Sponsor/delete/{id}
+    controller: App\Controller\SponsorController::delete
+app_sponsors4:
+    path: /stat2
+    controller: App\Controller\SponsorController::stat 
 
 # search:
 #   path: /search
@@ -23,8 +38,8 @@ gregwar_captcha_routing:
 2fa_login_check:
     path: /2fa_check
 
-not_found:
-    path: '{any}'
-    requirements:
-        any: '.+'
-    controller: App\Controller\ExceptionController::notFound
+# not_found:
+#     path: '{any}'
+#     requirements:
+#         any: '.+'
+#     controller: App\Controller\ExceptionController::notFound

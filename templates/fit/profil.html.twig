@@ -2,7 +2,10 @@
 
 {% block title %}E-FIT!
 {% endblock %}
+{% block topheader %}
+{% include 'test.html.twig' %}
 
+{% endblock %}
 {% block body %}
  <div class"grix xs4 container" >
 {% for message in app.flashes('message') %}

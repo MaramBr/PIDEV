@@ -23,6 +23,7 @@ class Participant
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups("Participant")]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -58,17 +59,18 @@ class Participant
 
  
  #[ORM\Column]
-    #[Groups("Participant")]
+   
     #[Assert\NotBlank(message : "Le numéro de téléphone est obligatoire.")]
     #[Assert\Length(
         max : 11,
         maxMessage : "Le numéro de téléphone ne doit pas contenir plus de {{ limit }} chiffres."
     )]
+    #[Groups("Participant")]
     private ?string $tel = null;
 
 
     #[ORM\ManyToMany(targetEntity: Evenement::class, inversedBy: 'participants')]
-
+    #[Groups("Participant")]
     private Collection $evenement;
 
     
@@ -179,6 +181,7 @@ class Participant
         $this->evenement->removeElement($evenement);
 
         return $this;
+        
     }
 
     

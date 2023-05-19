@@ -58,98 +58,10 @@ class ProduitController extends AbstractController
 
        
     
-    #[Route('/afficherjson', name: 'json')]
+   
 
-    public function affichercoachjson(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
-    {
-        $repo=$mg->getRepository(Produit::class);
-        $resultat = $repo ->FindAll();
-        $ProduitNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Produit"]);
-        $json=json_encode($ProduitNormalises);
-        return new Response ($json);
-    }
 
-    #[Route('/ajoutjson', name: 'ajoutjson')]
-    public function ajoutjson(ManagerRegistry $doctrine,Request $request,NormalizerInterface $normalizer): Response
-    {
-        $Produit =new Produit();
-        $nom=$request->query->get('nom');
-        $description=$request->query->get('description');
-        $quantite=$request->query->get('quantite');
-        $prix=$request->query->get('prix');
-        $image=$request->query->get('image');
-        $em=$doctrine->getManager();
-
-        $Produit->setNom($nom);
-        $Produit->setDescription($description);
-        $Produit->setQuantite(intval($quantite));
-        $Produit->setPrix(floatval($prix));
-        $Produit->setImage('image');
-
-        $em->persist($Produit);
-        $em->flush();
-
-        $serializer =new Serializer([new ObjectNormalizer()]);
-        $formatted=$serializer->normalize($Produit);
-
-        return new JsonResponse ($formatted);
-    }
-
-    #[Route('/updatejson/{id}', name: 'updatejson')]
-public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
-{
-    $em = $this->getDoctrine()->getManager();
-    $Produit = $em->getRepository(Produit::class)->find($id);
     
-    $nom = $req->get('nom');
-    $description = $req->get('description');
-    $quantite = $req->get('quantite');
-    $prix = $req->get('prix');
-    $image = $req->get('image');
-
-    // Set the updated values in the entity
-    if ($nom) {
-        $Produit->setNom($nom);
-    }
-    if ($description) {
-        $Produit->setDescription($description);
-    }
-    if ($quantite) {
-        $Produit->setQuantite(intval($quantite));
-    }
-    if ($prix) {
-        $Produit->setPrix(floatval($prix));
-    }
-    if ($image) {
-        $Produit->setImage($image);
-    }
-
-    $em->persist($Produit);
-    $em->flush();
-
-    $jsonContent = $Normalizer->normalize($Produit, 'json', ['groups' => 'Produit']);
-    return new Response("Produit updated successfully" . json_encode($jsonContent));
-}
-    #[Route('/deletejson/{id}', name: 'deletejson')]
-    public function deletejson(Request $request, $id, NormalizerInterface $normalizer)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $produit = $em->getRepository(Produit::class)->find($id);
-    
-        if ($produit !== null) {
-            $em->remove($produit);
-            $em->flush();
-    
-            $jsonContent = $normalizer->normalize($produit, 'json', ['groups' => 'Produit']);
-            return new Response("Produit deleted successfully: " . json_encode($jsonContent));
-        } else {
-            return new Response("Produit not found.");
-        }
-    }
-
-
-
-
 
 //     #[Route('/detailP/{id}', name: 'detailP')]
 //     public function detaille($id,ManagerRegistry $mg, Produit $Produit, LoggerInterface $logger, Request $request): Response
@@ -363,7 +275,7 @@ public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
 
     }
 
-    #[Route('/Produit/update/{id}', name: 'update')]
+    #[Route('/Produit/update/{id}', name: 'update1')]
 
     public function  updateProduit (ManagerRegistry $doctrine,$id,  Request  $request) : Response
     { $Produit = $doctrine
@@ -735,5 +647,99 @@ public function like(Request $request, Produit $Produit, $type)
         return $this->redirectToRoute('appback1');
     }*/
 
+       //////////Mobilr json///////
+    
+       #[Route('/afficherjsonP', name: 'json')]
 
+       public function affichercoachjson(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
+       {
+           $repo=$mg->getRepository(Produit::class);
+           $resultat = $repo ->FindAll();
+           $ProduitNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Produit"]);
+           $json=json_encode($ProduitNormalises);
+           return new Response ($json);
+       }
+   
+       #[Route('/ajoutjsonP', name: 'ajoutjson')]
+       public function ajoutjson(ManagerRegistry $doctrine,Request $request,NormalizerInterface $normalizer): Response
+       {
+           $Produit =new Produit();
+           $nom=$request->query->get('nom');
+           $description=$request->query->get('description');
+           $quantite=$request->query->get('quantite');
+           $prix=$request->query->get('prix');
+           $image=$request->query->get('image');
+           $em=$doctrine->getManager();
+   
+           $Produit->setNom($nom);
+           $Produit->setDescription($description);
+           $Produit->setQuantite(intval($quantite));
+           $Produit->setPrix(floatval($prix));
+           $Produit->setImage($image);
+   
+           $em->persist($Produit);
+           $em->flush();
+   
+           $serializer =new Serializer([new ObjectNormalizer()]);
+           $formatted=$serializer->normalize($Produit);
+   
+           return new JsonResponse ($formatted);
+       }
+   
+       #[Route('/updatejsonP/{id}', name: 'updatejson')]
+   public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
+   {
+       $em = $this->getDoctrine()->getManager();
+       $Produit = $em->getRepository(Produit::class)->find($id);
+       
+       $nom = $req->get('nom');
+       $description = $req->get('description');
+       $quantite = $req->get('quantite');
+       $prix = $req->get('prix');
+       $image = $req->get('image');
+   
+       // Set the updated values in the entity
+       if ($nom) {
+           $Produit->setNom($nom);
+       }
+       if ($description) {
+           $Produit->setDescription($description);
+       }
+       if ($quantite) {
+           $Produit->setQuantite(intval($quantite));
+       }
+       if ($prix) {
+           $Produit->setPrix(floatval($prix));
+       }
+       if ($image) {
+           $Produit->setImage($image);
+       }
+   
+       $em->persist($Produit);
+       $em->flush();
+   
+       $jsonContent = $Normalizer->normalize($Produit, 'json', ['groups' => 'Produit']);
+       return new Response("Produit updated successfully" . json_encode($jsonContent));
+   }
+       #[Route('/deletejsonP/{id}', name: 'deletejson')]
+       public function deletejson(Request $request, $id, NormalizerInterface $normalizer)
+       {
+           $em = $this->getDoctrine()->getManager();
+           $produit = $em->getRepository(Produit::class)->find($id);
+       
+           if ($produit !== null) {
+               $em->remove($produit);
+               $em->flush();
+       
+               $jsonContent = $normalizer->normalize($produit, 'json', ['groups' => 'Produit']);
+               return new Response("Produit deleted successfully: " . json_encode($jsonContent));
+           } else {
+               return new Response("Produit not found.");
+           }
+       }
+   
+   
+   
+   ///////////fin mobile json////////////
+   
 }

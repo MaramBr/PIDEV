@@ -1,4 +1,4 @@
-{% extends 'baseBack.html.twig' %}
+{% extends 'baseback.html.twig' %}
 
 {% block title %}E-FIT!{% endblock %}
 
@@ -79,19 +79,19 @@
                                                     {{i.Companies}}
                                                 </td>
                                                 
-                                                <td><img src="{{ asset('/uploads/Produits/' ~ i.Image) }}?t={{ date().getTimestamp() }}" alt="image"  width = "10%"></td>
+                                                <td><img src="{{ asset('/uploads/' ~ i.Image) }}?t={{ date().getTimestamp() }}" alt="image"  width = "10%"></td>
                                                  <td>
                                                     <a class="btn btn-danger" href="{{ path('delete', {id:i.ID}) }}">Delete </a>
                                                 </td>
                                                  <td>
-                                                    <a class="btn btn-warning" href="{{ path('update', {id:i.ID}) }}">Update </a>
+                                                    <a class="btn btn-warning" href="{{ path('updateTrans', {id:i.ID}) }}">Update </a>
                                                 </td>
                                             </tr>
                                            {% endfor%}
                                         </tbody>
                                     </table>
                                        <th>
-                                    <a class="btn btn-light " href="/Transporteur/add"> Ajouter des transporteurs </a>
+                                    <a class="btn btn-light " href="/Transporteur1/add"> Ajouter des transporteurs </a>
                                       </th>
                                       <th>
                                        <a class="btn btn-info " href="/companie/add2"> Ajouter des Companies </a>

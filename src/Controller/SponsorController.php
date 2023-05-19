@@ -26,7 +26,7 @@ class SponsorController extends AbstractController
 
    
     
-    #[Route('/Sponsor/afficherback', name: 'appback')]
+    #[Route('/Sponsor/afficherback', name: 'appbacksponsor')]
     public function afficheback(ManagerRegistry $em): Response
     {
         $repo=$em->getRepository(Sponsor::class);
@@ -39,7 +39,7 @@ class SponsorController extends AbstractController
 
 
 
-    #[Route('/Sponsor/add', name: 'add')]
+    #[Route('/Sponsor/add1', name: 'add')]
     public function add(ManagerRegistry $doctrine,Request $request): Response
     {
         $Sponsor=new Sponsor() ;
@@ -50,7 +50,7 @@ class SponsorController extends AbstractController
         $em=$doctrine->getManager(); //appel lel manager
         $em->persist($Sponsor); //elli tzid
         $em->flush(); //besh ysob fi base de donnee
-        return $this->redirectToRoute('appback');
+        return $this->redirectToRoute('appbacksponsor');
         
         }
         return $this->render('Sponsor/add.html.twig', array("formSponsor"=>$form->createView()));
@@ -73,7 +73,7 @@ class SponsorController extends AbstractController
         if ($form->isSubmitted())
         { $em = $doctrine->getManager();
             $em->flush();
-            return $this->redirectToRoute('appback');
+            return $this->redirectToRoute('appbacksponsor');
         }
         return $this->renderForm("Sponsor/add.html.twig",
             ["formSponsor"=>$form]) ;
@@ -90,7 +90,7 @@ class SponsorController extends AbstractController
         $em = $doctrine->getManager();
         $em->remove($c);
         $em->flush() ;
-        return $this->redirectToRoute('appback');
+        return $this->redirectToRoute('appbacksponsor');
     }
 
      #[Route('/searchSponsor', name: 'searchSponsor')]

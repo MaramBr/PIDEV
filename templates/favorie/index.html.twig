@@ -1,5 +1,9 @@
-{% extends 'test.html.twig' %}
+{% extends 'baseEmna.html.twig' %}
 {% block title %} Votre panier{% endblock %}
+{% block topheader %}
+{% include 'test.html.twig' %}
+
+{% endblock %}
 {% set prod = {} %}
 {% for i in data %}
 

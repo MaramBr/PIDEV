@@ -1,10 +1,14 @@
-{% extends 'test.html.twig' %}
+{% extends 'baseEmna.html.twig' %}
 
-{% block title %}result{% endblock %}
+{% block title %}Evenements{% endblock %}
+{% block topheader %}
+{% include 'test.html.twig' %}
+
+{% endblock %}
 
 {% block body %}
 <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
-</head>
+
 
 <!-- SECTION -->
 		<div class="section">
@@ -48,7 +52,7 @@
 				<!-- /row --> 
 			<!-- /container -->
 			
-		</div>
+		
 		<!-- /SECTION -->
 	<div class="row">
 					<div class="col-md-12">
@@ -56,7 +60,7 @@
 							
 							<form>
 							
-                  <button class="newsletter-btn"><a href="/Participant/add" >  Participer Maintenant</a></button>
+				  <a href="/Participant/add" class="primary-btn order-submit" >Participer Maintenant</a>
 
                  
 
@@ -72,13 +76,12 @@
 			<!-- /container -->
 				
 		</div>
+		
 		<!-- /SECTION -->
 	
 {% endblock %}
 
-{% block footer %}
 
-{% endblock %}
 
 
 

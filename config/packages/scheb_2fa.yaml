@@ -3,16 +3,16 @@ scheb_two_factor:
     security_tokens:
         #- Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken
         - Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken
-    email:
-        digits: 6
-        enabled: true 
-        sender_email: rayan.lahmar@esprit.tn
-        sender_name: E-Fit
-    trusted_device:
-        enabled: true 
-        lifetime: 3000
-        extend_lifetime: false 
-        cookie_name : trusted_device
-        cookie_secure: false 
-        cookie_same_site : "lax"
-        cookie_path : "/"
+    # email:
+    #     digits: 6
+    #     enabled: true 
+    #     sender_email: rayan.lahmar@esprit.tn
+    #     sender_name: E-Fit
+    # trusted_device:
+    #     enabled: true 
+    #     lifetime: 3000
+    #     extend_lifetime: false 
+    #     cookie_name : trusted_device
+    #     cookie_secure: false 
+    #     cookie_same_site : "lax"
+    #     cookie_path : "/"

@@ -46,10 +46,11 @@ class Produit
         pattern:"/^[^0-9]+$/",
         message:"Le nom ne doit pas contenir de chiffres"
     )]
-    #[Groups("Produit")]
+
      
     
-     
+    #[Groups("Produit")]
+    
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -79,11 +80,10 @@ class Produit
     private ?string $image = null;
 
     #[ORM\ManyToOne(inversedBy: 'Produit')]
-    #[Groups("Produit")]
+
     private ?Category $Categorys = null;
 
     #[ORM\OneToMany(mappedBy: 'Produit', targetEntity: CommandeProduit::class)]
-    #[Groups("Produit")]
     private Collection $Commande;
 
     #[ORM\OneToMany(mappedBy: 'produits', targetEntity: Comments::class, orphanRemoval: true)]
@@ -99,7 +99,6 @@ class Produit
     #[ORM\ManyToMany(inversedBy: 'produits',targetEntity: Panier::class)]
     #[ORM\JoinTable(name:'panierproduit')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[Groups("produit")]
     private Collection $panier;
 
     #[ORM\ManyToMany(targetEntity: Favorie::class, mappedBy: 'produit')]
@@ -118,7 +117,6 @@ class Produit
     #[ORM\ManyToMany(inversedBy: 'produits',targetEntity: Panier::class)]
     #[ORM\JoinTable(name:'panierproduit')]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[Groups("produit")]
     // private Collection $panier;
 
     // #[ORM\ManyToMany(targetEntity: Favorie::class, mappedBy: 'produit')]

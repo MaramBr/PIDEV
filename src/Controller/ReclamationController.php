@@ -56,7 +56,7 @@ class ReclamationController extends AbstractController
              $em = $doctrine->getManager();
              $em->persist($reclamation);
              $em->flush();
-     
+     /*
              $accountSid = 'AC099883ea0f07c67cd19e55b497fceb12';
              $authToken = '0dd561ef29a8f933acf0a98205b376c0';
              $client = new Client($accountSid, $authToken);
@@ -68,7 +68,7 @@ class ReclamationController extends AbstractController
                      'body' => 'New réclamation par ' . $user,
                  ]
              );
-     
+     */
              return $this->redirectToRoute('app_affrecfront');
          }
      
@@ -167,7 +167,7 @@ else{
     $reclamation=$ReclamationRepository->find($id);
     $form=$this->CreateForm(ReclamationType :: class,$reclamation);
     $form->handleRequest($request);
-    if($form->isSubmitted() && $form->isValid())
+    if($form->isSubmitted() )
     {
     $em=$doctrine->getManager();
     $em->persist($reclamation);
@@ -184,7 +184,7 @@ else{
     $reclamation=$ReclamationRepository->find($id);
     $form=$this->CreateForm(UpdateReclamationType:: class,$reclamation);
     $form->handleRequest($request);
-    if($form->isSubmitted() && $form->isValid())
+    if($form->isSubmitted() )
     {
     $em=$doctrine->getManager();
     $em->persist($reclamation);

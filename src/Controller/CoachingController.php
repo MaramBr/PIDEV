@@ -56,16 +56,7 @@ class CoachingController extends AbstractController
     }
 
 
-    #[Route('/afficherjson', name: 'affichercoachjson')]
-    public function affichercoachjson(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
-    {
-        $repo=$mg->getRepository(Coaching::class);
-        $resultat = $repo ->FindAll();
-        $coachingNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Coaching"]);
-        $json=json_encode($coachingNormalises);
-        return new Response ($json);
-    }
-     
+  
   
 
     /*
@@ -215,20 +206,21 @@ class CoachingController extends AbstractController
 
    
    
-
-
-    #[Route('/ajoutjson', name: 'ajoutjson')]
+    #[Route('/ajoutcoachjson', name: 'ajoutjsoncoach')]
     public function ajoutjson(ManagerRegistry $doctrine,Request $request,NormalizerInterface $normalizer): Response
     {
         $Coaching =new Coaching();
+        $descCoach=$request->query->get('descCoach');
+
         $cours=$request->query->get('cours');
-        $dispocoach=$request->query->get('dispoCoash');
+        $dispocoach=$request->query->get('dispoCoach');
         $img=$request->query->get('imgCoach');
         $em=$doctrine->getManager();
 
-        $Coaching->setCours('cours');
-        $Coaching->setDispoCoach('dispocoach');
-        $Coaching->setimgCoach('img');
+        $Coaching->setDescCoach($descCoach);
+        $Coaching->setCours($cours);
+        $Coaching->setDispoCoach($dispocoach);
+        $Coaching->setimgCoach($img);
 
         $em->persist($Coaching);
         $em->flush();
@@ -238,6 +230,9 @@ class CoachingController extends AbstractController
 
         return new JsonResponse ($formatted);
     }
+
+
+  
 
     #[Route('/stat', name: 'stat', methods: ['GET'])]
     public function Coachingstats(): Response
@@ -310,40 +305,11 @@ class CoachingController extends AbstractController
 
 
 
-    #[Route('/updatejson/{id}', name: 'updatejson')]
-
-    public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
-    {
-               $em = $this->getDoctrine()->getManager();
-               $Coaching= $em->getRepository(Coaching::class)->find($id);
-               $Coaching->setCours('cours');
-$Coaching->setDispoCoach('dispocoach');
-$Coaching->setimgCoach('img');
-
-$em->persist($Coaching);
-               $em->flush();
-               $jsonContent=$Normalizer->normalize($Coaching, 'json', ['groups' => 'Coachings']);
-return new Response("Coachingupdated successfully" .json_encode ($jsonContent));
-    }
+  
 
     
 
-    #[Route('/deletejson/{id}', name: 'deletejson')]
-
-    public function deletejson(Request $request, $id)
-    {           $id=$request->get('id');
-               $em = $this->getDoctrine()->getManager();
-               $Coaching= $em->getRepository(Coaching::class)->find($id);
-               
-
-                $em->remove($Coaching);
-                $em->flush();
-
-            
-               $jsonContent=$Normalizer->normalize($Coaching, 'json', ['groups' => 'Coachings']);
-return new Response("Coaching deleted successfully" .json_encode ($jsonContent));
-    }
-
+ 
 
     #[Route('/like/{id}', name: 'like1', methods: ['POST'])]
 public function likeCoaching(Request $request, Coaching $Coaching): Response
@@ -410,6 +376,71 @@ else{
         //trie selon Date normal
 
     }
+    /////////////////////////////////////////////////////
     
+    #[Route('/affichercoachjson', name: 'affichercoachjson')]
+    public function affichercoachjson(ManagerRegistry $mg,NormalizerInterface $normalizer): Response
+    {
+        $repo=$mg->getRepository(Coaching::class);
+        $resultat = $repo ->FindAll();
+        $coachingNormalises=$normalizer->normalize($resultat,'json',['groups'=>"Coaching"]);
+        $json=json_encode($coachingNormalises);
+        return new Response ($json);
+    }
+
+
+////////////////////////////////
+
+
+  #[Route('/updatecoachjson/{id}', name: 'updatejson')]
+
+    public function updatejson(Request $req, $id, NormalizerInterface $Normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $Coaching = $em->getRepository(Coaching::class)->find($id);
+        
+        $descCoach = $req->get('descCoach');
+        $dispoCoach = $req->get('dispoCoach');
+        $cours = $req->get('cours');
+        $image = $req->get('imgCoach');
+    
+        // Set the updated values in the entity
+        if ($descCoach) {
+            $Coaching->setDescCoach($descCoach);
+        }
+        if ($dispoCoach) {
+            $Coaching->setDispoCoach($dispoCoach);
+        }
+        if ($cours) {
+            $Coaching->setCours($cours);
+        }
+      
+        if ($image) {
+            $Coaching->setImgCoach($image);
+        }
+    
+        $em->persist($Coaching);
+        $em->flush();
+    
+        $jsonContent = $Normalizer->normalize($Coaching, 'json', ['groups' => 'Coachings']);
+        return new Response("Coaching updated successfully" . json_encode($jsonContent));
+    }
+
+  #[Route('/deletecoachjson/{id}', name: 'deletejsoncoach')]
+
+    public function deletejson(Request $request, $id, NormalizerInterface $normalizer)
+    {        $em = $this->getDoctrine()->getManager();
+        $Coaching = $em->getRepository(Coaching::class)->find($id);
+    
+        if ($Coaching !== null) {
+            $em->remove($Coaching);
+            $em->flush();
+    
+            $jsonContent = $normalizer->normalize($Coaching, 'json', ['groups' => 'Coachings']);
+            return new Response("Coaching deleted successfully: " . json_encode($jsonContent));
+        } else {
+            return new Response("Coaching not found.");
+        }
+    }
    
 }

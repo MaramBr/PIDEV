@@ -1,20 +1,22 @@
 {% extends 'baseEmna.html.twig' %}
 
 {% block title %}Coaching{% endblock %}
+{% block topheader %}
+{% include 'test.html.twig' %}
+
+{% endblock %}
 
 {% block body %}
 <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
-</head>
 
-<!-- SECTION -->
-		<div class="section">
+
+		<!-- /SECTION -->
+<div class="section">
 			<!-- container -->
-
-							{%for i in Coaching%}
 			<div class="container">
 				<!-- row -->
-
 				<div class="row">
+				{%for i in Coaching%}
 					<!-- shop -->
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
@@ -26,23 +28,13 @@
 								<a href="{{ path('detailcoach', {id:i.id}) }}" class="cta-btn"> Détailles <i class="fa fa-arrow-circle-right"></i></a>
 
 							</div>
-
 						</div>
 					</div>
-					
-					
-
-					<!-- /shop -->
-
-{%endfor%}
-			</div>
-				</div>
-				<!-- /row --> 
-			<!-- /container -->
-				
+					{%endfor%}
 		</div>
-		<!-- /SECTION -->
-	
+		</div>
+		</div>
+
 
 {% endblock %}
 
